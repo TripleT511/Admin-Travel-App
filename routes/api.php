@@ -23,6 +23,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
+    Route::post('/user/change-password', [AuthController::class, 'updatePassword']);
+
     // Lấy danh sách các token của user hiện tại
     Route::get('/user/sessions', [AuthController::class, 'getListToken']);
 

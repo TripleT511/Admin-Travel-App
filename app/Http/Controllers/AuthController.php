@@ -106,6 +106,46 @@ class AuthController extends Controller
         }
     }
 
+    public function updatePassword(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'password' => 'required',
+                'new_password' => 'required|string|min:6|different:password',
+                'confirm_password' => 'required|same:new_password',
+            ]);
+
+            if ($validator->fails()) {
+                return response([
+                    'error' => $validator->errors()->all()
+                ], 422);
+            }
+
+            $user = request()->user();
+
+            if (!Hash::check($request->password, $user->password)) {
+                return response()->json([
+                    'status_code' => 422,
+                    'message' => 'Old password doesn\'t matched',
+                ]);
+            }
+
+            $user->password = Hash::make($request->new_password);
+            $user->save();
+
+            return response()->json([
+                'status_code' => 200,
+                'message' => 'Password successfully changed!',
+            ]);
+        } catch (Exception $error) {
+            return response()->json([
+                'status_code' => 500,
+                'message' => 'Error in changing password',
+                'error' => $error,
+            ]);
+        }
+    }
+
     public function logout(Request $request)
     {
         $user = request()->user()->currentAccessToken()->delete();
