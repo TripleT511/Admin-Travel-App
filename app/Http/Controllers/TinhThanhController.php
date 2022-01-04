@@ -68,7 +68,7 @@ class TinhThanhController extends Controller
      */
     public function show(TinhThanh $tinhThanh)
     {
-        return view('tinhthanh.show-tinhThanh', ['tinhThanh' => $tinhThanh]);
+        return view('tinhthanh.show-tinhthanh', ['tinhThanh' => $tinhThanh]);
     }
 
     /**
