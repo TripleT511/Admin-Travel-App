@@ -81,6 +81,11 @@ class AuthController extends Controller
                 'trangThaiEmail' => 'required',
                 'trangThaiSDT' => 'required',
                 'trangThai' => 'required',
+            ], [
+                'hoTen.required' => 'Họ Tên không được bỏ trống',
+                'email.required' => 'Email không được bỏ trống',
+                'password.required' => 'Mật khẩu không được bỏ trống',
+                'soDienThoai.required' => 'Số điện thoại không được bỏ trống',
             ]);
 
             if ($validator->fails()) {

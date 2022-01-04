@@ -1,8 +1,14 @@
 <?php
 
+use App\Http\Controllers\ApiDiaDanhController;
+use App\Http\Controllers\ApiHinhAnhController;
+use App\Http\Controllers\ApiNhuCauController;
+use App\Http\Controllers\ApiTinhThanh;
+use App\Http\Controllers\ApiTinhThanhController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TinhThanhController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +39,18 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Xoá toàn bộ token
     Route::delete('/user/sessions', [AuthController::class, 'deleteAllToken']);
+
+    Route::get('/tinhthanh', [ApiTinhThanhController::class, 'index']);
+
+    Route::get('/nhucau', [ApiNhuCauController::class, 'index']);
+
+    Route::get('/diadanh', [ApiDiaDanhController::class, 'index']);
+
+    Route::get('/diadanh/{id}', [ApiDiaDanhController::class, 'show']);
+
+    Route::get('/hinhanh/{id}', [ApiHinhAnhController::class, 'show']);
+
+    Route::get('/tinhthanh/{id}', [ApiTinhThanhController::class, 'show']);
 });
 
 

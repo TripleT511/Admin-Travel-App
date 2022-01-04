@@ -1,0 +1,139 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\DiaDanh;
+use App\Http\Requests\StoreDiaDanhRequest;
+use App\Http\Requests\UpdateDiaDanhRequest;
+use App\Models\TinhThanh;
+use Illuminate\Support\Facades\Redirect;
+
+class DiaDanhController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $lstDiaDanh = DiaDanh::with('tinhthanh:id,tenTinhThanh', 'hinhanh:id,hinhAnh')->get();
+        return view('diadanh.index-diadanh', ['lstDiaDanh' => $lstDiaDanh]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $lstTinhThanh = TinhThanh::all();
+        return view('diadanh.create-diadanh', ['lstTinhThanh' => $lstTinhThanh]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \App\Http\Requests\StoreDiaDanhRequest  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(StoreDiaDanhRequest $request)
+    {
+        $request->validate([
+            'tenDiaDanh' => 'required|unique:dia_danhs',
+            'moTa' => 'required',
+            'kinhDo' => 'required',
+            'viDo' => 'required',
+        ], [
+            'tenDiaDanh.required' => "Tên địa danh không được bỏ trống",
+            'tenDiaDanh.unique' => "Tên địa danh bị trùng",
+            'moTa.required' => 'Mô tả không được bỏ trống',
+            'kinhDo.required' => 'Kinh độ không được bỏ trống',
+            'viDo.required' => 'Vĩ độ không được bỏ trống',
+        ]);
+        $trangThai = 1;
+        if ($request->input('trangThai') != "on") {
+            $trangThai = 0;
+        }
+        $diadanh = new DiaDanh();
+        $diadanh->fill([
+            'tenDiaDanh' => $request->input('tenDiaDanh'),
+            'moTa' => $request->input('moTa'),
+            'kinhDo' => $request->input('kinhDo'),
+            'viDo' => $request->input('viDo'),
+            'tinh_thanh_id' => $request->input('idTinhThanh'),
+            'trangThai' => $trangThai
+        ]);
+        $diadanh->save();
+        return Redirect::route('diaDanh.show', ['diaDanh' => $diadanh]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\DiaDanh  $diaDanh
+     * @return \Illuminate\Http\Response
+     */
+    public function show(DiaDanh $diaDanh)
+    {
+        return view('diadanh.show-diadanh', ['diaDanh' => $diaDanh]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\DiaDanh  $diaDanh
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(DiaDanh $diaDanh)
+    {
+        $lstTinhThanh = TinhThanh::all();
+        return view('diaDanh.edit-diadanh', ['diaDanh' => $diaDanh, 'lstTinhThanh' => $lstTinhThanh]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \App\Http\Requests\UpdateDiaDanhRequest  $request
+     * @param  \App\Models\DiaDanh  $diaDanh
+     * @return \Illuminate\Http\Response
+     */
+    public function update(UpdateDiaDanhRequest $request, DiaDanh $diaDanh)
+    {
+        $request->validate([
+            'tenDiaDanh' => 'required',
+            'moTa' => 'required',
+            'kinhDo' => 'required',
+            'viDo' => 'required',
+            'idTinhThanh' => 'required',
+            'trangThai' => 'required'
+        ]);
+        $trangThai = 1;
+        if ($request->input('trangThai') != "on") {
+            $trangThai = 0;
+        }
+        $diaDanh->fill([
+            'tenDiaDanh' => $request->input('tenDiaDanh'),
+            'moTa' => $request->input('moTa'),
+            'kinhDo' => $request->input('kinhDo'),
+            'viDo' => $request->input('viDo'),
+            'tinh_thanh_id' => $request->input('idTinhThanh'),
+            'trangThai' => $trangThai
+        ]);
+        $diaDanh->save();
+        return Redirect::route('diaDanh.show', ['diaDanh' => $diaDanh]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\DiaDanh  $diaDanh
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(DiaDanh $diaDanh)
+    {
+        $diaDanh->delete();
+        return Redirect::route('diaDanh.index');
+    }
+}

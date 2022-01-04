@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\TinhThanhController;
+use App\Http\Controllers\DiaDanhController;
+use App\Http\Controllers\DiaDanhNhuCauController;
+use App\Http\Controllers\HinhAnhController;
+use App\Http\Controllers\NhuCauController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,14 +19,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard');
+Route::middleware('auth')->group(function () {
+    Route::resource('tinhThanh', TinhThanhController::class);
+
+    Route::resource('diaDanh', DiaDanhController::class);
+
+    Route::resource('nhuCau', NhuCauController::class);
+
+    Route::resource('diaDanhNhuCau', DiaDanhNhuCauController::class);
+
+    Route::resource('hinhAnh', HinhAnhController::class);
 });
 
-Route::get('/register', function () {
-    return view('register');
-})->name('register');
 
-Route::get('/login', function () {
-    return view('login');
-})->name('login');
+Route::get('/', function () {
+    return view('dashboard');
+})->middleware('auth');
+
+
+Route::get('/login', [LoginController::class, 'showFormlogin'])->name('show-login');
+Route::post('/login', [LoginController::class, 'login'])->name('login');
+
+Route::get('/register', [LoginController::class, 'showFormregister'])->name('show-register');
+Route::post('/register', [LoginController::class, 'register'])->name('register');

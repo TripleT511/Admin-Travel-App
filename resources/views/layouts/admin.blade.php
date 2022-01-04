@@ -5,10 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@yield('title')</title>
-    <link rel="stylesheet" href="vendors/mdi/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="shortcut icon" href="images/favicon.png" />
+    <link rel="stylesheet" href="{{ asset('vendors/mdi/css/materialdesignicons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendors/css/vendor.bundle.base.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" />
 </head>
 
 <body>
@@ -16,15 +16,15 @@
         <!-- partial:../../partials/_sidebar.html -->
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
             <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-                <a class="sidebar-brand brand-logo" href="../../index.html"><img src="images/logo.svg" alt="logo" /></a>
-                <a class="sidebar-brand brand-logo-mini" href="../../index.html"><img src="images/logo-mini.svg" alt="logo" /></a>
+                <a class="sidebar-brand brand-logo" href="../../index.html"><img src="{{ asset('images/logo.svg') }}" alt="logo" /></a>
+                <a class="sidebar-brand brand-logo-mini" href="../../index.html"><img src="{{ asset('images/logo-mini.svg') }}" alt="logo" /></a>
             </div>
             <ul class="nav">
                 <li class="nav-item profile">
                     <div class="profile-desc">
                         <div class="profile-pic">
                             <div class="count-indicator">
-                                <img class="img-xs rounded-circle " src="images/faces/face15.jpg" alt="">
+                                <img class="img-xs rounded-circle " src="{{ asset('images/faces/face15.jpg') }}" alt="">
                                 <span class="count bg-success"></span>
                             </div>
                             <div class="profile-name">
@@ -97,7 +97,7 @@
                     </div>
                 </li>
                 <li class="nav-item menu-items">
-                    <a class="nav-link" href="../../pages/forms/basic_elements.html">
+                    <a class="nav-link" href="{{ route('diaDanh.index') }}">
                         <span class="menu-icon">
                             <i class="mdi mdi-map-marker-multiple"></i>
                         </span>
@@ -105,7 +105,7 @@
                     </a>
                 </li>
                 <li class="nav-item menu-items">
-                    <a class="nav-link" href="../../pages/tables/basic-table.html">
+                    <a class="nav-link" href="{{ route('tinhThanh.index') }}">
                         <span class="menu-icon">
                             <i class="mdi mdi-map-marker-multiple"></i>
                         </span>
@@ -128,21 +128,36 @@
                         <span class="menu-title">Quản lý quán ăn</span>
                     </a>
                 </li>
-                <li class="nav-item menu-items">
-                    <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+               <li class="nav-item menu-items">
+                    <a class="nav-link" href="#">
                         <span class="menu-icon">
-                            <i class="mdi mdi-home"></i>
+                            <i class="mdi mdi-home-map-marker"></i>
                         </span>
                         <span class="menu-title">Quản lý lưu trú</span>
-                        <i class="menu-arrow"></i>
                     </a>
                 </li>
                 <li class="nav-item menu-items">
-                    <a class="nav-link" href="http://www.bootstrapdash.com/demo/corona-free/jquery/documentation/documentation.html">
+                    <a class="nav-link" href="{{ route('nhuCau.index') }}">
                         <span class="menu-icon">
-                            <i class="mdi mdi-file-document-box"></i>
+                            <i class="mdi mdi-home-map-marker"></i>
                         </span>
-                        <span class="menu-title">Quản lý abc</span>
+                        <span class="menu-title">Quản lý nhu cầu</span>
+                    </a>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" href="{{ route('diaDanhNhuCau.index') }}">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-guitar-pick-outline"></i>
+                        </span>
+                        <span class="menu-title text-wrap" >Quản lý địa danh nhu cầu</span>
+                    </a>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" href="{{ route('hinhAnh.index') }}">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-file-image"></i>
+                        </span>
+                        <span class="menu-title text-wrap" >Quản lý hình ảnh</span>
                     </a>
                 </li>
             </ul>
@@ -152,7 +167,7 @@
             <!-- partial:../../partials/_navbar.html -->
             <nav class="navbar p-0 fixed-top d-flex flex-row">
                 <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
-                    <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="images/logo-mini.svg" alt="logo" /></a>
+                    <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="{{ asset('images/logo-mini.svg') }}" alt="logo" /></a>
                 </div>
                 <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
                     <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -222,7 +237,7 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item preview-item">
                                     <div class="preview-thumbnail">
-                                        <img src="images/faces/face4.jpg" alt="image" class="rounded-circle profile-pic">
+                                        <img src="{{ asset('images/faces/face4.jpg') }}" alt="image" class="rounded-circle profile-pic">
                                     </div>
                                     <div class="preview-item-content">
                                         <p class="preview-subject ellipsis mb-1">Mark send you a message</p>
@@ -232,7 +247,7 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item preview-item">
                                     <div class="preview-thumbnail">
-                                        <img src="images/faces/face2.jpg" alt="image" class="rounded-circle profile-pic">
+                                        <img src="{{ asset('images/faces/face2.jpg') }}" alt="image" class="rounded-circle profile-pic">
                                     </div>
                                     <div class="preview-item-content">
                                         <p class="preview-subject ellipsis mb-1">Cregh send you a message</p>
@@ -242,7 +257,7 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item preview-item">
                                     <div class="preview-thumbnail">
-                                        <img src="images/faces/face3.jpg" alt="image" class="rounded-circle profile-pic">
+                                        <img src="{{ asset('images/faces/face3.jpg') }}" alt="image" class="rounded-circle profile-pic">
                                     </div>
                                     <div class="preview-item-content">
                                         <p class="preview-subject ellipsis mb-1">Profile picture updated</p>
@@ -303,7 +318,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                                 <div class="navbar-profile">
-                                    <img class="img-xs rounded-circle" src="images/faces/face15.jpg" alt="">
+                                    <img class="img-xs rounded-circle" src="{{ asset('images/faces/face15.jpg') }}" alt="">
                                     <p class="mb-0 d-none d-sm-block navbar-profile-name">Henry Klein</p>
                                     <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                                 </div>
@@ -365,16 +380,17 @@
     </div>
     <!-- container-scroller -->
     <!-- plugins:js -->
-    <script src="vendors/js/vendor.bundle.base.js"></script>
+    <script src="{{ asset('vendors/js/vendor.bundle.base.js') }}"></script>
     <!-- endinject -->
     <!-- Plugin js for this page -->
     <!-- End plugin js for this page -->
     <!-- inject:js -->
-    <script src="js/off-canvas.js"></script>
-    <script src="js/hoverable-collapse.js"></script>
-    <script src="js/misc.js"></script>
-    <script src="js/settings.js"></script>
-    <script src="js/todolist.js"></script>
+    <script src="{{ asset('js/off-canvas.js') }}"></script>
+    <script src="{{ asset('js/hoverable-collapse.js') }}"></script>
+    <script src="{{ asset('js/misc.js') }}"></script>
+    <script src="{{ asset('js/file-upload.js') }}"></script>
+    <script src="{{ asset('js/settings.js') }}"></script>
+    <script src="{{ asset('js/todolist.js') }}"></script>
     <!-- endinject -->
     <!-- Custom js for this page -->
     <!-- End custom js for this page -->
