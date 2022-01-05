@@ -14,7 +14,7 @@ class ApiDiaDanhController extends Controller
      */
     public function index()
     {
-        $lstDiaDanh = DiaDanh::with('tinhthanh:id,tenTinhThanh', 'hinhanh:id,hinhAnh')->get();
+        $lstDiaDanh = DiaDanh::with('tinhthanh:id,tenTinhThanh', 'hinhanh:id,hinhAnh,idBaiVietChiaSe,idLoai')->get();
 
         return response()->json([
             'data' => $lstDiaDanh
@@ -40,7 +40,7 @@ class ApiDiaDanhController extends Controller
      */
     public function show(int $id)
     {
-        $diaDanh = DiaDanh::where('trangThai', '=', '1')->whereId($id)->with('tinhthanh:id,tenTinhThanh', 'hinhanh:id,hinhAnh')->get();
+        $diaDanh = DiaDanh::where('trangThai', '=', '1')->whereId($id)->with('tinhthanh:id,tenTinhThanh', 'hinhanh:id,hinhAnh,idBaiVietChiaSe,idLoai')->get();
         return response()->json([
             'diaDanh' => $diaDanh
         ], 200);

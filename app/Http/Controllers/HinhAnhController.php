@@ -59,7 +59,7 @@ class HinhAnhController extends Controller
         ]);
         $hinhAnh->save();
         if ($request->hasFile('hinhAnh')) {
-            $hinhAnh->hinhAnh = $request->file('hinhAnh')->store('images/diaDanh' . $hinhAnh->idDiaDanh, 'public');
+            $hinhAnh->hinhAnh = Storage::disk('public')->put('images', $request->file('hinhAnh'));
         }
         $hinhAnh->save();
         $lstDiaDanh = DiaDanh::all();
