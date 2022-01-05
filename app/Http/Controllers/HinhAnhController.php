@@ -18,10 +18,10 @@ class HinhAnhController extends Controller
     // Phương thức hỗ trợ load hình và thay thế bằng hình mặc định nếu không tìm thấy file
     protected function fixImage(HinhAnh $hinhAnh)
     {
-        if (Storage::disk('public')->exists($hinhAnh->hinh_anh)) {
-            $hinhAnh->hinh_anh = Storage::url($hinhAnh->hinh_anh);
+        if (Storage::disk('public')->exists($hinhAnh->hinhAnh)) {
+            $hinhAnh->hinhAnh = $hinhAnh->hinhAnh;
         } else {
-            $hinhAnh->hinh_anh = '/img/no-image-available.jpg';
+            $hinhAnh->hinhAnh = '/images/no-image-available.jpg';
         }
     }
     public function index()

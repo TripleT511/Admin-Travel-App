@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\DiaDanh;
+use App\Models\HinhAnh;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ApiDiaDanhController extends Controller
 {
@@ -12,10 +14,20 @@ class ApiDiaDanhController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected function fixImage(HinhAnh $hinhAnh)
+    {
+        if (Storage::disk('public')->exists($hinhAnh->hinhAnh)) {
+            $hinhAnh->hinhAnh = $hinhAnh->hinhAnh;
+        } else {
+            $hinhAnh->hinhAnh = 'images/no-image-available.jpg';
+        }
+    }
     public function index()
     {
         $lstDiaDanh = DiaDanh::with('tinhthanh:id,tenTinhThanh', 'hinhanh:id,hinhAnh,idBaiVietChiaSe,idLoai')->get();
-
+        foreach ($lstDiaDanh as $item) {
+            $this->fixImage($item->hinhanh);
+        }
         return response()->json([
             'data' => $lstDiaDanh
         ], 200);
