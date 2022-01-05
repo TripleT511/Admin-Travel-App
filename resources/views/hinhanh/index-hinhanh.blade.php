@@ -37,7 +37,7 @@
                                      <td>{{ $item->diadanh->tenDiaDanh }}</td>
                                      <td>{{ $item->idBaiVietChiaSe }}</td>
                                      <td>
-                                         <img class="img-fluid" src="{{ $item->hinhAnh }}" width="200" alt="">
+                                         <img class="img-fluid" src="{{ asset($item->hinhAnh) }}" width="200" alt="">
                                      </td>
                                      <td>
                                         @if($item->idLoai == 1) Địa Danh 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DiaDanh;
 use App\Models\HinhAnh;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
 class HinhAnhController extends Controller
@@ -85,7 +86,8 @@ class HinhAnhController extends Controller
      */
     public function edit(HinhAnh $hinhAnh)
     {
-        //
+        $lstDiaDanh = DiaDanh::all();
+        return view('hinhanh.edit-hinhanh', ['hinhAnh' => $hinhAnh, 'lstDiaDanh' => $lstDiaDanh]);
     }
 
     /**
@@ -97,7 +99,26 @@ class HinhAnhController extends Controller
      */
     public function update(Request $request, HinhAnh $hinhAnh)
     {
-        //
+        if ($request->hasFile('hinhAnh')) {
+            $hinhAnh->fill([
+                'idDiaDanh' => $request->input('idDiaDanh'),
+                'idBaiVietChiaSe' => 1,
+                'idLoai' => 1,
+                'hinhAnh' => '',
+            ]);
+            $hinhAnh->save();
+            $hinhAnh->hinhAnh = Storage::disk('public')->put('images', $request->file('hinhAnh'));
+        } else {
+            $hinhAnh->fill([
+                'idDiaDanh' => $request->input('idDiaDanh'),
+                'idBaiVietChiaSe' => 1,
+                'idLoai' => 1,
+                'hinhAnh' => $hinhAnh->hinhAnh,
+            ]);
+        }
+        $hinhAnh->save();
+        $lstDiaDanh = DiaDanh::all();
+        return view('hinhanh.create-hinhanh', ['lstDiaDanh' => $lstDiaDanh]);
     }
 
     /**
@@ -108,6 +129,8 @@ class HinhAnhController extends Controller
      */
     public function destroy(HinhAnh $hinhAnh)
     {
-        //
+        Storage::disk('public')->delete($hinhAnh->hinhAnh);
+        $hinhAnh->delete();
+        return Redirect::route('hinhAnh.index');
     }
 }
