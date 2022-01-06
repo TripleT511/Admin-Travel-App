@@ -31,7 +31,7 @@ class DiaDanh extends Model
 
     public function hinhanh()
     {
-        return $this->belongsTo(HinhAnh::class, 'id');
+        return $this->belongsTo(HinhAnh::class, 'id', 'idDiaDanh');
     }
 
     public function hinhanhs()
