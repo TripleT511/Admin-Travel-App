@@ -25,9 +25,9 @@ class ApiDiaDanhController extends Controller
     public function index()
     {
         $lstDiaDanh = DiaDanh::with('tinhthanh:id,tenTinhThanh', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai')->get();
-        foreach ($lstDiaDanh as $item) {
-            $this->fixImage($item->hinhanh);
-        }
+        // foreach ($lstDiaDanh as $item) {
+        //     $this->fixImage($item->hinhanh);
+        // }
         return response()->json([
             'data' => $lstDiaDanh
         ], 200);
