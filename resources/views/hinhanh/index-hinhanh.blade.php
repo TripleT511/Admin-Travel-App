@@ -24,10 +24,9 @@
                             <tr>
                                 <th>id</th>
                                 <th>Tên địa danh</th>
-                                <th>Id bài viết</th>
                                 <th>Hình ảnh</th>
                                 <th>Loại hình ảnh</th>
-                                <th>Trạng thái</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -35,21 +34,17 @@
                                 <tr>
                                      <td>{{ $item->id }}</td>
                                      <td>{{ $item->diadanh->tenDiaDanh }}</td>
-                                     <td>{{ $item->idBaiVietChiaSe }}</td>
                                      <td>
                                          <img class="img-fluid" src="{{ asset($item->hinhAnh) }}" width="200" alt="">
                                      </td>
                                      <td>
                                         @if($item->idLoai == 1) Địa Danh 
-                                        @elseif($item->idLoad == 2) Bài viết
+                                        @elseif($item->idLoai == 2) Bài viết
                                         @endif
                                     </td>
                                      <td>
                                         <label class="badge badge-primary">
                                             <a class="d-block text-light" href="{{ route('hinhAnh.edit', ['hinhAnh'=>$item]) }}"> Sửa</a>
-                                        </label>
-                                        <label class="badge badge-success">
-                                            <a class="d-block text-light" href="{{ route('hinhAnh.show', ['hinhAnh'=>$item]) }}"> Show</a>
                                         </label>
                                         <label >
                                             <form method="post" action="{{ route('hinhAnh.destroy', ['hinhAnh'=>$item]) }}">

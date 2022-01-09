@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\BaiVietChiaSeController;
 use App\Http\Controllers\ApiDiaDanhController;
 use App\Http\Controllers\ApiHinhAnhController;
 use App\Http\Controllers\ApiNhuCauController;
@@ -51,6 +52,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/hinhanh/{id}', [ApiHinhAnhController::class, 'show']);
 
     Route::get('/tinhthanh/{id}', [ApiTinhThanhController::class, 'show']);
+
+    Route::get('/baiviet', [BaiVietChiaSeController::class, 'index']);
+
+    Route::post('/baiviet/create', [BaiVietChiaSeController::class, 'store']);
+
+    Route::put('/baiviet/update/{id}', [BaiVietChiaSeController::class, 'update']);
+
+    Route::get('/baiviet/noibat', [BaiVietChiaSeController::class, 'show']);
 });
 
 

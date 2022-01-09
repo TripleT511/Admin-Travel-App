@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\DiaDanh;
 use App\Http\Requests\StoreDiaDanhRequest;
 use App\Http\Requests\UpdateDiaDanhRequest;
+use App\Models\BaiVietChiaSe;
+use App\Models\HinhAnh;
 use App\Models\TinhThanh;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 
 class DiaDanhController extends Controller
 {
@@ -17,7 +20,8 @@ class DiaDanhController extends Controller
      */
     public function index()
     {
-        $lstDiaDanh = DiaDanh::with('tinhthanh:id,tenTinhThanh', 'hinhanh:id,hinhAnh')->get();
+        $lstDiaDanh = DiaDanh::with('tinhthanh:id,tenTinhThanh', 'hinhanh:id,idDiaDanh,hinhAnh,idLoai')->get();
+
         return view('diadanh.index-diadanh', ['lstDiaDanh' => $lstDiaDanh]);
     }
 
@@ -45,12 +49,14 @@ class DiaDanhController extends Controller
             'moTa' => 'required',
             'kinhDo' => 'required',
             'viDo' => 'required',
+            'hinhAnh' => 'required',
         ], [
             'tenDiaDanh.required' => "Tên địa danh không được bỏ trống",
             'tenDiaDanh.unique' => "Tên địa danh bị trùng",
             'moTa.required' => 'Mô tả không được bỏ trống',
             'kinhDo.required' => 'Kinh độ không được bỏ trống',
             'viDo.required' => 'Vĩ độ không được bỏ trống',
+            'hinhAnh.required' => 'Bắt buộc chọn hình ảnh'
         ]);
         $trangThai = 1;
         if ($request->input('trangThai') != "on") {
@@ -66,6 +72,20 @@ class DiaDanhController extends Controller
             'trangThai' => $trangThai
         ]);
         $diadanh->save();
+
+        $hinhAnh = new HinhAnh();
+
+        $hinhAnh->fill([
+            'idDiaDanh' => $diadanh->id,
+            'idLoai' => 1,
+            'hinhAnh' => '',
+        ]);
+        $hinhAnh->save();
+        if ($request->hasFile('hinhAnh')) {
+            $hinhAnh->hinhAnh = Storage::disk('public')->put('images', $request->file('hinhAnh'));
+        }
+        $hinhAnh->save();
+
         return Redirect::route('diaDanh.show', ['diaDanh' => $diadanh]);
     }
 
@@ -89,7 +109,8 @@ class DiaDanhController extends Controller
     public function edit(DiaDanh $diaDanh)
     {
         $lstTinhThanh = TinhThanh::all();
-        return view('diaDanh.edit-diadanh', ['diaDanh' => $diaDanh, 'lstTinhThanh' => $lstTinhThanh]);
+        $hinhAnh = HinhAnh::where('idDiaDanh', '=', $diaDanh->id)->orderBy('created_at', 'desc')->first();
+        return view('diaDanh.edit-diadanh', ['diaDanh' => $diaDanh, 'lstTinhThanh' => $lstTinhThanh, 'hinhAnh' => $hinhAnh]);
     }
 
     /**
@@ -106,8 +127,12 @@ class DiaDanhController extends Controller
             'moTa' => 'required',
             'kinhDo' => 'required',
             'viDo' => 'required',
-            'idTinhThanh' => 'required',
-            'trangThai' => 'required'
+        ], [
+            'tenDiaDanh.required' => "Tên địa danh không được bỏ trống",
+            'tenDiaDanh.unique' => "Tên địa danh bị trùng",
+            'moTa.required' => 'Mô tả không được bỏ trống',
+            'kinhDo.required' => 'Kinh độ không được bỏ trống',
+            'viDo.required' => 'Vĩ độ không được bỏ trống',
         ]);
         $trangThai = 1;
         if ($request->input('trangThai') != "on") {
@@ -122,6 +147,12 @@ class DiaDanhController extends Controller
             'trangThai' => $trangThai
         ]);
         $diaDanh->save();
+        if ($request->hasFile('hinhAnh')) {
+            $hinhAnh = HinhAnh::where('idDiaDanh', '=', $diaDanh->id)->orderBy('created_at', 'desc')->first();
+            $hinhAnh->hinhAnh = Storage::disk('public')->put('images', $request->file('hinhAnh'));
+            $hinhAnh->save();
+        }
+
         return Redirect::route('diaDanh.show', ['diaDanh' => $diaDanh]);
     }
 
@@ -133,6 +164,10 @@ class DiaDanhController extends Controller
      */
     public function destroy(DiaDanh $diaDanh)
     {
+        $hinhAnh = HinhAnh::where('idDiaDanh', '=', $diaDanh->id);
+        $baiViet = BaiVietChiaSe::where('idDiaDanh', '=', $diaDanh->id);
+        $baiViet->delete();
+        $hinhAnh->delete();
         $diaDanh->delete();
         return Redirect::route('diaDanh.index');
     }

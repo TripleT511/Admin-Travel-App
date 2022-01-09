@@ -14,7 +14,7 @@
                     @endforeach
                 @endif
             <hr>
-            <form class="forms-sample" action="{{ route('diaDanh.update', ['diaDanh'=>$diaDanh]) }}" method="post">
+            <form class="forms-sample" action="{{ route('diaDanh.update', ['diaDanh'=>$diaDanh]) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method("PATCH")
                 <div class="form-group">
@@ -32,6 +32,19 @@
                 <div class="form-group">
                     <label for="exampleInputPassword4">Vĩ độ</label>
                      <input type="text" class="form-control text-light" name="viDo" value="{{ $diaDanh->viDo }}" placeholder="Vĩ độ">
+                </div>
+                <div class="form-group">
+                     <img src="{{ asset($hinhAnh->hinhAnh) }}" width="200" />
+                </div>
+                <div class="form-group">
+                    <label>Hình ảnh</label>
+                    <input type="file" name="hinhAnh" class="file-upload-default">
+                    <div class="input-group col-xs-12">
+                        <input type="text" class="form-control file-upload-info" disabled="" placeholder="Upload Image">
+                        <span class="input-group-append">
+                        <button class="file-upload-browse btn btn-primary" type="button">Upload hình ảnh</button>
+                        </span>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword4">Tỉnh thành</label>

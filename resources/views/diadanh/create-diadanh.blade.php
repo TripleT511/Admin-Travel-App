@@ -21,9 +21,9 @@
                      <input type="text" class="form-control text-light"  name="tenDiaDanh" placeholder="Tên địa danh">
                 </div>
                 <div class="form-group">
-                        <label for="exampleTextarea1">Mô tả</label>
-                        <input type="text" class="form-control text-light"  name="moTa" placeholder="Mô tả">
-                      </div>
+                    <label for="exampleTextarea1">Mô tả</label>
+                    <input type="text" class="form-control text-light"  name="moTa" placeholder="Mô tả">
+                </div>
                 <div class="form-group">
                     <label for="exampleInputPassword4">Kinh độ</label>
                      <input type="text" class="form-control text-light" name="kinhDo" placeholder="Kinh độ">
@@ -31,6 +31,16 @@
                 <div class="form-group">
                     <label for="exampleInputPassword4">Vĩ độ</label>
                      <input type="text" class="form-control text-light" name="viDo" placeholder="Vĩ độ">
+                </div>
+                <div class="form-group">
+                    <label>Hình ảnh</label>
+                    <input type="file" name="hinhAnh" class="file-upload-default">
+                    <div class="input-group col-xs-12">
+                        <input type="text" class="form-control file-upload-info" placeholder="Upload Image">
+                        <span class="input-group-append">
+                        <button class="file-upload-browse btn btn-primary" type="button">Upload hình ảnh</button>
+                        </span>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword4">Tỉnh thành</label>

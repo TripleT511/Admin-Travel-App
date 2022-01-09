@@ -1,0 +1,188 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Models\BaiVietChiaSe;
+use App\Models\HinhAnh;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+
+class BaiVietChiaSeController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->orderBy('created_at')->get();
+        return response()->json([
+            'data' => $baiViet
+        ], 200);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        try {
+
+            $validator = Validator::make(
+                $request->all(),
+                [
+                    'noiDung' => 'required',
+                    'hinhAnh' => 'required',
+                    'idUser' => 'required',
+                    'idDiaDanh' => 'required',
+                ],
+                [
+                    'noiDung.required' => 'Nội dung không được bỏ trống',
+                    'hinhAnh.required' => "Bắt buộc chọn hình ảnh"
+                ]
+            );
+
+            if ($validator->fails()) {
+                return response([
+                    'error' => $validator->errors()->all()
+                ], 422);
+            }
+
+            $baiViet = new BaiVietChiaSe();
+            $baiViet->fill([
+                'idDiaDanh' => $request->input('idDiaDanh'),
+                'idUser' => $request->input('idUser'),
+                'noiDung' => $request->input('noiDung'),
+                'thoiGian' => Carbon::now()->toDateTimeString(),
+                'trangThai' => 1
+            ]);
+            $baiViet->save();
+
+            $hinhAnh = new HinhAnh();
+
+            $hinhAnh->fill([
+                'idDiaDanh' => $request->input('idDiaDanh'),
+                'idBaiVietChiaSe' => $baiViet->id,
+                'idLoai' => 2,
+                'hinhAnh' => '',
+            ]);
+            $hinhAnh->save();
+            if ($request->hasFile('hinhAnh')) {
+                $hinhAnh->hinhAnh = Storage::disk('public')->put('images', $request->file('hinhAnh'));
+            }
+            $hinhAnh->save();
+
+            return response()->json([
+                'status_code' => 200,
+                'message' => 'Create Post Successfull',
+            ]);
+        } catch (Exception $error) {
+            return response()->json([
+                'status_code' => 500,
+                'message' => 'Error in Create Post',
+                'error' => $error,
+            ]);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\BaiVietChiaSe  $baiVietChiaSe
+     * @return \Illuminate\Http\Response
+     */
+    public function show(BaiVietChiaSe $baiVietChiaSe)
+    {
+        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->orderBy('created_at')->take(5)->get();
+        return response()->json([
+            'data' => $baiViet
+        ], 200);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\BaiVietChiaSe  $baiVietChiaSe
+     * @return \Illuminate\Http\Response
+     */
+    // public function update(Request $request, BaiVietChiaSe $baiVietChiaSe)
+    public function update(Request $request, $id)
+    {
+        try {
+
+            $validator = Validator::make(
+                $request->all(),
+                [
+                    'noiDung' => 'required',
+                    'hinhAnh' => 'required',
+                    'idUser' => 'required',
+                    'idDiaDanh' => 'required',
+                ],
+                [
+                    'noiDung.required' => 'Nội dung không được bỏ trống',
+                    'hinhAnh.required' => "Bắt buộc chọn hình ảnh"
+                ]
+            );
+
+            if ($validator->fails()) {
+                return response([
+                    'error' => $validator->errors()->all()
+                ], 422);
+            }
+
+            $baiViet = BaiVietChiaSe::find($id);
+            $baiViet->fill([
+                'idDiaDanh' => $baiViet->idDiaDanh,
+                'idUser' => $baiViet->idUser,
+                'noiDung' => $request->input('noiDung'),
+                'thoiGian' => Carbon::now()->toDateTimeString(),
+                'trangThai' => 1
+            ]);
+            $baiViet->update();
+
+            $hinhAnh = HinhAnh::where('idBaiVietChiaSe', '=', $id)->first();
+
+            $hinhAnh->fill([
+                'idDiaDanh' => $request->input('idDiaDanh'),
+                'idBaiVietChiaSe' => $baiViet->id,
+                'idLoai' => 2,
+                'hinhAnh' => '',
+            ]);
+            $hinhAnh->update();
+            $hinhAnh->hinhAnh = Storage::disk('public')->put('images', $request->file('hinhAnh'));
+            $hinhAnh->update();
+
+            return response()->json([
+                'status_code' => 200,
+                'message' => 'Update Post Successfull',
+            ]);
+        } catch (Exception $error) {
+            return response()->json([
+                'status_code' => 500,
+                'message' => 'Error in Update Post',
+                'error' => $error,
+            ]);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\BaiVietChiaSe  $baiVietChiaSe
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(BaiVietChiaSe $baiVietChiaSe)
+    {
+        //
+    }
+}

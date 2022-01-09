@@ -18,7 +18,7 @@ class DiaDanhNhuCauController extends Controller
      */
     public function index()
     {
-        $lstDiaDanhNhuCau = DiaDanhNhuCau::all();
+        $lstDiaDanhNhuCau = DiaDanhNhuCau::with(['diadanh', 'nhucau'])->get();
         return view('diadanhnhucau.index-diadanhnhucau', ['lstDiaDanhNhuCau' => $lstDiaDanhNhuCau]);
     }
 

@@ -26,7 +26,7 @@ class HinhAnhController extends Controller
     }
     public function index()
     {
-        $lstHinhAnh = HinhAnh::with('diadanh')->get();
+        $lstHinhAnh = HinhAnh::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id'])->where('idLoai', '=', '1')->get();
         return view('hinhanh.index-hinhanh', ["lstHinhAnh" => $lstHinhAnh]);
     }
 
@@ -54,7 +54,6 @@ class HinhAnhController extends Controller
 
         $hinhAnh->fill([
             'idDiaDanh' => $request->input('idDiaDanh'),
-            'idBaiVietChiaSe' => 1,
             'idLoai' => 1,
             'hinhAnh' => '',
         ]);
@@ -63,8 +62,8 @@ class HinhAnhController extends Controller
             $hinhAnh->hinhAnh = Storage::disk('public')->put('images', $request->file('hinhAnh'));
         }
         $hinhAnh->save();
-        $lstDiaDanh = DiaDanh::all();
-        return view('hinhanh.create-hinhanh', ['lstDiaDanh' => $lstDiaDanh]);
+        $lstHinhAnh = HinhAnh::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id'])->where('idLoai', '=', '1')->get();
+        return view('hinhanh.index-hinhanh', ["lstHinhAnh" => $lstHinhAnh]);
     }
 
     /**
@@ -102,7 +101,6 @@ class HinhAnhController extends Controller
         if ($request->hasFile('hinhAnh')) {
             $hinhAnh->fill([
                 'idDiaDanh' => $request->input('idDiaDanh'),
-                'idBaiVietChiaSe' => 1,
                 'idLoai' => 1,
                 'hinhAnh' => '',
             ]);
@@ -111,14 +109,13 @@ class HinhAnhController extends Controller
         } else {
             $hinhAnh->fill([
                 'idDiaDanh' => $request->input('idDiaDanh'),
-                'idBaiVietChiaSe' => 1,
                 'idLoai' => 1,
                 'hinhAnh' => $hinhAnh->hinhAnh,
             ]);
         }
         $hinhAnh->save();
-        $lstDiaDanh = DiaDanh::all();
-        return view('hinhanh.create-hinhanh', ['lstDiaDanh' => $lstDiaDanh]);
+        $lstHinhAnh = HinhAnh::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id'])->where('idLoai', '=', '1')->get();
+        return view('hinhanh.index-hinhanh', ["lstHinhAnh" => $lstHinhAnh]);
     }
 
     /**

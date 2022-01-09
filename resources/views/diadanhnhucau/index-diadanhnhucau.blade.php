@@ -25,15 +25,15 @@
                                 <th>id</th>
                                 <th>Tên địa danh</th>
                                 <th>Tên nhu cầu</th>
-                                <th>Trạng thái</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                            @foreach ($lstDiaDanhNhuCau as $item)
                                 <tr>
                                      <td>{{ $item->id }}</td>
-                                     <td>{{ $item->idDiaDanh }}</td>
-                                     <td>{{ $item->idNhuCau }}</td>
+                                     <td>{{ $item->diadanh->tenDiaDanh }}</td>
+                                     <td>{{ $item->nhucau->tenNhuCau }}</td>
 
                                      <td>
                                         <label class="badge badge-primary">

@@ -24,7 +24,7 @@
                             <tr>
                                 <th>id</th>
                                 <th>Tên tỉnh thành</th>
-                                <th>Trạng thái</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>

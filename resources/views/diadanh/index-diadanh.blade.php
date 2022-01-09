@@ -28,8 +28,9 @@
                                 <th>Mô tả</th>
                                 <th>Kinh độ</th>
                                 <th>Vĩ độ</th>
+                                <th>Hình ảnh</th>
                                 <th>Tỉnh thành</th>
-                                <th>Trạng thái</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -44,6 +45,11 @@
                                      <td class="text-wrap">{{ $item->moTa }}</td>
                                      <td>{{ $item->kinhDo }}</td>
                                      <td>{{ $item->viDo }}</td>
+                                     <td>
+                                         <img src="@if($item->hinhanh != null) {{ asset($item->hinhanh->hinhAnh) }}
+                                                      @else '/images/no-image-available.jpg'
+                                                      @endif" width="150"/>
+                                     </td>
                                      <td>{{ $item->tinhthanh->tenTinhThanh }}</td>
                                      <td>
                                         <label class="badge badge-primary">

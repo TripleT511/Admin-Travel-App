@@ -38,7 +38,7 @@ class ApiTinhThanhController extends Controller
      * @param  \App\Models\TinhThanh  $tinhThanh
      * @return \Illuminate\Http\Response
      */
-    public function show(int $id)
+    public function show($id)
     {
         $lstDiaDanh = TinhThanh::with('diadanhs:id,tenDiaDanh')->get();
 

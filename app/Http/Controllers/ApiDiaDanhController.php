@@ -50,7 +50,7 @@ class ApiDiaDanhController extends Controller
      * @param  \App\Models\DiaDanh  $diaDanh
      * @return \Illuminate\Http\Response
      */
-    public function show(int $id)
+    public function show($id)
     {
         $diaDanh = DiaDanh::where('trangThai', '=', '1')->whereId($id)->with('tinhthanh:id,tenTinhThanh', 'hinhanh:id,hinhAnh,idBaiVietChiaSe,idLoai')->get();
         return response()->json([

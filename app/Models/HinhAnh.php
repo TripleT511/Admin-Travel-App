@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\DiaDanh;
+use App\Models\BaiVietChiaSe;
+
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -23,5 +25,10 @@ class HinhAnh extends Model
     public function diadanh()
     {
         return $this->belongsTo(DiaDanh::class, 'idDiaDanh');
+    }
+
+    public function baiviet()
+    {
+        return $this->belongsTo(BaiVietChiaSe::class, 'idBaiVietChiaSe');
     }
 }

@@ -81,20 +81,12 @@
                     </a>
                 </li>
                 <li class="nav-item menu-items">
-                    <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                    <a class="nav-link" href="#ui-basic">
                         <span class="menu-icon">
                             <i class="mdi mdi-account-multiple"></i>
                         </span>
                         <span class="menu-title">Quản lý tài khoản</span>
-                        <i class="menu-arrow"></i>
                     </a>
-                    <div class="collapse" id="ui-basic">
-                        <ul class="nav flex-column sub-menu">
-                            <li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/buttons.html">Buttons</a></li>
-                            <li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/dropdowns.html">Dropdowns</a></li>
-                            <li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/typography.html">Typography</a></li>
-                        </ul>
-                    </div>
                 </li>
                 <li class="nav-item menu-items">
                     <a class="nav-link" href="{{ route('diaDanh.index') }}">
@@ -113,7 +105,7 @@
                     </a>
                 </li>
                 <li class="nav-item menu-items">
-                    <a class="nav-link" href="../../pages/charts/chartjs.html">
+                    <a class="nav-link" href="{{ route('baiViet.index') }}">
                         <span class="menu-icon">
                             <i class="mdi mdi-newspaper"></i>
                         </span>
@@ -157,7 +149,7 @@
                         <span class="menu-icon">
                             <i class="mdi mdi-file-image"></i>
                         </span>
-                        <span class="menu-title text-wrap" >Quản lý hình ảnh</span>
+                        <span class="menu-title text-wrap" >Quản lý hình ảnh địa danh</span>
                     </a>
                 </li>
             </ul>
