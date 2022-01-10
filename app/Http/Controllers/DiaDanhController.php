@@ -112,7 +112,7 @@ class DiaDanhController extends Controller
     {
         $lstTinhThanh = TinhThanh::all();
         $hinhAnh = HinhAnh::where('idDiaDanh', '=', $diaDanh->id)->orderBy('created_at', 'desc')->first();
-        return view('diaDanh.edit-diadanh', ['diaDanh' => $diaDanh, 'lstTinhThanh' => $lstTinhThanh, 'hinhAnh' => $hinhAnh]);
+        return view('diadanh.edit-diadanh', ['diaDanh' => $diaDanh, 'lstTinhThanh' => $lstTinhThanh, 'hinhAnh' => $hinhAnh]);
     }
 
     /**
