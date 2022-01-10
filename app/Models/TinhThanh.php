@@ -21,6 +21,6 @@ class TinhThanh extends Model
 
     public function diadanhs()
     {
-        return $this->hasMany(DiaDanh::class, 'id');
+        return $this->hasMany(DiaDanh::class, 'tinh_thanh_id');
     }
 }

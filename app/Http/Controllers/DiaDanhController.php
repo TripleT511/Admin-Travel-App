@@ -23,7 +23,6 @@ class DiaDanhController extends Controller
         $lstDiaDanh = DiaDanh::with('tinhthanh:id,tenTinhThanh')->with(['hinhanh' => function ($query) {
             $query->where('idLoai', '=', 1)->select('id', 'idDiaDanh', 'hinhAnh', 'idBaiVietChiaSe', 'idLoai')->orderBy('created_at');
         }])->get();
-
         return view('diadanh.index-diadanh', ['lstDiaDanh' => $lstDiaDanh]);
     }
 

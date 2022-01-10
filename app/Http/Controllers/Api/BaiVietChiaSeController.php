@@ -19,9 +19,20 @@ class BaiVietChiaSeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected function fixImage(HinhAnh $hinhAnh)
+    {
+        if (Storage::disk('public')->exists($hinhAnh->hinhAnh)) {
+            $hinhAnh->hinhAnh = $hinhAnh->hinhAnh;
+        } else {
+            $hinhAnh->hinhAnh = 'images/no-image-available.jpg';
+        }
+    }
     public function index()
     {
         $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->orderBy('created_at')->get();
+        foreach ($baiViet as $item) {
+            $this->fixImage($item->hinhanh);
+        }
         return response()->json([
             'data' => $baiViet
         ], 200);
@@ -102,7 +113,10 @@ class BaiVietChiaSeController extends Controller
      */
     public function show(BaiVietChiaSe $baiVietChiaSe)
     {
-        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->orderBy('created_at')->take(5)->get();
+        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->orderBy('created_at')->take(5)->get();
+        foreach ($baiViet as $item) {
+            $this->fixImage($item->hinhanh);
+        }
         return response()->json([
             'data' => $baiViet
         ], 200);
