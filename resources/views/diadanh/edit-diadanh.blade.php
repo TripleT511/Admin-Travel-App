@@ -50,7 +50,7 @@
                     <label for="exampleInputPassword4">Tỉnh thành</label>
                     <select class="form-control text-light " name="idTinhThanh">
                         @foreach ($lstTinhThanh as $item)
-                            <option value="{{ $item->id }}" @if($diaDanh->idTinhThanh == $item->id) selected @endif>
+                            <option value="{{ $item->id }}" @if($diaDanh->tinh_thanh_id == $item->id) selected @endif>
                              {{ $item->tenTinhThanh}}
                             </option>
                         @endforeach
