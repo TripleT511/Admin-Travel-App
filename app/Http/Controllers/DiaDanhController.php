@@ -20,7 +20,9 @@ class DiaDanhController extends Controller
      */
     public function index()
     {
-        $lstDiaDanh = DiaDanh::with('tinhthanh:id,tenTinhThanh', 'hinhanh:id,idDiaDanh,hinhAnh,idLoai')->get();
+        $lstDiaDanh = DiaDanh::with('tinhthanh:id,tenTinhThanh')->with(['hinhanh' => function ($query) {
+            $query->where('idLoai', '=', 1)->select('id', 'idDiaDanh', 'hinhAnh', 'idBaiVietChiaSe', 'idLoai')->orderBy('created_at');
+        }])->get();
 
         return view('diadanh.index-diadanh', ['lstDiaDanh' => $lstDiaDanh]);
     }

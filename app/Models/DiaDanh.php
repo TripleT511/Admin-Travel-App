@@ -36,6 +36,6 @@ class DiaDanh extends Model
 
     public function hinhanhs()
     {
-        return $this->hasMany(HinhAnh::class, 'id');
+        return $this->hasMany(HinhAnh::class, 'idDiaDanh', 'id');
     }
 }
