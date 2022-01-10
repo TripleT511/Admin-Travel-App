@@ -21,7 +21,7 @@ class BaiVietChiaSeController extends Controller
      */
     public function index()
     {
-        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->orderBy('created_at')->get();
+        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->orderBy('created_at')->get();
         return response()->json([
             'data' => $baiViet
         ], 200);

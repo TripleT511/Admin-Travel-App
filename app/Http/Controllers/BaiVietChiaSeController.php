@@ -33,7 +33,7 @@ class BaiVietChiaSeController extends Controller
     public function create()
     {
         $lstDiaDanh = DiaDanh::all();
-        return view('baiviet.create-baiViet', ['lstDiaDanh' => $lstDiaDanh]);
+        return view('baiviet.create-baiviet', ['lstDiaDanh' => $lstDiaDanh]);
     }
 
     /**
