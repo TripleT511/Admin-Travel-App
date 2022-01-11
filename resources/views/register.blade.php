@@ -17,19 +17,29 @@
                 @csrf
                 <div class="form-group">
                   <label>Username</label>
-                  <input type="text" name="hoTen" class="form-control text-light"   required>
+                  <input type="text" name="hoTen" class="form-control text-light"  >
                 </div>
                 <div class="form-group">
                   <label>Email</label>
-                  <input type="email" name="email" class="form-control text-light"  required>
+                  <input type="email" name="email" class="form-control text-light" >
                 </div>
                 <div class="form-group">
                   <label>Password</label>
-                  <input type="password" name="password" class="form-control text-light" required>
+                  <input type="password" name="password" class="form-control text-light">
                 </div>
                 <div class="form-group">
                   <label>Số điện thoại</label>
-                  <input type="text" name="soDienThoai" class="form-control text-light" required>
+                  <input type="text" name="soDienThoai" class="form-control text-light">
+                </div>
+                <div class="form-group">
+                    <label>Hình ảnh</label>
+                    <input type="file" name="hinhAnh" class="file-upload-default">
+                    <div class="input-group col-xs-12">
+                        <input type="text" class="form-control file-upload-info" placeholder="Upload Image">
+                        <span class="input-group-append">
+                        <button class="file-upload-browse btn btn-primary" type="button">Upload hình ảnh</button>
+                        </span>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword4">Loại tài khoản</label>

@@ -81,7 +81,7 @@
                     </a>
                 </li>
                 <li class="nav-item menu-items">
-                    <a class="nav-link" href="#ui-basic">
+                    <a class="nav-link" href="{{ route("lstUser") }}">
                         <span class="menu-icon">
                             <i class="mdi mdi-account-multiple"></i>
                         </span>

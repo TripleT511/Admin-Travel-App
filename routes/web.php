@@ -33,6 +33,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('hinhAnh', HinhAnhController::class);
 
     Route::resource('baiViet', BaiVietChiaSeController::class);
+
+    Route::get('/user', [LoginController::class, 'index'])->name("lstUser");
 });
 
 

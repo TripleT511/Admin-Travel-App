@@ -7,12 +7,21 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
+    protected function fixImage(User $hinhAnh)
+    {
+        if (Storage::disk('public')->exists($hinhAnh->hinhAnh)) {
+            $hinhAnh->hinhAnh = $hinhAnh->hinhAnh;
+        } else {
+            $hinhAnh->hinhAnh = 'images/user-default.jpg';
+        }
+    }
     public function login(Request $request)
     {
         try {
@@ -60,7 +69,9 @@ class AuthController extends Controller
     public function getAllUser()
     {
         $user = User::all();
-
+        foreach ($user as $item) {
+            $this->fixImage($item);
+        }
         return response([
             'data' => $user,
         ]);
@@ -109,6 +120,20 @@ class AuthController extends Controller
                 'error' => $error,
             ]);
         }
+    }
+
+    public function updateAvatar(Request $request)
+    {
+        if ($request->hasFile('hinhAnh')) {
+            $request->user()->update(['hinhAnh' => Storage::disk('public')->put('images', $request->file('hinhAnh'))]);
+
+            return response()->json([
+                'message' => "Change Avatar successfully"
+            ], 200);
+        }
+        return response()->json([
+            'message' => "No change"
+        ], 200);
     }
 
     public function updatePassword(Request $request)
