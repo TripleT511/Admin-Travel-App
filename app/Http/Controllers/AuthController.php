@@ -191,6 +191,13 @@ class AuthController extends Controller
         return $request->user()->tokens;
     }
 
+    public function getUser(Request $request)
+    {
+        $user = $request->user();
+        $this->fixImage($user);
+        return response($user);
+    }
+
     public function deleteTokenById(Request $request, $tokenId)
     {
         return $request->user()->tokens()->where('id', $tokenId)->delete();
