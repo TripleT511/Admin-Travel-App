@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\BaiVietChiaSe;
 use App\Models\HinhAnh;
+use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -27,11 +28,21 @@ class BaiVietChiaSeController extends Controller
             $hinhAnh->hinhAnh = 'images/no-image-available.jpg';
         }
     }
+
+    protected function fixImageUser(User $hinhAnh)
+    {
+        if (Storage::disk('public')->exists($hinhAnh->hinhAnh)) {
+            $hinhAnh->hinhAnh = $hinhAnh->hinhAnh;
+        } else {
+            $hinhAnh->hinhAnh = 'images/user-default.jpg';
+        }
+    }
     public function index()
     {
         $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->orderBy('created_at')->get();
         foreach ($baiViet as $item) {
             $this->fixImage($item->hinhanh);
+            $this->fixImageUser($item->user);
         }
         return response()->json([
             'data' => $baiViet
@@ -116,6 +127,7 @@ class BaiVietChiaSeController extends Controller
         $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->orderBy('created_at')->take(5)->get();
         foreach ($baiViet as $item) {
             $this->fixImage($item->hinhanh);
+            $this->fixImageUser($item->user);
         }
         return response()->json([
             'data' => $baiViet
