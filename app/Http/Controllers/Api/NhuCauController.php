@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\TinhThanh;
+use App\Models\NhuCau;
 use Illuminate\Http\Request;
 
-class TinhThanhController extends Controller
+class NhuCauController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +15,9 @@ class TinhThanhController extends Controller
      */
     public function index()
     {
-        $lstTinhThanh = TinhThanh::all();
+        $lstNhuCau = NhuCau::all();
         return response()->json([
-            'data' => $lstTinhThanh,
+            'data' => $lstNhuCau,
 
         ], 200);
     }
@@ -36,23 +36,22 @@ class TinhThanhController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\TinhThanh  $tinhThanh
+     * @param  \App\Models\NhuCau  $nhuCau
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(NhuCau $nhuCau)
     {
-        $lstTinhThanh = TinhThanh::whereId($id)->with('diadanhs:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai')->get();
-        return response($lstTinhThanh);
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\TinhThanh  $tinhThanh
+     * @param  \App\Models\NhuCau  $nhuCau
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TinhThanh $tinhThanh)
+    public function update(Request $request, NhuCau $nhuCau)
     {
         //
     }
@@ -60,10 +59,10 @@ class TinhThanhController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\TinhThanh  $tinhThanh
+     * @param  \App\Models\NhuCau  $nhuCau
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TinhThanh $tinhThanh)
+    public function destroy(NhuCau $nhuCau)
     {
         //
     }

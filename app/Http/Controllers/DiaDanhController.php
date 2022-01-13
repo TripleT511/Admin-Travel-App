@@ -18,11 +18,22 @@ class DiaDanhController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected function fixImage(HinhAnh $hinhAnh)
+    {
+        if (Storage::disk('public')->exists($hinhAnh->hinhAnh)) {
+            $hinhAnh->hinhAnh = $hinhAnh->hinhAnh;
+        } else {
+            $hinhAnh->hinhAnh = 'images/no-image-available.jpg';
+        }
+    }
     public function index()
     {
         $lstDiaDanh = DiaDanh::with('tinhthanh:id,tenTinhThanh')->with(['hinhanh' => function ($query) {
-            $query->where('idLoai', '=', 1)->select('id', 'idDiaDanh', 'hinhAnh', 'idBaiVietChiaSe', 'idLoai')->orderBy('created_at');
+            $query->where('idLoai', '=', 1)->orderBy('created_at');
         }])->get();
+        foreach ($lstDiaDanh as $item) {
+            $this->fixImage($item->hinhanh);
+        }
         return view('diadanh.index-diadanh', ['lstDiaDanh' => $lstDiaDanh]);
     }
 
@@ -110,7 +121,7 @@ class DiaDanhController extends Controller
     public function edit(DiaDanh $diaDanh)
     {
         $lstTinhThanh = TinhThanh::all();
-        $hinhAnh = HinhAnh::where('idDiaDanh', '=', $diaDanh->id)->orderBy('created_at', 'desc')->first();
+        $hinhAnh = HinhAnh::where([['idDiaDanh', '=', $diaDanh->id], ['idLoai', '=', '1']])->orderBy('created_at', 'desc')->first();
         return view('diadanh.edit-diadanh', ['diaDanh' => $diaDanh, 'lstTinhThanh' => $lstTinhThanh, 'hinhAnh' => $hinhAnh]);
     }
 

@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\TinhThanh;
+use App\Models\DanhGia;
 use Illuminate\Http\Request;
 
-class TinhThanhController extends Controller
+class DanhGiaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,11 +14,17 @@ class TinhThanhController extends Controller
      */
     public function index()
     {
-        $lstTinhThanh = TinhThanh::all();
-        return response()->json([
-            'data' => $lstTinhThanh,
+        //
+    }
 
-        ], 200);
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
     }
 
     /**
@@ -36,23 +41,33 @@ class TinhThanhController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\TinhThanh  $tinhThanh
+     * @param  \App\Models\DanhGia  $danhGia
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(DanhGia $danhGia)
     {
-        $lstTinhThanh = TinhThanh::whereId($id)->with('diadanhs:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai')->get();
-        return response($lstTinhThanh);
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\DanhGia  $danhGia
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(DanhGia $danhGia)
+    {
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\TinhThanh  $tinhThanh
+     * @param  \App\Models\DanhGia  $danhGia
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TinhThanh $tinhThanh)
+    public function update(Request $request, DanhGia $danhGia)
     {
         //
     }
@@ -60,10 +75,10 @@ class TinhThanhController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\TinhThanh  $tinhThanh
+     * @param  \App\Models\DanhGia  $danhGia
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TinhThanh $tinhThanh)
+    public function destroy(DanhGia $danhGia)
     {
         //
     }

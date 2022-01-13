@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\BaiVietChiaSe;
+use App\Models\DanhGia;
 use App\Models\HinhAnh;
 use App\Models\User;
 use Carbon\Carbon;
@@ -39,10 +40,11 @@ class BaiVietChiaSeController extends Controller
     }
     public function index()
     {
-        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->orderBy('created_at')->get();
+        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->orderBy('created_at', 'desc')->get();
         foreach ($baiViet as $item) {
             $this->fixImage($item->hinhanh);
             $this->fixImageUser($item->user);
+            $item->thoiGian = date('d-m-Y', strtotime($item->thoiGian));
         }
         return response()->json([
             'data' => $baiViet
@@ -89,6 +91,7 @@ class BaiVietChiaSeController extends Controller
             ]);
             $baiViet->save();
 
+
             $hinhAnh = new HinhAnh();
 
             $hinhAnh->fill([
@@ -124,10 +127,11 @@ class BaiVietChiaSeController extends Controller
      */
     public function show(BaiVietChiaSe $baiVietChiaSe)
     {
-        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->orderBy('created_at')->take(5)->get();
+        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->orderBy('created_at', 'desc')->take(5)->get();
         foreach ($baiViet as $item) {
             $this->fixImage($item->hinhanh);
             $this->fixImageUser($item->user);
+            $item->thoiGian = date('d-m-Y', strtotime($item->thoiGian));
         }
         return response()->json([
             'data' => $baiViet

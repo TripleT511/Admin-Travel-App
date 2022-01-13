@@ -1,14 +1,15 @@
 <?php
 
 use App\Http\Controllers\Api\BaiVietChiaSeController;
-use App\Http\Controllers\Api\TinhThanhController as ApiTinhThanhController;
-use App\Http\Controllers\ApiDiaDanhController;
+use App\Http\Controllers\Api\DiaDanhController;
+use App\Http\Controllers\Api\LuuTruController;
+use App\Http\Controllers\Api\TinhThanhController;
 use App\Http\Controllers\ApiHinhAnhController;
-use App\Http\Controllers\ApiNhuCauController;
+use App\Http\Controllers\Api\NhuCauController;
+use App\Http\Controllers\Api\QuanAnController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\TinhThanhController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,16 +42,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/user/sessions', [AuthController::class, 'deleteAllToken']);
 
     // Tỉnh thành //
-    Route::get('/tinhthanh', [ApiTinhThanhController::class, 'index']);
+    Route::get('/tinhthanh', [TinhThanhController::class, 'index']);
 
-    Route::get('/tinhthanh/{id}', [ApiTinhThanhController::class, 'show']);
+    Route::get('/tinhthanh/{id}', [TinhThanhController::class, 'show']);
     // Tỉnh thành //
 
-    Route::get('/nhucau', [ApiNhuCauController::class, 'index']);
+    Route::get('/nhucau', [NhuCauController::class, 'index']);
 
-    Route::get('/diadanh', [ApiDiaDanhController::class, 'index']);
+    Route::get('/diadanh', [DiaDanhController::class, 'index']);
 
-    Route::get('/diadanh/{id}', [ApiDiaDanhController::class, 'show']);
+    Route::get('/diadanh/{id}', [DiaDanhController::class, 'show']);
 
     Route::get('/hinhanh/{id}', [ApiHinhAnhController::class, 'show']);
 
@@ -59,10 +60,22 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/baiviet/create', [BaiVietChiaSeController::class, 'store']);
 
     // Bài viết //
-    Route::put('/baiviet/update/{id}', [BaiVietChiaSeController::class, 'update']);
+    Route::put('/baiviet/{id}/update', [BaiVietChiaSeController::class, 'update']);
 
     Route::get('/baiviet/noibat', [BaiVietChiaSeController::class, 'show']);
     // Bài viết //
+
+    //Luu trú theo id địa danh
+    Route::get('diadanh/{id}/luutru', [LuuTruController::class, 'index']);
+
+    //Chi tiết lưu trú
+    Route::get('luutru/{id}', [LuuTruController::class, 'show']);
+
+    //Quán ăn theo id địa danh
+    Route::get('diadanh/{id}/quanan', [QuanAnController::class, 'index']);
+
+    //Chi tiết quán ăn
+    Route::get('quanan/{id}', [QuanAnController::class, 'show']);
 });
 
 

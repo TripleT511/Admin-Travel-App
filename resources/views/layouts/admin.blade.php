@@ -113,15 +113,23 @@
                     </a>
                 </li>
                 <li class="nav-item menu-items">
-                    <a class="nav-link" href="../../pages/icons/mdi.html">
+                    <a class="nav-link" href="{{ route('quanAn.index') }}">
                         <span class="menu-icon">
                             <i class="mdi mdi-food-fork-drink"></i>
                         </span>
                         <span class="menu-title">Quản lý quán ăn</span>
                     </a>
                 </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" href="{{ route('monAn.index') }}">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-food-fork-drink"></i>
+                        </span>
+                        <span class="menu-title">Quản lý món ăn</span>
+                    </a>
+                </li>
                <li class="nav-item menu-items">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{{ route('luuTru.index') }}">
                         <span class="menu-icon">
                             <i class="mdi mdi-home-map-marker"></i>
                         </span>

@@ -6,7 +6,10 @@ use App\Http\Controllers\TinhThanhController;
 use App\Http\Controllers\DiaDanhController;
 use App\Http\Controllers\DiaDanhNhuCauController;
 use App\Http\Controllers\HinhAnhController;
+use App\Http\Controllers\LuuTruController;
+use App\Http\Controllers\MonAnController;
 use App\Http\Controllers\NhuCauController;
+use App\Http\Controllers\QuanAnController;
 use App\Models\BaiVietChiaSe;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +36,13 @@ Route::middleware('auth')->group(function () {
     Route::resource('hinhAnh', HinhAnhController::class);
 
     Route::resource('baiViet', BaiVietChiaSeController::class);
+
+    Route::resource('luuTru', LuuTruController::class);
+
+    Route::resource('quanAn', QuanAnController::class);
+
+    Route::resource('monAn', MonAnController::class);
+
 
     Route::get('/user', [LoginController::class, 'index'])->name("lstUser");
 });

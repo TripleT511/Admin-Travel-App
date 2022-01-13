@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\HinhAnh;
 use App\Models\DiaDanh;
 use App\Models\User;
+use App\Models\DanhGia;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -37,5 +38,10 @@ class BaiVietChiaSe extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'idUser');
+    }
+
+    public function danhgias()
+    {
+        return $this->hasMany(DanhGia::class, 'idBaiViet', 'id');
     }
 }

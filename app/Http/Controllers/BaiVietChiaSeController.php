@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BaiVietChiaSe;
 use App\Http\Requests\StoreBaiVietChiaSeRequest;
 use App\Http\Requests\UpdateBaiVietChiaSeRequest;
+use App\Models\DanhGia;
 use App\Models\DiaDanh;
 use App\Models\HinhAnh;
 use Carbon\Carbon;
@@ -18,10 +19,20 @@ class BaiVietChiaSeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected function fixImage(HinhAnh $hinhAnh)
+    {
+        if (Storage::disk('public')->exists($hinhAnh->hinhAnh)) {
+            $hinhAnh->hinhAnh = $hinhAnh->hinhAnh;
+        } else {
+            $hinhAnh->hinhAnh = 'images/no-image-available.jpg';
+        }
+    }
     public function index()
     {
         $lstBaiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id', 'hinhanh:id,idDiaDanh,idBaiVietChiaSe,hinhAnh,idLoai', 'user:id,hoTen'])->get();
-
+        foreach ($lstBaiViet as $item) {
+            $this->fixImage($item->hinhanh);
+        }
         return view('baiviet.index-baiviet', ['lstBaiViet' => $lstBaiViet]);
     }
 
@@ -64,6 +75,16 @@ class BaiVietChiaSeController extends Controller
             'trangThai' => $trangThai
         ]);
         $baiViet->save();
+
+        $danhgia = new DanhGia();
+        $danhgia->fill([
+            'idBaiViet' => $baiViet->id,
+            'idUser' => $request->user()->id,
+            'userLike' => 0,
+            'userUnLike' => 0,
+            'userXem' => 0,
+        ]);
+        $danhgia->save();
 
         $hinhAnh = new HinhAnh();
 
