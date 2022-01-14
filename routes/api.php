@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\Api\BaiVietChiaSeController;
 use App\Http\Controllers\Api\DiaDanhController;
+use App\Http\Controllers\Api\HinhAnhController;
 use App\Http\Controllers\Api\LuuTruController;
 use App\Http\Controllers\Api\TinhThanhController;
-use App\Http\Controllers\ApiHinhAnhController;
 use App\Http\Controllers\Api\NhuCauController;
 use App\Http\Controllers\Api\QuanAnController;
 use Illuminate\Http\Request;
@@ -30,6 +30,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/user/change-password', [AuthController::class, 'updatePassword']);
 
+    Route::post('/user/update-infor', [AuthController::class, 'updateInfor']);
+
     Route::post('/user/avatar', [AuthController::class, 'updateAvatar']);
 
     // Lấy danh sách các token của user hiện tại
@@ -53,7 +55,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/diadanh/{id}', [DiaDanhController::class, 'show']);
 
-    Route::get('/hinhanh/{id}', [ApiHinhAnhController::class, 'show']);
+    Route::get('/hinhanh/{id}', [HinhAnhController::class, 'show']);
 
     Route::get('/baiviet', [BaiVietChiaSeController::class, 'index']);
 
@@ -62,8 +64,12 @@ Route::middleware('auth:sanctum')->group(function () {
     // Bài viết //
     Route::put('/baiviet/{id}/update', [BaiVietChiaSeController::class, 'update']);
 
-    Route::get('/baiviet/noibat', [BaiVietChiaSeController::class, 'show']);
     // Bài viết //
+    Route::get('/baiviet', [BaiVietChiaSeController::class, 'index']);
+
+    // Bài viết nổi bật
+    Route::get('/baiviet/noibat', [BaiVietChiaSeController::class, 'show']);
+
 
     //Luu trú theo id địa danh
     Route::get('diadanh/{id}/luutru', [LuuTruController::class, 'index']);

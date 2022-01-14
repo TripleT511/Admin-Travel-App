@@ -125,7 +125,7 @@ class BaiVietChiaSeController extends Controller
      * @param  \App\Models\BaiVietChiaSe  $baiVietChiaSe
      * @return \Illuminate\Http\Response
      */
-    public function show(BaiVietChiaSe $baiVietChiaSe)
+    public function show()
     {
         $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->orderBy('created_at', 'desc')->take(5)->get();
         foreach ($baiViet as $item) {

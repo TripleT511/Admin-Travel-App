@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\LuuTru;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class LuuTruController extends Controller
 {
@@ -13,10 +14,20 @@ class LuuTruController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected function fixImage(LuuTru $hinhAnh)
+    {
+        if (Storage::disk('public')->exists($hinhAnh->hinhAnh)) {
+            $hinhAnh->hinhAnh = $hinhAnh->hinhAnh;
+        } else {
+            $hinhAnh->hinhAnh = 'images/no-image-available.jpg';
+        }
+    }
     public function index($id)
     {
         $lstLuuTru = LuuTru::where('dia_danh_id', '=', $id)->get();
-
+        foreach ($lstLuuTru as $item) {
+            $this->fixImage($item);
+        }
         return response()->json([
             'data' => $lstLuuTru
         ], 200);
@@ -42,7 +53,9 @@ class LuuTruController extends Controller
     public function show($id)
     {
         $LuuTru = LuuTru::whereId($id)->get();
-
+        foreach ($LuuTru as $item) {
+            $this->fixImage($item);
+        }
         return response($LuuTru);
     }
 

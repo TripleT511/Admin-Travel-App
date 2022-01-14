@@ -176,6 +176,45 @@ class AuthController extends Controller
         }
     }
 
+    public function updateInfor(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'hoTen' => 'required|string|max:255',
+                'soDienThoai' => 'required|string',
+            ], [
+                'hoTen.required' => 'Họ Tên không được bỏ trống',
+                'soDienThoai.required' => 'Số điện thoại không được bỏ trống',
+            ]);
+
+            if ($validator->fails()) {
+                return response([
+                    'error' => $validator->errors()->all()
+                ], 422);
+            }
+
+            $user = request()->user();
+            $user->hoTen = $request->hoTen;
+            $user->soDienThoai = $request->soDienThoai;
+            $user->trangThaiHoTen = $request->trangThaiHoTen;
+            $user->trangThaiEmail = $request->trangThaiEmail;
+            $user->trangThaiSDT = $request->trangThaiSDT;
+
+            $user->save();
+
+            return response()->json([
+                'status_code' => 200,
+                'message' => 'Update successfully',
+            ], 200);
+        } catch (Exception $error) {
+            return response()->json([
+                'status_code' => 500,
+                'message' => 'Error',
+                'error' => $error,
+            ]);
+        }
+    }
+
     public function logout(Request $request)
     {
         $user = request()->user()->currentAccessToken()->delete();

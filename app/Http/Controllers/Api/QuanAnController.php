@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\MonAn;
 use App\Models\QuanAn;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class QuanAnController extends Controller
 {
@@ -13,10 +15,28 @@ class QuanAnController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected function fixImage(QuanAn $hinhAnh)
+    {
+        if (Storage::disk('public')->exists($hinhAnh->hinhAnh)) {
+            $hinhAnh->hinhAnh = $hinhAnh->hinhAnh;
+        } else {
+            $hinhAnh->hinhAnh = 'images/no-image-available.jpg';
+        }
+    }
+    protected function fixImageMonAn(MonAn $hinhAnh)
+    {
+        if (Storage::disk('public')->exists($hinhAnh->hinhAnh)) {
+            $hinhAnh->hinhAnh = $hinhAnh->hinhAnh;
+        } else {
+            $hinhAnh->hinhAnh = 'images/no-image-available.jpg';
+        }
+    }
     public function index($id)
     {
         $lstQuanAn = QuanAn::where('dia_danh_id', '=', $id)->get();
-
+        foreach ($lstQuanAn as $item) {
+            $this->fixImage($item);
+        }
         return response()->json([
             'data' => $lstQuanAn
         ], 200);
@@ -42,7 +62,10 @@ class QuanAnController extends Controller
     public function show($id)
     {
         $QuanAn = QuanAn::whereId($id)->with('monan')->get();
-
+        foreach ($QuanAn as $item) {
+            $this->fixImage($item);
+            $this->fixImageMonAn($item->monan);
+        }
         return response($QuanAn);
     }
 

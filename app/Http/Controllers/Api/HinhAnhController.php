@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\HinhAnh;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class ApiHinhAnhController extends Controller
+class HinhAnhController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    // Phương thức hỗ trợ load hình và thay thế bằng hình mặc định nếu không tìm thấy file
     protected function fixImage(HinhAnh $hinhAnh)
     {
         if (Storage::disk('public')->exists($hinhAnh->hinh_anh)) {
@@ -44,7 +44,7 @@ class ApiHinhAnhController extends Controller
      * @param  \App\Models\HinhAnh  $hinhAnh
      * @return \Illuminate\Http\Response
      */
-    public function show(int $id)
+    public function show($id)
     {
         $lstHinhAnh = HinhAnh::where('idDiaDanh', '=', $id)->get();
         return response()->json([
