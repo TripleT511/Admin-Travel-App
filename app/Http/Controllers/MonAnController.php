@@ -16,9 +16,18 @@ class MonAnController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected function fixImage(MonAn $hinhAnh)
+    {
+        if (Storage::disk('public')->exists($hinhAnh->hinhAnh)) {
+            $hinhAnh->hinhAnh = $hinhAnh->hinhAnh;
+        } else {
+            $hinhAnh->hinhAnh = 'images/no-image-available.jpg';
+        }
+    }
     public function index()
     {
-        $lstMonAn = MonAn::with('quanan')->get()->where('trangThai', '==', 1);
+        $lstMonAn = MonAn::with('quanan')->where('trangThai', '==', 1)->get();
+
         return view('monan.index-monan', ['lstMonAn' => $lstMonAn]);
     }
 

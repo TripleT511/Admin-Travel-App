@@ -27,6 +27,9 @@
                                 <th>Tên người đăng</th>
                                 <th>Nội dung</th>
                                 <th>Hình ảnh</th>
+                                <th>Lượt like</th>
+                                <th>Lượt Unlike</th>
+                                <th>Lượt Xem</th>
                                 <th>Thời gian</th>
                                 <th></th>
                             </tr>
@@ -41,6 +44,9 @@
                                      <td>
                                          <img class="img-fluid" src="{{ asset($item->hinhanh->hinhAnh) }}" width="200" alt="">
                                      </td>
+                                     <td>{{ $item->likes_count }}</td>
+                                     <td>{{ $item->unlikes_count }}</td>
+                                     <td>{{ $item->views_count }}</td>
                                      <td>{{  date('d-m-Y', strtotime($item->thoiGian)) }}</td>
                                      <td>
                                         <label class="badge badge-primary">

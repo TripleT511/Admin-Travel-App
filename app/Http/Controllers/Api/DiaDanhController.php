@@ -58,8 +58,8 @@ class DiaDanhController extends Controller
     {
         // $diaDanh = DiaDanh::where('trangThai', '=', '1')->whereId($id)->with('tinhthanh:id,tenTinhThanh', 'hinhanh:id,hinhAnh,idBaiVietChiaSe,idLoai')->get();
         $diaDanh = DiaDanh::whereId($id)->with('tinhthanh:id,tenTinhThanh')->with(['hinhanhs' => function ($query) {
-            $query->where('idLoai', '=', 1)->select('id', 'idDiaDanh', 'hinhAnh', 'idBaiVietChiaSe', 'idLoai')->orderBy('created_at');
-        }])->get();
+            $query->where('idLoai', '=', 1)->select('id', 'idDiaDanh', 'hinhAnh', 'idBaiVietChiaSe', 'idLoai')->orderBy('created_at', 'desc');
+        }])->with('nhucaus')->get();
         foreach ($diaDanh as $item) {
             foreach ($item->hinhanhs as $img) {
                 $this->fixImage($img);

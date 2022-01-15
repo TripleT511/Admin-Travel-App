@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DiaDanh;
 use App\Models\LuuTru;
+use App\Models\MonAn;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
@@ -15,10 +16,17 @@ class LuuTruController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected function fixImage(LuuTru $hinhAnh)
+    {
+        if (Storage::disk('public')->exists($hinhAnh->hinhAnh)) {
+            $hinhAnh->hinhAnh = $hinhAnh->hinhAnh;
+        } else {
+            $hinhAnh->hinhAnh = 'images/no-image-available.jpg';
+        }
+    }
     public function index()
     {
-        $lstLuuTru = LuuTru::with('diadanh')->get()->where('trangThai', '==', 1);
-        // echo $lstLuuTru;
+        $lstLuuTru = LuuTru::with('diadanh')->where('trangThai', '==', 1)->get();
         return view('luutru.index-luutru', ['lstLuuTru' => $lstLuuTru]);
     }
 

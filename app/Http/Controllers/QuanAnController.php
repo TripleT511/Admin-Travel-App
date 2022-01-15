@@ -6,6 +6,7 @@ use App\Models\QuanAn;
 use App\Http\Requests\StoreQuanAnRequest;
 use App\Http\Requests\UpdateQuanAnRequest;
 use App\Models\DiaDanh;
+use App\Models\MonAn;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
@@ -16,9 +17,28 @@ class QuanAnController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected function fixImage(QuanAn $hinhAnh)
+    {
+        if (Storage::disk('public')->exists($hinhAnh->hinhAnh)) {
+            $hinhAnh->hinhAnh = $hinhAnh->hinhAnh;
+        } else {
+            $hinhAnh->hinhAnh = 'images/no-image-available.jpg';
+        }
+    }
+    protected function fixImageMonAn(MonAn $hinhAnh)
+    {
+        if (Storage::disk('public')->exists($hinhAnh->hinhAnh)) {
+            $hinhAnh->hinhAnh = $hinhAnh->hinhAnh;
+        } else {
+            $hinhAnh->hinhAnh = 'images/no-image-available.jpg';
+        }
+    }
     public function index()
     {
         $lstQuanAn = QuanAn::all();
+        foreach ($lstQuanAn as $item) {
+            $this->fixImage($item);
+        }
         return view('quanan.index-quanan', ['lstQuanAn' => $lstQuanAn]);
     }
 

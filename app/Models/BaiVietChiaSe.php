@@ -40,7 +40,17 @@ class BaiVietChiaSe extends Model
         return $this->belongsTo(User::class, 'idUser');
     }
 
-    public function danhgias()
+    public function likes()
+    {
+        return $this->hasMany(DanhGia::class, 'idBaiViet', 'id');
+    }
+
+    public function unlikes()
+    {
+        return $this->hasMany(DanhGia::class, 'idBaiViet', 'id');
+    }
+
+    public function views()
     {
         return $this->hasMany(DanhGia::class, 'idBaiViet', 'id');
     }
