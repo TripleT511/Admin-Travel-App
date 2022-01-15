@@ -26,7 +26,7 @@ class LuuTruController extends Controller
     }
     public function index()
     {
-        $lstLuuTru = LuuTru::with('diadanh')->where('trangThai', '==', 1)->get();
+        $lstLuuTru = LuuTru::with('diadanh')->where('trangThai', '=', 1)->get();
         return view('luutru.index-luutru', ['lstLuuTru' => $lstLuuTru]);
     }
 
