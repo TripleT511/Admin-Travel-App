@@ -26,7 +26,7 @@ class MonAnController extends Controller
     }
     public function index()
     {
-        $lstMonAn = MonAn::with('quanan')->where('trangThai', '==', 1)->get();
+        $lstMonAn = MonAn::with('quanan')->where('trangThai', '=', 1)->get();
 
         return view('monan.index-monan', ['lstMonAn' => $lstMonAn]);
     }
