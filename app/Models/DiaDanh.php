@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\TinhThanh;
 use App\Models\HinhAnh;
 use App\Models\DiaDanhNhuCau;
+use App\Models\BaiVietChiaSe;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -42,5 +43,10 @@ class DiaDanh extends Model
     public function nhucaus()
     {
         return $this->hasMany(DiaDanhNhuCau::class, 'idDiaDanh');
+    }
+
+    public function shares()
+    {
+        return $this->hasMany(BaiVietChiaSe::class, 'idDiaDanh');
     }
 }

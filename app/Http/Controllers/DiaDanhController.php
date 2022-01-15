@@ -30,7 +30,7 @@ class DiaDanhController extends Controller
     {
         $lstDiaDanh = DiaDanh::with('tinhthanh:id,tenTinhThanh')->with(['hinhanh' => function ($query) {
             $query->where('idLoai', '=', 1)->orderBy('created_at');
-        }])->get();
+        }])->withCount('shares')->get();
         foreach ($lstDiaDanh as $item) {
             $this->fixImage($item->hinhanh);
         }

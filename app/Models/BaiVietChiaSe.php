@@ -54,4 +54,14 @@ class BaiVietChiaSe extends Model
     {
         return $this->hasMany(DanhGia::class, 'idBaiViet', 'id');
     }
+
+    public function islike()
+    {
+        return $this->hasMany(DanhGia::class, 'idBaiViet', 'id');
+    }
+
+    public function isdislike()
+    {
+        return $this->hasMany(DanhGia::class, 'idBaiViet', 'id');
+    }
 }

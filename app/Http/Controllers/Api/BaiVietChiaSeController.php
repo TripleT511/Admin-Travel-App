@@ -40,12 +40,16 @@ class BaiVietChiaSeController extends Controller
     }
     public function index()
     {
-        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->withCount(['likes' => function ($query) {
+        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->with('islike')->withCount(['likes' => function ($query) {
             $query->where('userLike', '=', 1);
         }])->withCount(['unlikes' => function ($query) {
             $query->where('userUnLike', '=', 1);
         }])->withCount(['views' => function ($query) {
             $query->where('userXem', '=', 1);
+        }])->withCount(['islike' => function ($query) {
+            $query->where([['idUser', '=', request()->user()->id], ['userLike', '=', 1]]);
+        }])->withCount(['isdislike' => function ($query) {
+            $query->where([['idUser', '=', request()->user()->id], ['userUnLike', '=', 1]]);
         }])->orderBy('created_at', 'desc')->get();
         foreach ($baiViet as $item) {
             $this->fixImage($item->hinhanh);

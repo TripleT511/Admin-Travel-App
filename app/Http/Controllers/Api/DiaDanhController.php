@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\DiaDanh;
 use App\Models\HinhAnh;
+use App\Models\NhuCau;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -59,7 +60,7 @@ class DiaDanhController extends Controller
         // $diaDanh = DiaDanh::where('trangThai', '=', '1')->whereId($id)->with('tinhthanh:id,tenTinhThanh', 'hinhanh:id,hinhAnh,idBaiVietChiaSe,idLoai')->get();
         $diaDanh = DiaDanh::whereId($id)->with('tinhthanh:id,tenTinhThanh')->with(['hinhanhs' => function ($query) {
             $query->where('idLoai', '=', 1)->select('id', 'idDiaDanh', 'hinhAnh', 'idBaiVietChiaSe', 'idLoai')->orderBy('created_at', 'desc');
-        }])->with('nhucaus')->get();
+        }])->withCount('shares')->get();
         foreach ($diaDanh as $item) {
             foreach ($item->hinhanhs as $img) {
                 $this->fixImage($img);
