@@ -46,10 +46,6 @@ class BaiVietChiaSeController extends Controller
             $query->where('userUnLike', '=', 1);
         }])->withCount(['views' => function ($query) {
             $query->where('userXem', '=', 1);
-        }])->withCount(['islike' => function ($query) {
-            $query->where([['idUser', '=', request()->user()->id], ['userLike', '=', 1]]);
-        }])->withCount(['isdislike' => function ($query) {
-            $query->where([['idUser', '=', request()->user()->id], ['userUnLike', '=', 1]]);
         }])->orderBy('created_at', 'desc')->get();
         foreach ($baiViet as $item) {
             $this->fixImage($item->hinhanh);

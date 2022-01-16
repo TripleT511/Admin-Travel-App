@@ -6,6 +6,7 @@ use App\Models\TinhThanh;
 use App\Models\HinhAnh;
 use App\Models\DiaDanhNhuCau;
 use App\Models\BaiVietChiaSe;
+use App\Models\NhuCau;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -40,7 +41,7 @@ class DiaDanh extends Model
         return $this->hasMany(HinhAnh::class, 'idDiaDanh', 'id');
     }
 
-    public function nhucaus()
+    public function nhucaudiadanhs()
     {
         return $this->hasMany(DiaDanhNhuCau::class, 'idDiaDanh');
     }

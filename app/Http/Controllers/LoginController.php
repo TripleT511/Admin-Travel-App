@@ -93,7 +93,7 @@ class LoginController extends Controller
 
     public function index()
     {
-        $lstTaiKhoan = User::all();
+        $lstTaiKhoan = User::withCount('baiviets')->get();
         foreach ($lstTaiKhoan as $item) {
             $this->fixImage($item);
         }

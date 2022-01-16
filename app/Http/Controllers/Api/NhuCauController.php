@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\HinhAnh;
 use App\Models\NhuCau;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class NhuCauController extends Controller
 {
@@ -13,6 +15,14 @@ class NhuCauController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected function fixImage(HinhAnh $hinhAnh)
+    {
+        if (Storage::disk('public')->exists($hinhAnh->hinhAnh)) {
+            $hinhAnh->hinhAnh = $hinhAnh->hinhAnh;
+        } else {
+            $hinhAnh->hinhAnh = 'images/no-image-available.jpg';
+        }
+    }
     public function index()
     {
         $lstNhuCau = NhuCau::all();
@@ -39,9 +49,18 @@ class NhuCauController extends Controller
      * @param  \App\Models\NhuCau  $nhuCau
      * @return \Illuminate\Http\Response
      */
-    public function show(NhuCau $nhuCau)
+    public function show($id)
     {
-        //
+        $lstNhuCau = NhuCau::whereId($id)->with('nhucaudiadanh.diadanh.tinhthanh:id,tenTinhThanh')->with('nhucaudiadanh.diadanh.hinhanh', function ($query) {
+            $query->where('idLoai', '=', 1)->select('id', 'idDiaDanh', 'hinhAnh', 'idBaiVietChiaSe', 'idLoai')->orderBy('created_at');
+        })->first();
+        foreach ($lstNhuCau->nhucaudiadanh as $item) {
+            $this->fixImage($item->diadanh->hinhanh);
+        }
+
+        return response()->json([
+            'data' =>  $lstNhuCau
+        ], 200);
     }
 
     /**

@@ -41,8 +41,10 @@ class TinhThanhController extends Controller
      */
     public function show($id)
     {
-        $lstTinhThanh = TinhThanh::whereId($id)->with('diadanhs:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai')->get();
-        return response($lstTinhThanh);
+        $lstTinhThanh = TinhThanh::whereId($id)->with('diadanhs.tinhthanh:id,tenTinhThanh')->with('diadanhs.hinhanh', function ($query) {
+            $query->where('idLoai', '=', 1)->select('id', 'idDiaDanh', 'hinhAnh', 'idBaiVietChiaSe', 'idLoai')->orderBy('created_at');
+        })->get();
+        return response($lstTinhThanh, 200);
     }
 
     /**

@@ -57,17 +57,18 @@ class DiaDanhController extends Controller
      */
     public function show($id)
     {
-        // $diaDanh = DiaDanh::where('trangThai', '=', '1')->whereId($id)->with('tinhthanh:id,tenTinhThanh', 'hinhanh:id,hinhAnh,idBaiVietChiaSe,idLoai')->get();
+
         $diaDanh = DiaDanh::whereId($id)->with('tinhthanh:id,tenTinhThanh')->with(['hinhanhs' => function ($query) {
             $query->where('idLoai', '=', 1)->select('id', 'idDiaDanh', 'hinhAnh', 'idBaiVietChiaSe', 'idLoai')->orderBy('created_at', 'desc');
-        }])->withCount('shares')->get();
-        foreach ($diaDanh as $item) {
-            foreach ($item->hinhanhs as $img) {
-                $this->fixImage($img);
-            }
+        }])->withCount('shares')->with('nhucaudiadanhs.nhucau', function ($query) {
+            $query->select('id', 'tenNhuCau');
+        })->first();
+        foreach ($diaDanh->hinhanhs as $img) {
+            $this->fixImage($img);
         }
+
         return response()->json([
-            'diaDanh' => $diaDanh
+            'data' => $diaDanh
         ], 200);
     }
 

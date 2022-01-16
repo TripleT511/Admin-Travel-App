@@ -26,6 +26,7 @@
                                 <th>Hình ảnh</th>
                                 <th>Họ tên</th>
                                 <th>Email</th>
+                                <th>Bài viết</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -43,7 +44,9 @@
                                 <td>
                                     <a href="">{{ $item->email }}</a>
                                 </td>
-                                
+                                <td>
+                                    <a href="">{{ $item->baiviets_count }}</a>
+                                </td>
                                 <td>
                                     {{-- <label class="badge badge-primary">
                                         <a class="d-block text-light"
