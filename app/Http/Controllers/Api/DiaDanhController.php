@@ -38,6 +38,20 @@ class DiaDanhController extends Controller
         ], 200);
     }
 
+    public function noibat()
+    {
+
+        $lstDiaDanh = DiaDanh::with('tinhthanh:id,tenTinhThanh')->with(['hinhanh' => function ($query) {
+            $query->where('idLoai', '=', 1)->select('id', 'idDiaDanh', 'hinhAnh', 'idBaiVietChiaSe', 'idLoai')->orderBy('created_at');
+        }])->withCount('shares')->orderBy('shares_count', 'desc')->take(5)->get();
+        foreach ($lstDiaDanh as $item) {
+            $this->fixImage($item->hinhanh);
+        }
+        return response()->json([
+            'data' => $lstDiaDanh
+        ], 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      *

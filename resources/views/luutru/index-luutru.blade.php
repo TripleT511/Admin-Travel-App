@@ -39,7 +39,7 @@
                                 <td>{{ $item->id }}</td>
                                 <td>{{ $item->diadanh->tenDiaDanh }}</td>
                                 <td>{{ $item->tenLuuTru }}</td>
-                                <td style="text-overflow: ellipsis;">{{ $item->moTa}}</td>
+                                <td>{{ $item->moTa}}</td>
                                 <td>{{ $item->diaChi }}</td>
                                 <td>{{ $item->sdt}}</td>
                                 <td>{{ $item->thoiGianHoatDong }}</td>

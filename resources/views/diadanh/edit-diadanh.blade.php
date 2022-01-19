@@ -34,11 +34,13 @@
                      <input type="text" class="form-control text-light" name="viDo" value="{{ $diaDanh->viDo }}" placeholder="Vĩ độ">
                 </div>
                 <div class="form-group">
-                     <img src="{{ asset($hinhAnh->hinhAnh) }}" width="200" />
+                    @foreach ($hinhAnh as $item)
+                     <img src="{{ asset($item->hinhAnh) }}" width="150" />
+                    @endforeach
                 </div>
                 <div class="form-group">
                     <label>Hình ảnh</label>
-                    <input type="file" name="hinhAnh" class="file-upload-default">
+                    <input type="file" name="hinhAnh[]" class="file-upload-default" multiple>
                     <div class="input-group col-xs-12">
                         <input type="text" class="form-control file-upload-info" disabled="" placeholder="Upload Image">
                         <span class="input-group-append">

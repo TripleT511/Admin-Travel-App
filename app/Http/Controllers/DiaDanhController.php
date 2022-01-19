@@ -6,10 +6,13 @@ use App\Models\DiaDanh;
 use App\Http\Requests\StoreDiaDanhRequest;
 use App\Http\Requests\UpdateDiaDanhRequest;
 use App\Models\BaiVietChiaSe;
+use App\Models\DiaDanhNhuCau;
 use App\Models\HinhAnh;
+use App\Models\NhuCau;
 use App\Models\TinhThanh;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Mockery\Undefined;
 
 class DiaDanhController extends Controller
 {
@@ -28,9 +31,9 @@ class DiaDanhController extends Controller
     }
     public function index()
     {
-        $lstDiaDanh = DiaDanh::with('tinhthanh:id,tenTinhThanh')->with(['hinhanh' => function ($query) {
+        $lstDiaDanh = DiaDanh::with('tinhthanh:id,tenTinhThanh')->with(['hinhanhs' => function ($query) {
             $query->where('idLoai', '=', 1)->orderBy('created_at');
-        }])->withCount('shares')->get();
+        }])->withCount('shares')->orderBy('id')->get();
         foreach ($lstDiaDanh as $item) {
             $this->fixImage($item->hinhanh);
         }
@@ -45,7 +48,8 @@ class DiaDanhController extends Controller
     public function create()
     {
         $lstTinhThanh = TinhThanh::all();
-        return view('diadanh.create-diadanh', ['lstTinhThanh' => $lstTinhThanh]);
+        $lstNhuCau = NhuCau::all();
+        return view('diadanh.create-diadanh', ['lstTinhThanh' => $lstTinhThanh, 'lstNhuCau' => $lstNhuCau]);
     }
 
     /**
@@ -56,24 +60,29 @@ class DiaDanhController extends Controller
      */
     public function store(StoreDiaDanhRequest $request)
     {
+
         $request->validate([
             'tenDiaDanh' => 'required|unique:dia_danhs',
             'moTa' => 'required',
             'kinhDo' => 'required',
             'viDo' => 'required',
             'hinhAnh' => 'required',
+            'idNhuCau' => 'required'
         ], [
             'tenDiaDanh.required' => "Tên địa danh không được bỏ trống",
             'tenDiaDanh.unique' => "Tên địa danh bị trùng",
             'moTa.required' => 'Mô tả không được bỏ trống',
             'kinhDo.required' => 'Kinh độ không được bỏ trống',
             'viDo.required' => 'Vĩ độ không được bỏ trống',
-            'hinhAnh.required' => 'Bắt buộc chọn hình ảnh'
+            'hinhAnh.required' => 'Bắt buộc chọn hình ảnh',
+            'idNhuCau.required' => 'Cần phải chọn nhu cầu cho địa danh'
         ]);
         $trangThai = 1;
         if ($request->input('trangThai') != "on") {
             $trangThai = 0;
         }
+
+        // Thêm địa danh
         $diadanh = new DiaDanh();
         $diadanh->fill([
             'tenDiaDanh' => $request->input('tenDiaDanh'),
@@ -85,18 +94,37 @@ class DiaDanhController extends Controller
         ]);
         $diadanh->save();
 
-        $hinhAnh = new HinhAnh();
-
-        $hinhAnh->fill([
-            'idDiaDanh' => $diadanh->id,
-            'idLoai' => 1,
-            'hinhAnh' => '',
-        ]);
-        $hinhAnh->save();
+        // Thêm hình ảnh
         if ($request->hasFile('hinhAnh')) {
-            $hinhAnh->hinhAnh = Storage::disk('public')->put('images', $request->file('hinhAnh'));
+
+            foreach ($request->file('hinhAnh') as $item) {
+                $hinhAnh = new HinhAnh();
+
+                $hinhAnh->fill([
+                    'idDiaDanh' => $diadanh->id,
+                    'idLoai' => 1,
+                    'hinhAnh' => '',
+                ]);
+
+                $hinhAnh->save();
+                $hinhAnh->hinhAnh = Storage::disk('public')->put('images', $item);
+                $hinhAnh->save();
+            }
         }
-        $hinhAnh->save();
+
+        // Thêm nhu cầu
+        foreach ($request->input('idNhuCau') as $key => $item) {
+
+            $diadanhnhucau = new DiaDanhNhuCau();
+
+            $diadanhnhucau->fill([
+                'idDiaDanh' => $diadanh->id,
+                'idNhuCau' => $request->input('idNhuCau')[$key],
+                'trangThai' => 1
+            ]);
+
+            $diadanhnhucau->save();
+        }
 
         return Redirect::route('diaDanh.show', ['diaDanh' => $diadanh]);
     }
@@ -121,8 +149,8 @@ class DiaDanhController extends Controller
     public function edit(DiaDanh $diaDanh)
     {
         $lstTinhThanh = TinhThanh::all();
-        $hinhAnh = HinhAnh::where([['idDiaDanh', '=', $diaDanh->id], ['idLoai', '=', '1']])->orderBy('created_at', 'desc')->first();
-        return view('diadanh.edit-diadanh', ['diaDanh' => $diaDanh, 'lstTinhThanh' => $lstTinhThanh, 'hinhAnh' => $hinhAnh]);
+        $lsthinhAnh = HinhAnh::where([['idDiaDanh', '=', $diaDanh->id], ['idLoai', '=', '1']])->orderBy('created_at', 'desc')->get();
+        return view('diadanh.edit-diadanh', ['diaDanh' => $diaDanh, 'lstTinhThanh' => $lstTinhThanh, 'hinhAnh' => $lsthinhAnh]);
     }
 
     /**
@@ -160,10 +188,30 @@ class DiaDanhController extends Controller
         ]);
         $diaDanh->save();
         if ($request->hasFile('hinhAnh')) {
-            $hinhAnh = HinhAnh::where('idDiaDanh', '=', $diaDanh->id)->orderBy('created_at', 'desc')->first();
-            $hinhAnh->hinhAnh = Storage::disk('public')->put('images', $request->file('hinhAnh'));
-            $hinhAnh->save();
+            $hinhAnh = HinhAnh::where('idDiaDanh', '=', $diaDanh->id)->orderBy('created_at')->get();
+
+            foreach ($hinhAnh as $item) {
+                Storage::disk('public')->delete($item->hinhAnh);
+                $item->delete();
+            }
+
+            foreach ($request->file('hinhAnh') as $item) {
+                $hinhAnh = new HinhAnh();
+
+                $hinhAnh->fill([
+                    'idDiaDanh' => $diaDanh->id,
+                    'idLoai' => 1,
+                    'hinhAnh' => '',
+                ]);
+
+                $hinhAnh->save();
+                $hinhAnh->hinhAnh = Storage::disk('public')->put('images', $item);
+                $hinhAnh->save();
+            }
         }
+
+
+
 
         return Redirect::route('diaDanh.show', ['diaDanh' => $diaDanh]);
     }

@@ -25,13 +25,13 @@
                      </select>
                 </div>
                 <div class="form-group">
-                        <label for="exampleTextarea1">Nhu cầu</label>
-                        <select class="form-control text-light" name="idNhuCau" >
+                    <label for="exampleTextarea1">Nhu cầu</label>
+                    <select class="form-control text-light" name="idNhuCau" >
                          @foreach($lstNhuCau as $nc)
                             <option value="{{$nc->id}}">{{$nc->tenNhuCau}}</option>
                          @endforeach
                      </select>
-                      </div>
+                </div>
                <div class="form-check form-check-primary">
                     <label class="form-check-label">
                     <input type="checkbox" name="trangThai" class="form-check-input" checked> Trạng thái </label>

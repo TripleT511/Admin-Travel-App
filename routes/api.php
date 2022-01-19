@@ -53,9 +53,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/nhucau/{id}', [NhuCauController::class, 'show']);
 
-
+    // Danh sách địa danh
     Route::get('/diadanh', [DiaDanhController::class, 'index']);
 
+    // Danh sách địa danh nổi bật
+    Route::get('/diadanh/noibat', [DiaDanhController::class, 'noibat']);
+
+    // Chi tiết địa danh
     Route::get('/diadanh/{id}', [DiaDanhController::class, 'show']);
 
     Route::get('/hinhanh/{id}', [HinhAnhController::class, 'show']);
@@ -69,6 +73,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Bài viết //
     Route::get('/baiviet', [BaiVietChiaSeController::class, 'index']);
+
+    // Bài viết của user
+    Route::get('user/{id}/baiviet', [BaiVietChiaSeController::class, 'baivietuser']);
 
     // Bài viết nổi bật
     Route::get('/baiviet/noibat', [BaiVietChiaSeController::class, 'show']);

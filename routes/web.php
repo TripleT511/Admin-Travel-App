@@ -33,8 +33,6 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('diaDanhNhuCau', DiaDanhNhuCauController::class);
 
-    Route::resource('hinhAnh', HinhAnhController::class);
-
     Route::resource('baiViet', BaiVietChiaSeController::class);
 
     Route::resource('luuTru', LuuTruController::class);

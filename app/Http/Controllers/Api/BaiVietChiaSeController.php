@@ -40,13 +40,33 @@ class BaiVietChiaSeController extends Controller
     }
     public function index()
     {
-        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->with('islike')->withCount(['likes' => function ($query) {
+        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->withCount(['likes' => function ($query) {
             $query->where('userLike', '=', 1);
         }])->withCount(['unlikes' => function ($query) {
             $query->where('userUnLike', '=', 1);
         }])->withCount(['views' => function ($query) {
             $query->where('userXem', '=', 1);
         }])->orderBy('created_at', 'desc')->get();
+        foreach ($baiViet as $item) {
+            $this->fixImage($item->hinhanh);
+            $this->fixImageUser($item->user);
+            $item->thoiGian = date('d-m-Y', strtotime($item->thoiGian));
+        }
+        return response()->json([
+            'data' => $baiViet
+        ], 200);
+    }
+
+    public function baivietuser(Request $request)
+    {
+
+        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->with('islike')->withCount(['likes' => function ($query) {
+            $query->where('userLike', '=', 1);
+        }])->withCount(['unlikes' => function ($query) {
+            $query->where('userUnLike', '=', 1);
+        }])->withCount(['views' => function ($query) {
+            $query->where('userXem', '=', 1);
+        }])->where('idUser', '=', $request->user()->id)->orderBy('created_at', 'desc')->get();
         foreach ($baiViet as $item) {
             $this->fixImage($item->hinhanh);
             $this->fixImageUser($item->user);

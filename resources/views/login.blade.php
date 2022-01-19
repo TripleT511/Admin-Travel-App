@@ -26,8 +26,6 @@
     <div class="text-center">
       <input type="submit" class="btn btn-primary btn-block enter-btn" value="Login">
     </div>
-    
-    <p class="sign-up">Don't have an Account?<a href="{{ route('register') }}"> Sign Up</a></p>
   </form>
 </div>
 @endsection

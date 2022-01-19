@@ -75,7 +75,7 @@ class BaiVietChiaSeController extends Controller
         $baiViet = new BaiVietChiaSe();
         $baiViet->fill([
             'idDiaDanh' => $request->input('idDiaDanh'),
-            'idUser' => 1,
+            'idUser' => $request->user()->id,
             'noiDung' => $request->input('noiDung'),
             'thoiGian' => Carbon::now()->toDateTimeString(),
             'trangThai' => $trangThai

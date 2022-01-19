@@ -39,13 +39,13 @@
                                                       @endif" width="50" height="50" />
                                 </td>
                                 <td>
-                                    <a href="">{{ $item->hoTen }}</a>
+                                    {{ $item->hoTen }}
                                 </td>
                                 <td>
-                                    <a href="">{{ $item->email }}</a>
+                                    {{ $item->email }}
                                 </td>
                                 <td>
-                                    <a href="">{{ $item->baiviets_count }}</a>
+                                    {{ $item->baiviets_count }}
                                 </td>
                                 <td>
                                     {{-- <label class="badge badge-primary">

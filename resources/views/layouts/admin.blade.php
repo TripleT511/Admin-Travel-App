@@ -91,7 +91,7 @@
                 <li class="nav-item menu-items">
                     <a class="nav-link" href="{{ route('diaDanh.index') }}">
                         <span class="menu-icon">
-                            <i class="mdi mdi-map-marker-multiple"></i>
+                            <i class="mdi mdi mdi-map"></i>
                         </span>
                         <span class="menu-title">Quản lý địa danh</span>
                     </a>
@@ -150,14 +150,6 @@
                             <i class="mdi mdi-guitar-pick-outline"></i>
                         </span>
                         <span class="menu-title text-wrap" >Quản lý địa danh nhu cầu</span>
-                    </a>
-                </li>
-                <li class="nav-item menu-items">
-                    <a class="nav-link" href="{{ route('hinhAnh.index') }}">
-                        <span class="menu-icon">
-                            <i class="mdi mdi-file-image"></i>
-                        </span>
-                        <span class="menu-title text-wrap" >Quản lý hình ảnh địa danh</span>
                     </a>
                 </li>
             </ul>

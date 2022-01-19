@@ -34,7 +34,7 @@
                 </div>
                 <div class="form-group">
                     <label>Hình ảnh</label>
-                    <input type="file" name="hinhAnh" class="file-upload-default">
+                    <input type="file" name="hinhAnh[]" class="file-upload-default" multiple>
                     <div class="input-group col-xs-12">
                         <input type="text" class="form-control file-upload-info" placeholder="Upload Image">
                         <span class="input-group-append">
@@ -51,6 +51,14 @@
                             </option>
                         @endforeach
                     </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleTextarea1">Nhu cầu</label>
+                    <select class="form-control text-light" name="idNhuCau[]" multiple>
+                         @foreach($lstNhuCau as $nc)
+                            <option value="{{$nc->id}}">{{$nc->tenNhuCau}}</option>
+                         @endforeach
+                     </select>
                 </div>
                <div class="form-check form-check-primary">
                     <label class="form-check-label">

@@ -30,6 +30,7 @@
                                 <th>Vĩ độ</th>
                                 <th>Hình ảnh</th>
                                 <th>Tỉnh thành</th>
+                                <th>Lượt chia sẻ</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -51,6 +52,7 @@
                                                       @endif" width="150"/>
                                      </td>
                                      <td>{{ $item->tinhthanh->tenTinhThanh }}</td>
+                                     <td>{{ $item->shares_count }}</td>
                                      <td>
                                         <label class="badge badge-primary">
                                             <a class="d-block text-light" href="{{ route('diaDanh.edit', ['diaDanh'=>$item]) }}"> Sửa</a>

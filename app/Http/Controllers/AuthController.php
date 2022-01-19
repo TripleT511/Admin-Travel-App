@@ -233,7 +233,7 @@ class AuthController extends Controller
 
     public function getUser(Request $request)
     {
-        $user = $request->user();
+        $user = User::withCount('baiviets')->where('id', '=', $request->user()->id)->first();
         $this->fixImage($user);
         return response($user);
     }
