@@ -52,10 +52,9 @@ class BaiVietChiaSeController extends Controller
             $this->fixImageUser($item->user);
             $item->thoiGian = date('d-m-Y', strtotime($item->thoiGian));
         }
-        return $baiViet;
-        // return response()->json([
-        //     'data' => $baiViet
-        // ], 200);
+        return response()->json([
+            'data' => $baiViet
+        ], 200);
     }
 
     public function baivietuser(Request $request)
