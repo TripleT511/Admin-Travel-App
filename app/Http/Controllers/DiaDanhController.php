@@ -33,6 +33,8 @@ class DiaDanhController extends Controller
     {
         $lstDiaDanh = DiaDanh::with('tinhthanh:id,tenTinhThanh')->with(['hinhanhs' => function ($query) {
             $query->where('idLoai', '=', 1)->orderBy('created_at');
+        }])->with(['hinhanh' => function ($query) {
+            $query->where('idLoai', '=', 1)->orderBy('created_at');
         }])->withCount('shares')->orderBy('id')->get();
         foreach ($lstDiaDanh as $item) {
             $this->fixImage($item->hinhanh);
@@ -188,7 +190,7 @@ class DiaDanhController extends Controller
         ]);
         $diaDanh->save();
         if ($request->hasFile('hinhAnh')) {
-            $hinhAnh = HinhAnh::where('idDiaDanh', '=', $diaDanh->id)->orderBy('created_at')->get();
+            $hinhAnh = HinhAnh::where([['idDiaDanh', '=', $diaDanh->id], ['idLoai', '=', '1']])->orderBy('created_at')->get();
 
             foreach ($hinhAnh as $item) {
                 Storage::disk('public')->delete($item->hinhAnh);

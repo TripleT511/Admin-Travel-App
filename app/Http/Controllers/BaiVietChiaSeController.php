@@ -29,16 +29,20 @@ class BaiVietChiaSeController extends Controller
     }
     public function index()
     {
-        $lstBaiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id', 'hinhanh:id,idDiaDanh,idBaiVietChiaSe,hinhAnh,idLoai', 'user:id,hoTen'])->with(['likes', 'unlikes', 'views'])->withCount(['likes' => function ($query) {
+        $lstBaiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id', 'user:id,hoTen'])->with(['hinhanh' => function ($query) {
+            $query->where('idLoai', '=', '2');
+        }])->with(['likes', 'unlikes', 'views'])->withCount(['likes' => function ($query) {
             $query->where('userLike', '=', 1);
         }])->withCount(['unlikes' => function ($query) {
             $query->where('userUnLike', '=', 1);
         }])->withCount(['views' => function ($query) {
             $query->where('userXem', '=', 1);
         }])->get();
+
         foreach ($lstBaiViet as $item) {
             $this->fixImage($item->hinhanh);
         }
+
         return view('baiviet.index-baiviet', ['lstBaiViet' => $lstBaiViet]);
     }
 
