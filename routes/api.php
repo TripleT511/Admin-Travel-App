@@ -71,6 +71,15 @@ Route::middleware('auth:sanctum')->group(function () {
     // Bài viết //
     Route::put('/baiviet/{id}/update', [BaiVietChiaSeController::class, 'update']);
 
+    // Like bài viết //
+    Route::patch('/baiviet/{id}/like', [BaiVietChiaSeController::class, 'like']);
+
+    // Like bài viết //
+    Route::patch('/baiviet/{id}/unlike', [BaiVietChiaSeController::class, 'unlike']);
+
+    // View bài viết //
+    Route::patch('/baiviet/{id}/view', [BaiVietChiaSeController::class, 'view']);
+
     // Bài viết //
     Route::get('/baiviet', [BaiVietChiaSeController::class, 'index']);
 

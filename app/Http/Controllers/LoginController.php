@@ -24,6 +24,11 @@ class LoginController extends Controller
         return view('login');
     }
 
+    public function showFormForgot()
+    {
+        return view('forgot');
+    }
+
     public function showFormregister()
     {
         return view('register');

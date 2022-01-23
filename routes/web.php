@@ -56,3 +56,5 @@ Route::post('/login', [LoginController::class, 'login'])->name('login');
 
 Route::get('/register', [LoginController::class, 'showFormregister'])->name('show-register');
 Route::post('/register', [LoginController::class, 'register'])->name('register');
+
+Route::get('/forgot', [LoginController::class, 'showFormForgot'])->name('showforgot');

@@ -40,7 +40,9 @@ class BaiVietChiaSeController extends Controller
     }
     public function index()
     {
-        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->withCount(['likes' => function ($query) {
+        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->with(['user' => function ($query) {
+            $query->withCount('baiviets');
+        }])->withCount(['likes' => function ($query) {
             $query->where('userLike', '=', 1);
         }])->withCount(['unlikes' => function ($query) {
             $query->where('userUnLike', '=', 1);
@@ -243,6 +245,134 @@ class BaiVietChiaSeController extends Controller
                 'message' => 'Error in Update Post',
                 'error' => $error,
             ]);
+        }
+    }
+
+    public function like(Request $request, $id)
+    {
+
+        $danhgia = DanhGia::where([
+            ['idBaiViet', '=', $id],
+            ['idUser', '=', $request->user()->id],
+        ])->get();
+        $isLike = count($danhgia);
+
+        if ($isLike == 0) {
+            $danhgia = new DanhGia();
+            $danhgia->fill([
+                'idBaiViet' => $id,
+                'idUser' => $request->user()->id,
+                'userLike' => 1,
+                'userUnLike' => 0,
+                'userXem' => 0,
+            ]);
+            $danhgia->save();
+
+            return response()->json([
+                'message' => 'Đã thêm like',
+            ], 200);
+        } else {
+            if ($danhgia[0]->userLike == 0) {
+
+                $danhgia[0]->userLike = 1;
+                $danhgia[0]->userUnLike = 0;
+                $danhgia[0]->update();
+
+                return response()->json([
+                    'message' => 'Đã like',
+                ], 200);
+            } else {
+
+                $danhgia[0]->userLike = 0;
+                $danhgia[0]->userUnLike = 0;
+                $danhgia[0]->update();
+
+                return response()->json([
+                    'message' => 'Xoá like',
+                ], 200);
+            }
+        }
+    }
+
+    public function unlike(Request $request, $id)
+    {
+        $danhgia = DanhGia::where([
+            ['idBaiViet', '=', $id],
+            ['idUser', '=', $request->user()->id],
+        ])->get();
+        $isUnLike = count($danhgia);
+
+        if ($isUnLike == 0) {
+            $danhgia = new DanhGia();
+            $danhgia->fill([
+                'idBaiViet' => $id,
+                'idUser' => $request->user()->id,
+                'userLike' => 0,
+                'userUnLike' => 1,
+                'userXem' => 0,
+            ]);
+            $danhgia->save();
+
+            return response()->json([
+                'message' => 'Đã thêm Unlike',
+            ], 200);
+        } else {
+            if ($danhgia[0]->userUnLike == 0) {
+
+                $danhgia[0]->userLike = 0;
+                $danhgia[0]->userUnLike = 1;
+                $danhgia[0]->update();
+
+                return response()->json([
+                    'message' => 'Đã Unlike',
+                ], 200);
+            } else {
+
+                $danhgia[0]->userLike = 0;
+                $danhgia[0]->userUnLike = 0;
+                $danhgia[0]->update();
+
+                return response()->json([
+                    'message' => 'Xoá Unlike',
+                ], 200);
+            }
+        }
+    }
+
+    public function view(Request $request, $id)
+    {
+        $danhgia = DanhGia::where([
+            ['idBaiViet', '=', $id],
+            ['idUser', '=', $request->user()->id],
+        ])->get();
+        $isView = count($danhgia);
+
+        if ($isView == 0) {
+            $danhgia = new DanhGia();
+            $danhgia->fill([
+                'idBaiViet' => $id,
+                'idUser' => $request->user()->id,
+                'userLike' => 0,
+                'userUnLike' => 0,
+                'userXem' => 1,
+            ]);
+            $danhgia->save();
+
+            return response()->json([
+                'message' => 'Đã tăng view',
+            ], 200);
+        } else {
+            if ($danhgia[0]->userXem == 1) return response()->json([
+                'message' => 'Đã View rồi',
+            ], 200);
+            else {
+                $danhgia[0]->userXem = 1;
+                $danhgia[0]->update();
+
+                return response()->json([
+                    'message' => 'Đã View',
+                ], 200);
+            }
         }
     }
 
