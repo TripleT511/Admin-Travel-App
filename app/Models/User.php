@@ -42,6 +42,11 @@ class User extends Authenticatable
         return $this->hasMany(BaiVietChiaSe::class, 'idUser', 'id');
     }
 
+    public function danhgia()
+    {
+        return $this->hasMany(DanhGia::class, 'idUser');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
