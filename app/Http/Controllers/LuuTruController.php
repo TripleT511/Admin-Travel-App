@@ -139,6 +139,7 @@ class LuuTruController extends Controller
         ]);
 
         if ($request->hasFile('hinhAnh')) {
+            Storage::disk('public')->delete($luuTru->hinhAnh);
             $luuTru->hinhAnh = Storage::disk('public')->put('images', $request->file('hinhAnh'));
             $luuTru->save();
         }
@@ -171,6 +172,7 @@ class LuuTruController extends Controller
      */
     public function destroy(LuuTru $luuTru)
     {
+        Storage::disk('public')->delete($luuTru->hinhAnh);
         $luuTru->delete();
         return Redirect::route('luuTru.index');
     }

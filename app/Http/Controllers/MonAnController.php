@@ -120,6 +120,7 @@ class MonAnController extends Controller
         ]);
 
         if ($request->hasFile('hinhAnh')) {
+            Storage::disk('public')->delete($monAn->hinhAnh);
             $monAn->hinhAnh = Storage::disk('public')->put('images', $request->file('hinhAnh'));
         }
         $monAn->save();
@@ -145,6 +146,7 @@ class MonAnController extends Controller
      */
     public function destroy(MonAn $monAn)
     {
+        Storage::disk('public')->delete($monAn->hinhAnh);
         $monAn->delete();
         return Redirect::route('monAn.index');
     }

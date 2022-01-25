@@ -147,6 +147,7 @@ class QuanAnController extends Controller
         ]);
 
         if ($request->hasFile('hinhAnh')) {
+            Storage::disk('public')->delete($quanAn->hinhAnh);
             $quanAn->hinhAnh = Storage::disk('public')->put('images', $request->file('hinhAnh'));
         }
         $quanAn->save();
@@ -176,6 +177,7 @@ class QuanAnController extends Controller
      */
     public function destroy(QuanAn $quanAn)
     {
+        Storage::disk('public')->delete($quanAn->hinhAnh);
         $quanAn->delete();
         return Redirect::route('quanAn.index');
     }

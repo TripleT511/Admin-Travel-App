@@ -197,13 +197,9 @@ class BaiVietChiaSeController extends Controller
                 $request->all(),
                 [
                     'noiDung' => 'required',
-                    'hinhAnh' => 'required',
-                    'idUser' => 'required',
-                    'idDiaDanh' => 'required',
                 ],
                 [
                     'noiDung.required' => 'Nội dung không được bỏ trống',
-                    'hinhAnh.required' => "Bắt buộc chọn hình ảnh"
                 ]
             );
 
@@ -222,18 +218,21 @@ class BaiVietChiaSeController extends Controller
                 'trangThai' => 1
             ]);
             $baiViet->update();
+            if ($request->hasFile('hinhAnh')) {
+                $hinhAnh = HinhAnh::where('idBaiVietChiaSe', '=', $id)->first();
+                Storage::disk('public')->delete($hinhAnh->hinhAnh);
 
-            $hinhAnh = HinhAnh::where('idBaiVietChiaSe', '=', $id)->first();
+                $hinhAnh->fill([
+                    'idDiaDanh' => $baiViet->idDiaDanh,
+                    'idBaiVietChiaSe' => $id,
+                    'idLoai' => 2,
+                    'hinhAnh' => '',
+                ]);
+                $hinhAnh->update();
+                $hinhAnh->hinhAnh = Storage::disk('public')->put('images', $request->file('hinhAnh'));
+                $hinhAnh->update();
+            }
 
-            $hinhAnh->fill([
-                'idDiaDanh' => $request->input('idDiaDanh'),
-                'idBaiVietChiaSe' => $baiViet->id,
-                'idLoai' => 2,
-                'hinhAnh' => '',
-            ]);
-            $hinhAnh->update();
-            $hinhAnh->hinhAnh = Storage::disk('public')->put('images', $request->file('hinhAnh'));
-            $hinhAnh->update();
 
             return response()->json([
                 'status_code' => 200,

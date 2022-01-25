@@ -106,6 +106,7 @@ class BaiVietChiaSeController extends Controller
         ]);
         $hinhAnh->save();
         if ($request->hasFile('hinhAnh')) {
+
             $hinhAnh->hinhAnh = Storage::disk('public')->put('images', $request->file('hinhAnh'));
         }
         $hinhAnh->save();
@@ -168,6 +169,7 @@ class BaiVietChiaSeController extends Controller
 
         $hinhAnh = HinhAnh::where('idBaiVietChiaSe', '=', $baiViet->id)->first();
         if ($request->hasFile('hinhAnh')) {
+            Storage::disk('public')->delete($hinhAnh->hinhAnh);
             $hinhAnh->hinhAnh = Storage::disk('public')->put('images', $request->file('hinhAnh'));
         }
         $hinhAnh->save();
