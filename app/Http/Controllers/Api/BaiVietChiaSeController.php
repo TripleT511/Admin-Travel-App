@@ -59,7 +59,7 @@ class BaiVietChiaSeController extends Controller
         ], 200);
     }
 
-    public function baivietuser(Request $request)
+    public function baivietuser(Request $request, $id)
     {
 
         $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->withCount(['likes' => function ($query) {
@@ -68,7 +68,7 @@ class BaiVietChiaSeController extends Controller
             $query->where('userUnLike', '=', 1);
         }])->withCount(['views' => function ($query) {
             $query->where('userXem', '=', 1);
-        }])->where('idUser', '=', $request->user()->id)->orderBy('created_at', 'desc')->get();
+        }])->where('idUser', '=', $id)->orderBy('created_at', 'desc')->get();
         foreach ($baiViet as $item) {
             $this->fixImage($item->hinhanh);
             $this->fixImageUser($item->user);
