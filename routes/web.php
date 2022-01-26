@@ -41,6 +41,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('monAn', MonAnController::class);
 
+    Route::get('/register', [LoginController::class, 'showFormregister'])->name('show-register');
+
+    Route::post('/register', [LoginController::class, 'register'])->name('register');
 
     Route::get('/user', [LoginController::class, 'index'])->name("lstUser");
 });
@@ -54,7 +57,8 @@ Route::get('/', function () {
 Route::get('/login', [LoginController::class, 'showFormlogin'])->name('show-login');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 
-Route::get('/register', [LoginController::class, 'showFormregister'])->name('show-register');
-Route::post('/register', [LoginController::class, 'register'])->name('register');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
+
 
 Route::get('/forgot', [LoginController::class, 'showFormForgot'])->name('showforgot');
