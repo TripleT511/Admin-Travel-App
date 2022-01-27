@@ -24,7 +24,7 @@
                     <div class="profile-desc">
                         <div class="profile-pic">
                             <div class="count-indicator">
-                                <img class="img-xs rounded-circle " src="{{ asset(Auth::user()->hinhAnh) }}" alt="">
+                                <img class="img-xs rounded-circle " src="@if(Storage::disk('public')->exists(Auth::user()->hinhAnh)) {{ asset(Auth::user()->hinhAnh) }} @else images/user-default.jpg @endif" alt="">
                                 <span class="count bg-success"></span>
                             </div>
                             <div class="profile-name">
@@ -285,7 +285,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                                 <div class="navbar-profile">
-                                    <img class="img-xs rounded-circle" src="{{ asset(Auth::user()->hinhAnh) }}" alt="">
+                                    <img class="img-xs rounded-circle" src="@if(Storage::disk('public')->exists(Auth::user()->hinhAnh)) {{ asset(Auth::user()->hinhAnh) }} @else images/user-default.jpg @endif" alt="">
                                     <p class="mb-0 d-none d-sm-block navbar-profile-name">
                                         @auth
                                         {{ Auth::user()->hoTen }}

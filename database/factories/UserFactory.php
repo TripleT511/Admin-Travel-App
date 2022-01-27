@@ -16,7 +16,7 @@ class UserFactory extends Factory
     {
         return [
             'remember_token' => Str::random(10),
-            'idPhanQuyen' => 1,
+            'idPhanQuyen' => 0,
             'hoTen' => "Roger",
             'email' => "roger@gmail.com",
             'email_verified_at' => now(),

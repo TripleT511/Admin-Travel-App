@@ -36,19 +36,30 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
+        $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
+        ], [
+            'email.required' => "Bắt buộc nhập email",
+            'email.email' => "Không đúng định dạng email",
+            'password.required' => "Bắt buộc nhập mật khẩu"
         ]);
 
-        if (Auth::attempt($credentials)) {
+        $remember = false;
+        if ($request->input('nhomatkhau') == "on") {
+            $remember = true;
+        }
+
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'idPhanQuyen' => 0], $remember)) {
+
             $request->session()->regenerate();
 
             return redirect()->intended('/');
         }
 
+
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => 'Thông tin đăng nhập không chính xác',
         ]);
     }
 
@@ -71,20 +82,12 @@ class LoginController extends Controller
             'password' => 'required|string|min:6',
             'soDienThoai' => 'required|string',
             'hinhAnh' => 'required',
-            // 'trangThaiHoTen' => 'required',
-            // 'trangThaiEmail' => 'required',
-            // 'trangThaiSDT' => 'required',
-            // 'trangThai' => 'required',
         ], [
             'hoTen.required' => 'Họ Tên không được bỏ trống',
             'email.required' => 'Email không được bỏ trống',
             'password.required' => 'Mật khẩu không được bỏ trống',
             'soDienThoai.required' => 'Số điện thoại không được bỏ trống',
             'hinhAnh.required' => 'Bắt buộc chọn Hình ảnh',
-            // 'trangThaiHoTen.required' => 'Trạng thái họ tên không được bỏ trống',
-            // 'trangThaiEmail.required' => 'Trạng thái email không được bỏ trống',
-            // 'trangThaiSDT.required' => 'Trạng thái số điện thoại không được bỏ trống',
-            // 'trangThai.required' => 'Trạng thái không được bỏ trống',
         ]);
         $user = new User();
         $user->idPhanQuyen = $request->idPhanQuyen;
