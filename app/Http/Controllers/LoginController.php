@@ -112,8 +112,14 @@ class LoginController extends Controller
 
     public function index()
     {
-        $lstTaiKhoan = User::withCount('baiviets')->get();
+        $lstTaiKhoan = User::withCount('baiviets')->withCount('tinhthanhs')->get();
         foreach ($lstTaiKhoan as $item) {
+            $countTinhThanh = 0;
+            $userTinhThanh = User::whereId($item->id)->with('tinhthanhs.diadanh')->first();
+            foreach ($userTinhThanh->tinhthanhs->groupBy('diadanh.tinh_thanh_id') as $items) {
+                $countTinhThanh++;
+            }
+            $item->tinhthanhs_count = $countTinhThanh;
             $this->fixImage($item);
         }
         return view('user.index-user', ['lstTaiKhoan' => $lstTaiKhoan]);

@@ -27,6 +27,7 @@
                                 <th>Họ tên</th>
                                 <th>Email</th>
                                 <th>Bài viết</th>
+                                <th>Tỉnh thành</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -46,6 +47,9 @@
                                 </td>
                                 <td>
                                     {{ $item->baiviets_count }}
+                                </td>
+                                <td>
+                                    {{ $item->tinhthanhs_count }}
                                 </td>
                                 <td>
                                     {{-- <label class="badge badge-primary">
