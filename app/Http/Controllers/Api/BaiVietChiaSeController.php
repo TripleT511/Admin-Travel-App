@@ -68,6 +68,7 @@ class BaiVietChiaSeController extends Controller
             $countTinhThanh = 0;
             $userTinhThanh = User::whereId($item->user->id)->with('tinhthanhs.diadanh')->first();
             foreach ($userTinhThanh->tinhthanhs->groupBy('diadanh.tinh_thanh_id') as $items) {
+
                 $countTinhThanh++;
             }
             $item->user->tinhthanhs_count = $countTinhThanh;

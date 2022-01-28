@@ -70,8 +70,16 @@ class AuthController extends Controller
     public function getAllUser()
     {
         $user = User::all();
-        echo $user;
+
         foreach ($user as $item) {
+            $countTinhThanh = 0;
+            $userTinhThanh = User::whereId($item->id)->with('tinhthanhs.diadanh')->first();
+            foreach ($userTinhThanh->tinhthanhs->groupBy('diadanh.tinh_thanh_id') as $items) {
+                if (count($userTinhThanh->tinhthanhs->groupBy('diadanh.tinh_thanh_id')) != 0) {
+                    $countTinhThanh++;
+                }
+            }
+            $item->tinhthanhs_count = $countTinhThanh;
             $this->fixImage($item);
         }
         return response([
@@ -234,12 +242,15 @@ class AuthController extends Controller
 
     public function getUser(Request $request)
     {
-        $countTinhThanh = 0;
-        $userTinhThanh = User::with('tinhthanhs.diadanh')->first();
-        foreach ($userTinhThanh->tinhthanhs->groupBy('diadanh.tinh_thanh_id') as $item) {
-            $countTinhThanh++;
-        }
+
         $user = User::withCount('baiviets')->withCount('tinhthanhs')->where('id', '=', $request->user()->id)->first();
+        $countTinhThanh = 0;
+        $userTinhThanh = User::whereId($request->user()->id)->with('tinhthanhs.diadanh')->first();
+        foreach ($userTinhThanh->tinhthanhs->groupBy('diadanh.tinh_thanh_id') as $item) {
+            if (count($userTinhThanh->tinhthanhs->groupBy('diadanh.tinh_thanh_id')) != 0) {
+                $countTinhThanh++;
+            }
+        }
         $this->fixImage($user);
         $user->tinhthanhs_count = $countTinhThanh;
         return response($user);

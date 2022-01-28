@@ -117,7 +117,9 @@ class LoginController extends Controller
             $countTinhThanh = 0;
             $userTinhThanh = User::whereId($item->id)->with('tinhthanhs.diadanh')->first();
             foreach ($userTinhThanh->tinhthanhs->groupBy('diadanh.tinh_thanh_id') as $items) {
-                $countTinhThanh++;
+                if (count($userTinhThanh->tinhthanhs->groupBy('diadanh.tinh_thanh_id')) != 0) {
+                    $countTinhThanh++;
+                }
             }
             $item->tinhthanhs_count = $countTinhThanh;
             $this->fixImage($item);
