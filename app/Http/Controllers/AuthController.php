@@ -288,7 +288,7 @@ class AuthController extends Controller
                 ], 422);
             }
 
-            $token = strtoupper(Str::random(5));
+            $token = strtoupper(Str::random(6));
             DB::table('password_resets')->insert([
                 'email' => $request->email,
                 'token' => $token,
