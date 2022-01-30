@@ -36,7 +36,7 @@
                                 <td>{{ $item->id }}</td>
                                 <td>
                                     <img class="rounded-circle" src="@if($item->hinhAnh != null) {{ asset($item->hinhAnh) }}
-                                                      @else '/images/no-image-available.jpg'
+                                                      @else {{ asset("/images/no-image-available.jpg") }}
                                                       @endif" width="50" height="50" />
                                 </td>
                                 <td>

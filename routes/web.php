@@ -62,3 +62,4 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 
 Route::get('/forgot', [LoginController::class, 'showFormForgot'])->name('showforgot');
+Route::post('/forgot', [LoginController::class, 'forgot'])->name('forgot');

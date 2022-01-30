@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
 
 class LoginController extends Controller
 {
@@ -29,6 +30,27 @@ class LoginController extends Controller
         return view('forgot');
     }
 
+    public function forgot(Request $request)
+    {
+        $request->validate([
+            'email' => 'email|required|exists:users',
+        ], [
+            'email.required' => "Bắt buộc nhập email",
+            'email.email' => "Không đúng định dạng email",
+            'email.exists' => "Email không tồn tại trong hệ thống",
+        ]);
+
+        $user = User::where('email', '=', $request->input('email'))->first();
+        $token = strtoupper(Str::random(5));
+
+        Mail::send('check-email', compact('user'), function ($message) use ($user) {
+            $message->subject('StrawHat - Khôi phục mật khẩu');
+            $message->to($user->email, $user->hoTen);
+        });
+
+        return redirect()->back()->with('Thông báo', 'Đã gửi email xác nhận');
+    }
+
     public function showFormregister()
     {
         return view('register');
@@ -45,10 +67,8 @@ class LoginController extends Controller
             'password.required' => "Bắt buộc nhập mật khẩu"
         ]);
 
-        $remember = false;
-        if ($request->input('nhomatkhau') == "on") {
-            $remember = true;
-        }
+
+        $remember = $request->has('nhomatkhau') ? true : false;
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'idPhanQuyen' => 0], $remember)) {
 
