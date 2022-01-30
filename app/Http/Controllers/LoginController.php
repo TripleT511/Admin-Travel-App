@@ -6,9 +6,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
 
 class LoginController extends Controller
 {
@@ -40,15 +43,54 @@ class LoginController extends Controller
             'email.exists' => "Email không tồn tại trong hệ thống",
         ]);
 
-        $user = User::where('email', '=', $request->input('email'))->first();
-        $token = strtoupper(Str::random(5));
-
-        Mail::send('check-email', compact('user'), function ($message) use ($user) {
+        $token = strtoupper(Str::random(60));
+        DB::table('password_resets')->insert([
+            'email' => $request->email,
+            'token' => $token,
+            'created_at' => Carbon::now(),
+        ]);
+        Mail::send('check-email', ['token' => $token], function ($message) use ($request) {
             $message->subject('StrawHat - Khôi phục mật khẩu');
-            $message->to($user->email, $user->hoTen);
+            $message->to($request->email);
         });
 
-        return redirect()->back()->with('Thông báo', 'Đã gửi email xác nhận');
+        return redirect()->back()->with('message', 'Đã gửi email xác nhận');
+    }
+
+    public function showFormReset($token)
+    {
+        $passwordreset = DB::table('password_resets')->where('token', $token)->first();
+        return view('reset-password', ['token' => $token, 'email' => $passwordreset->email]);
+    }
+
+    public function reset(Request $request)
+    {
+        $request->validate([
+            'email' => 'email|required|exists:password_resets',
+            'password' => 'required|string|min:6',
+            'confirm-password' => 'required|same:password',
+            'token' => 'required|exists:password_resets',
+        ], [
+            'email.required' => "Bắt buộc nhập email",
+            'email.email' => "Không đúng định dạng email",
+            'email.exists' => "Email không tồn tại trong hệ thống",
+            'password.required' => "Bắt buộc nhập mật khẩu",
+            'password.string' => "Mật khẩu phải là chuỗi ký tự",
+            'password.min' => "Mật khẩu phải có ít nhất 6 ký tự",
+            'confirm-password.required' => "Bắt buộc nhập lại mật khẩu",
+            'confirm-password.same' => "Mật khẩu nhập lại không khớp",
+            'token.required' => "Bắt buộc nhập token",
+            'token.exists' => "Token không tồn tại",
+        ]);
+
+        $passwordReset = DB::table('password_resets')->where('token', $request->token)->first();
+
+        $user = User::where('email', $passwordReset->email)->firstOrFail();
+        $user->password = Hash::make($request->password);
+        $user->update();
+        $passwordReset = DB::table('password_resets')->where('token', $request->token)->delete();
+
+        return redirect()->route('show-login')->with('message', 'Vui lòng đăng nhập');
     }
 
     public function showFormregister()

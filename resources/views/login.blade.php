@@ -10,7 +10,10 @@
           @foreach ($errors->all() as $err)
               <li class="card-description" style="color: #fc424a;">{{ $err }}</li>
           @endforeach
-      @endif
+    @endif
+    @if(session('message')) 
+      <label class="text-success" >{{ session('message') }}</label>
+    @endif
   <hr>
   <form method="post" action="{{ route('login') }}">
     @csrf

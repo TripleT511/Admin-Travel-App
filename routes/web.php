@@ -51,7 +51,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/', function () {
     return view('dashboard');
-})->middleware('auth');
+})->name('dashboard')->middleware('auth');
 
 
 Route::get('/login', [LoginController::class, 'showFormlogin'])->name('show-login');
@@ -63,3 +63,6 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/forgot', [LoginController::class, 'showFormForgot'])->name('showforgot');
 Route::post('/forgot', [LoginController::class, 'forgot'])->name('forgot');
+
+Route::get('/reset-password/{token}', [LoginController::class, 'showFormReset'])->name('showReset');
+Route::post('/reset-password', [LoginController::class, 'reset'])->name('reset');

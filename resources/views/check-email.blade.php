@@ -25,13 +25,6 @@
                         <td style="height:80px;">&nbsp;</td>
                     </tr>
                     <tr>
-                        <td style="text-align:center;">
-                            <a href="#" title="logo" target="_blank">
-                                <img width="150" src="{{ asset("/images/logo_sh.svg") }}" title="logo" alt="logo">
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
                         <td style="height:20px;">&nbsp;</td>
                     </tr>
                     <tr>
@@ -53,8 +46,8 @@
                                             bạn đã làm điều đó vui lòng nhấp vào liên kết dưới đây và làm theo hướng dẫn
                                             để đặt lại
                                             mật khẩu của bạn. </p>
-                                        <a href="javascript:void(0);"
-                                            style="background:#0066FF;text-decoration:none !important; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:25px;">Đặt
+                                        <a href="{{ url('/reset-password/'. $token) }}"
+                                            style="background:#0066FF;text-decoration:none !important; font-weight:500; margin-top:30px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:25px;">Đặt
                                             lại mật khẩu</a>
                                         <p style="color:#333333; font-size:15px;line-height:24px; margin-top: 20px;">
                                             Nếu bạn không làm điều đó, vui lòng <a href="#"
