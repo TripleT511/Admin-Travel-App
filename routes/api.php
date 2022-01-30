@@ -112,3 +112,15 @@ Route::post('/register', [AuthController::class, 'register']);
 
 // Lấy danh sách tất cả user
 Route::get('/users', [AuthController::class, 'getAllUser']);
+
+// Gửi email xác nhận
+Route::post('/forgot', [AuthController::class, 'forgot']);
+
+// Reset mật khẩu
+Route::post('/check-token', [AuthController::class, 'checkToken']);
+
+// Reset mật khẩu
+Route::post('/reset/{token}', [AuthController::class, 'reset']);
+
+// Danh sách token
+Route::get('/list-token', [AuthController::class, 'getAllToken']);

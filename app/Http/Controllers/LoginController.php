@@ -49,8 +49,9 @@ class LoginController extends Controller
             'token' => $token,
             'created_at' => Carbon::now(),
         ]);
-        Mail::send('check-email', ['token' => $token], function ($message) use ($request) {
-            $message->subject('StrawHat - Khôi phục mật khẩu');
+        $user = User::where('email', $request->email)->first();
+        Mail::send('check-email', ['token' => $token, 'user' => $user], function ($message) use ($request) {
+            $message->subject('Đặt lại mật khẩu');
             $message->to($request->email);
         });
 

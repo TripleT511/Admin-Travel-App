@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\TinhThanh;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -264,5 +267,121 @@ class AuthController extends Controller
     public function deleteAllToken(Request $request)
     {
         return $request->user()->tokens()->delete();
+    }
+
+    public function forgot(Request $request)
+    {
+
+
+        try {
+            $validator = Validator::make($request->all(), [
+                'email' => 'email|required|exists:users',
+            ], [
+                'email.required' => "Bắt buộc nhập email",
+                'email.email' => "Không đúng định dạng email",
+                'email.exists' => "Email không tồn tại trong hệ thống",
+            ]);
+
+            if ($validator->fails()) {
+                return response([
+                    'error' => $validator->errors()->all()
+                ], 422);
+            }
+
+            $token = strtoupper(Str::random(5));
+            DB::table('password_resets')->insert([
+                'email' => $request->email,
+                'token' => $token,
+                'created_at' => Carbon::now(),
+            ]);
+            $user = User::where('email', $request->email)->first();
+            Mail::send('check-email-app', ['token' => $token, 'user' => $user], function ($message) use ($request) {
+                $message->subject('Đặt lại mật khẩu');
+                $message->to($request->email);
+            });
+
+            return response()->json([
+                'message' => 'Đã gửi email, vui lòng kiểm tra email để đặt lại mật khẩu.',
+            ], 200);
+        } catch (Exception $error) {
+            return response()->json([
+                'message' => 'Có lỗi xảy ra',
+                'error' => $error,
+            ], 500);
+        }
+    }
+
+    public function checkToken(Request $request)
+    {
+        $request->validate([
+            'token' => 'required|exists:password_resets',
+        ], [
+            'token.required' => "Bắt buộc nhập token",
+            'token.exists' => "Token không tồn tại",
+        ]);
+
+        $token = DB::table('password_resets')->where('token', $request->token)->first();
+
+        if ($token) {
+            return response()->json([
+                'message' => 'Token hợp lệ',
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Token không hợp lệ',
+            ], 422);
+        }
+    }
+
+    public function reset(Request $request, $token)
+    {
+        try {
+
+            $validator = Validator::make($request->all(), [
+                'password' => 'required|string|min:6',
+                'confirm-password' => 'required|same:password',
+            ], [
+                'password.required' => "Bắt buộc nhập mật khẩu",
+                'password.string' => "Mật khẩu phải là chuỗi ký tự",
+                'password.min' => "Mật khẩu phải có ít nhất 6 ký tự",
+                'confirm-password.required' => "Bắt buộc nhập lại mật khẩu",
+                'confirm-password.same' => "Mật khẩu nhập lại không khớp",
+                'token.required' => "Bắt buộc nhập token",
+            ]);
+
+            if ($validator->fails()) {
+                return response([
+                    'error' => $validator->errors()->all()
+                ], 422);
+            }
+
+            $passwordReset = DB::table('password_resets')->where('token', $token)->first();
+
+            $user = User::where('email', $passwordReset->email)->firstOrFail();
+            $user->password = Hash::make($request->password);
+            $user->update();
+            $passwordReset = DB::table('password_resets')->where('email', $passwordReset->email)->get();
+
+            foreach ($passwordReset as $item) {
+                DB::table('password_resets')->where('email', $item->email)->delete();
+            }
+
+            return response()->json([
+                'message' => 'Đặt lại mật khẩu thành công.',
+            ], 200);
+        } catch (Exception $error) {
+            return response()->json([
+                'message' => 'Có lỗi xảy ra, kiểm tra lại token của bạn.',
+                'error' => $error,
+            ], 500);
+        }
+    }
+
+    public function getAllToken()
+    {
+        $lstToken = DB::table('password_resets')->get();
+        return response()->json([
+            'data' => $lstToken,
+        ], 200);
     }
 }
