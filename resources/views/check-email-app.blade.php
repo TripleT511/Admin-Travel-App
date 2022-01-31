@@ -44,8 +44,8 @@
                                             style="display:inline-block; vertical-align:middle; margin:20px 0 0px;"></span>
                                         <p style="color:#333333; font-size:15px;line-height:24px; margin:0;">
                                             Xin chào <strong>{{ $user->hoTen }}</strong>,<br>
-                                            Có vẻ bạn đã yêu cầu đặt lại mật khẩu cho tài khoản của mình. Dưới đây là mã
-                                            xác nhận để đặt lại mật khẩu.</p>
+                                            Có vẻ bạn đã yêu cầu đặt lại mật khẩu cho tài khoản của bạn. Dưới đây là mã
+                                            xác minh để đặt lại mật khẩu.</p>
                                         <strong style="font-size: 30px; color:#242A37">{{ $token
                                             }}</strong>
                                         <p style="color:#333333; font-size:15px;line-height:24px;margin-top: 5px;">
