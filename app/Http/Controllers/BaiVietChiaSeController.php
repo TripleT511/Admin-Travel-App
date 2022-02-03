@@ -37,12 +37,11 @@ class BaiVietChiaSeController extends Controller
             $query->where('userUnLike', '=', 1);
         }])->withCount(['views' => function ($query) {
             $query->where('userXem', '=', 1);
-        }])->get();
+        }])->paginate(5);
 
         foreach ($lstBaiViet as $item) {
             $this->fixImage($item->hinhanh);
         }
-
         return view('baiviet.index-baiviet', ['lstBaiViet' => $lstBaiViet]);
     }
 
@@ -111,7 +110,7 @@ class BaiVietChiaSeController extends Controller
         }
         $hinhAnh->save();
 
-        $lstBaiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id', 'hinhanh:id,idDiaDanh,idBaiVietChiaSe,hinhAnh,idLoai', 'user:id,hoTen'])->get();
+        $lstBaiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id', 'hinhanh:id,idDiaDanh,idBaiVietChiaSe,hinhAnh,idLoai', 'user:id,hoTen'])->paginate(5);
 
         return view('baiviet.index-baiviet', ['lstBaiViet' => $lstBaiViet]);
     }

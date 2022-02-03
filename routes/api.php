@@ -68,8 +68,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/baiviet/create', [BaiVietChiaSeController::class, 'store']);
 
-    // Bài viết //
+    // Cập nhật Bài viết //
     Route::put('/baiviet/{id}/update', [BaiVietChiaSeController::class, 'update']);
+
+    // Xoá Bài viết //
+    Route::delete('/baiviet/{id}/delete', [BaiVietChiaSeController::class, 'destroy']);
 
     // Like bài viết //
     Route::patch('/baiviet/{id}/like', [BaiVietChiaSeController::class, 'like']);

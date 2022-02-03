@@ -35,7 +35,7 @@ class QuanAnController extends Controller
     }
     public function index()
     {
-        $lstQuanAn = QuanAn::all();
+        $lstQuanAn = QuanAn::paginate(5);
         foreach ($lstQuanAn as $item) {
             $this->fixImage($item);
         }

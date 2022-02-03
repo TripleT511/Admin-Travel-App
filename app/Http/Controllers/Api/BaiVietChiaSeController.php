@@ -433,8 +433,23 @@ class BaiVietChiaSeController extends Controller
      * @param  \App\Models\BaiVietChiaSe  $baiVietChiaSe
      * @return \Illuminate\Http\Response
      */
-    public function destroy(BaiVietChiaSe $baiVietChiaSe)
+    public function destroy($id)
     {
-        //
+        try {
+            $hinhAnh = HinhAnh::where('idBaiVietChiaSe', '=', $id);
+            $deleteHinh = $hinhAnh->first();
+            Storage::disk('public')->delete($deleteHinh->hinhAnh);
+            $baiViet = BaiVietChiaSe::find($id);
+            $baiViet->delete();
+            $hinhAnh->delete();
+            return response()->json([
+                'message' => 'Xoá thành công',
+            ], 200);
+        } catch (Exception $error) {
+            return response()->json([
+                'message' => 'Có lỗi xảy ra',
+                'error' => $error,
+            ], 500);
+        }
     }
 }

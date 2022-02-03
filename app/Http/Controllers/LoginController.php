@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Redirect;
 
 class LoginController extends Controller
 {
@@ -175,7 +174,7 @@ class LoginController extends Controller
 
     public function index()
     {
-        $lstTaiKhoan = User::withCount('baiviets')->withCount('tinhthanhs')->get();
+        $lstTaiKhoan = User::withCount('baiviets')->withCount('tinhthanhs')->paginate(5);
         foreach ($lstTaiKhoan as $item) {
             $countTinhThanh = 0;
             $userTinhThanh = User::whereId($item->id)->with('tinhthanhs.diadanh')->first();

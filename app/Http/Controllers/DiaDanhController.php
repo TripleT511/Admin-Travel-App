@@ -35,7 +35,7 @@ class DiaDanhController extends Controller
             $query->where('idLoai', '=', 1)->orderBy('created_at');
         }])->with(['hinhanh' => function ($query) {
             $query->where('idLoai', '=', 1)->orderBy('created_at');
-        }])->withCount('shares')->orderBy('id')->get();
+        }])->withCount('shares')->orderBy('id')->paginate(5);
         foreach ($lstDiaDanh as $item) {
             $this->fixImage($item->hinhanh);
         }
@@ -227,10 +227,13 @@ class DiaDanhController extends Controller
     public function destroy(DiaDanh $diaDanh)
     {
         $hinhAnh = HinhAnh::where('idDiaDanh', '=', $diaDanh->id);
+        $deleteHinh = $hinhAnh->first();
         $baiViet = BaiVietChiaSe::where('idDiaDanh', '=', $diaDanh->id);
+        Storage::disk('public')->delete($deleteHinh->hinhAnh);
         $baiViet->delete();
         $hinhAnh->delete();
         $diaDanh->delete();
+
         return Redirect::route('diaDanh.index');
     }
 }

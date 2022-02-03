@@ -73,6 +73,9 @@
                     </table>
                 </div>
             </div>
+            <div class="pagination d-flex justify-content-center">
+                    {{ $lstQuanAn->links() }}
+            </div>
         </div>
     </div>
 </div>

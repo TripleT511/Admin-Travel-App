@@ -15,7 +15,7 @@ class NhuCauController extends Controller
      */
     public function index()
     {
-        $lstNhuCau = NhuCau::all();
+        $lstNhuCau = NhuCau::paginate(5);
         return view('nhucau.index-nhucau', ['lstNhuCau' => $lstNhuCau]);
     }
 

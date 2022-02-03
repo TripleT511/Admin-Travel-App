@@ -56,6 +56,9 @@
                     </table>
                 </div>
             </div>
+            <div class="pagination d-flex justify-content-center">
+                    {{ $lstDiaDanhNhuCau->links() }}
+            </div>
         </div>
     </div>
 </div>

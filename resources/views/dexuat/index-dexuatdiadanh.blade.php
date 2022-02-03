@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
-@section('title','Danh sách lưu trú')
+@section('title','Đề xuất địa danh')
 
 @section('content')
 <div class="page-header">
-    <h3 class="page-title"> Danh sách lưu trú </h3>
+    <h3 class="page-title"> Đề xuất địa danh </h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('luuTru.create') }}">Thêm lưu trú</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Danh sách lưu trú</li>
+            <li class="breadcrumb-item"><a href="{{ route('deXuatDiaDanh.create') }}">Thêm địa danh</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Đề xuất địa danh</li>
         </ol>
     </nav>
 </div>
@@ -16,7 +16,8 @@
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Bảng lưu trú</h4>
+                <h4 class="card-title">Bảng địa danh
+                </h4>
                 </p>
                 <div class="table-responsive">
                     <table class="table">
@@ -24,42 +25,43 @@
                             <tr>
                                 <th>id</th>
                                 <th>Tên địa danh</th>
-                                <th>Tên lưu trú </th>
-                                <th>Mô tả </th>
-                                <th>Địa chỉ</th>
-                                <th>Sdt </th>
-                                <th>Thời gian hoạt động </th>
+                                <th>Tên người đăng</th>
+                                <th>Mô tả</th>
+                                <th>Kinh độ</th>
+                                <th>Vĩ độ</th>
                                 <th>Hình ảnh</th>
+                                <th>Tỉnh thành</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($lstLuuTru as $item)
+                            @foreach ($lstDiaDanh as $item)
                             <tr>
                                 <td>{{ $item->id }}</td>
-                                <td>{{ $item->diadanh->tenDiaDanh }}</td>
-                                <td>{{ $item->tenLuuTru }}</td>
-                                <td>{{ $item->moTa}}</td>
-                                <td>{{ $item->diaChi }}</td>
-                                <td>{{ $item->sdt}}</td>
-                                <td>{{ $item->thoiGianHoatDong }}</td>
+                                <td>
+                                    <a href="{{ route('diaDanh.show', ['diaDanh'=>$item]) }}">
+                                        {{ $item->tenDiaDanh }}
+                                    </a>
+                                </td>
+                                <td>{{ $item->user->hoTen }}</td>
+                                <td class="text-wrap">{{ $item->moTa }}</td>
+                                <td>{{ $item->kinhDo }}</td>
+                                <td>{{ $item->viDo }}</td>
                                 <td>
                                     <img src="@if($item->hinhAnh != null) {{ asset($item->hinhAnh) }}
                                                       @else '/images/no-image-available.jpg'
                                                       @endif" width="150" />
                                 </td>
-
+                                <td>{{ $item->tinhthanh->tenTinhThanh }}</td>
                                 <td>
                                     <label class="badge badge-primary">
                                         <a class="d-block text-light"
-                                            href="{{ route('luuTru.edit', ['luuTru'=>$item]) }}"> Sửa</a>
+                                            href="{{ route('deXuatDiaDanh.edit', ['deXuatDiaDanh'=>$item]) }}">
+                                            Duyệt</a>
                                     </label>
-                                    <!-- <label class="badge badge-success">
-                                        <a class="d-block text-light"
-                                            href="{{ route('luuTru.show', ['luuTru'=>$item]) }}"> Show</a>
-                                    </label> -->
                                     <label>
-                                        <form method="post" action="{{ route('luuTru.destroy', ['luuTru'=>$item]) }}">
+                                        <form method="post"
+                                            action="{{ route('deXuatDiaDanh.destroy', ['deXuatDiaDanh'=>$item]) }}">
                                             @csrf
                                             @method("DELETE")
                                             <button style="outline: none; border: none" class="badge badge-danger"
@@ -72,9 +74,6 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class="pagination d-flex justify-content-center">
-                    {{ $lstLuuTru->links() }}
             </div>
         </div>
     </div>

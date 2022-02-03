@@ -1,16 +1,15 @@
 <?php
 
 use App\Http\Controllers\BaiVietChiaSeController;
+use App\Http\Controllers\DeXuatDiaDanhController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TinhThanhController;
 use App\Http\Controllers\DiaDanhController;
 use App\Http\Controllers\DiaDanhNhuCauController;
-use App\Http\Controllers\HinhAnhController;
 use App\Http\Controllers\LuuTruController;
 use App\Http\Controllers\MonAnController;
 use App\Http\Controllers\NhuCauController;
 use App\Http\Controllers\QuanAnController;
-use App\Models\BaiVietChiaSe;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,6 +24,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth')->group(function () {
+    Route::get('/', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
     Route::resource('tinhThanh', TinhThanhController::class);
 
     Route::resource('diaDanh', DiaDanhController::class);
@@ -41,17 +44,14 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('monAn', MonAnController::class);
 
+    Route::resource('deXuat', DeXuatDiaDanhController::class);
+
     Route::get('/register', [LoginController::class, 'showFormregister'])->name('show-register');
 
     Route::post('/register', [LoginController::class, 'register'])->name('register');
 
     Route::get('/user', [LoginController::class, 'index'])->name("lstUser");
 });
-
-
-Route::get('/', function () {
-    return view('dashboard');
-})->name('dashboard')->middleware('auth');
 
 
 Route::get('/login', [LoginController::class, 'showFormlogin'])->name('show-login');

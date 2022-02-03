@@ -53,7 +53,7 @@ class AuthController extends Controller
                     'status_code' => 422,
                     'message' => 'Password Match',
 
-                ]);
+                ], 422);
             }
 
             $tokenResult = $user->createToken('authToken')->plainTextToken;
@@ -61,13 +61,13 @@ class AuthController extends Controller
                 'status_code' => 200,
                 'access_token' => $tokenResult,
                 'token_type' => 'Bearer',
-            ]);
+            ], 200);
         } catch (Exception $error) {
             return response()->json([
                 'status_code' => 500,
                 'message' => 'Error in login',
                 'error' => $error,
-            ]);
+            ], 500);
         }
     }
     public function getAllUser()
@@ -125,13 +125,13 @@ class AuthController extends Controller
             return response()->json([
                 'status_code' => 200,
                 'message' => 'Registration Successfull',
-            ]);
+            ], 200);
         } catch (Exception $error) {
             return response()->json([
                 'status_code' => 500,
                 'message' => 'Error in Registration',
                 'error' => $error,
-            ]);
+            ], 500);
         }
     }
 
@@ -170,7 +170,7 @@ class AuthController extends Controller
                 return response()->json([
                     'status_code' => 422,
                     'message' => 'Old password doesn\'t matched',
-                ]);
+                ], 422);
             }
 
             $user->password = Hash::make($request->new_password);
@@ -179,13 +179,13 @@ class AuthController extends Controller
             return response()->json([
                 'status_code' => 200,
                 'message' => 'Password successfully changed!',
-            ]);
+            ], 200);
         } catch (Exception $error) {
             return response()->json([
                 'status_code' => 500,
                 'message' => 'Error in changing password',
                 'error' => $error,
-            ]);
+            ], 500);
         }
     }
 
@@ -224,7 +224,7 @@ class AuthController extends Controller
                 'status_code' => 500,
                 'message' => 'Error',
                 'error' => $error,
-            ]);
+            ], 500);
         }
     }
 
@@ -235,7 +235,7 @@ class AuthController extends Controller
         return response()->json([
             'status_code' => 200,
             'message' => "Logout Successfull",
-        ]);
+        ], 200);
     }
 
     public function getListToken(Request $request)
@@ -256,7 +256,7 @@ class AuthController extends Controller
         }
         $this->fixImage($user);
         $user->tinhthanhs_count = $countTinhThanh;
-        return response($user);
+        return response($user, 200);
     }
 
     public function deleteTokenById(Request $request, $tokenId)

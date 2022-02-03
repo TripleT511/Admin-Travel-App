@@ -66,6 +66,9 @@
                     </table>
                 </div>
             </div>
+            <div class="pagination d-flex justify-content-center">
+                    {{ $lstBaiViet->links() }}
+            </div>
         </div>
     </div>
 </div>

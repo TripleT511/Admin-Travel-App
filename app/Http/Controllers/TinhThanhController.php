@@ -17,7 +17,7 @@ class TinhThanhController extends Controller
 
     public function index()
     {
-        $lstTinhThanh = TinhThanh::all();
+        $lstTinhThanh = TinhThanh::paginate(5);
         return view('tinhthanh.index-tinhthanh', ['lstTinhThanh' => $lstTinhThanh]);
     }
 

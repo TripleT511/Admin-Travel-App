@@ -26,6 +26,7 @@
                                 <th>Hình ảnh</th>
                                 <th>Họ tên</th>
                                 <th>Email</th>
+                                <th>Phân quyền</th>
                                 <th>Bài viết</th>
                                 <th>Tỉnh thành</th>
                             </tr>
@@ -44,6 +45,11 @@
                                 </td>
                                 <td>
                                     {{ $item->email }}
+                                </td>
+                                <td>
+                                    @if($item->idPhanQuyen == 0) Admin
+                                    @else Người dùng
+                                    @endif
                                 </td>
                                 <td>
                                     {{ $item->baiviets_count }}
@@ -71,6 +77,9 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+            <div class="pagination d-flex justify-content-center">
+                    {{ $lstTaiKhoan->links() }}
             </div>
         </div>
     </div>
