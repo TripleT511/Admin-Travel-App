@@ -16,7 +16,6 @@ class CreateNhuCausTable extends Migration
         Schema::create('nhu_caus', function (Blueprint $table) {
             $table->id();
             $table->string('tenNhuCau');
-            $table->integer('trangThai');
             $table->timestamps();
             $table->softDeletes();
         });

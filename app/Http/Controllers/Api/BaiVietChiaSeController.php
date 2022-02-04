@@ -40,7 +40,7 @@ class BaiVietChiaSeController extends Controller
     }
     public function index()
     {
-        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->with(['user' => function ($query) {
+        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->with(['user' => function ($query) {
             $query->withCount('baiviets')->withCount('tinhthanhs');
         }])->withCount(['islike' => function ($query) {
             $query->where([
@@ -84,7 +84,7 @@ class BaiVietChiaSeController extends Controller
     public function baivietuser(Request $request, $id)
     {
 
-        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->withCount(['likes' => function ($query) {
+        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->withCount(['likes' => function ($query) {
             $query->where('userLike', '=', 1);
         }])->withCount(['islike' => function ($query) {
             $query->where([
@@ -147,7 +147,7 @@ class BaiVietChiaSeController extends Controller
                 'idUser' => $request->input('idUser'),
                 'noiDung' => $request->input('noiDung'),
                 'thoiGian' => Carbon::now()->toDateTimeString(),
-                'trangThai' => 1
+
             ]);
             $baiViet->save();
 
@@ -196,7 +196,7 @@ class BaiVietChiaSeController extends Controller
      */
     public function show()
     {
-        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id,trangThai', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->with(['user' => function ($query) {
+        $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->with(['user' => function ($query) {
             $query->withCount('baiviets')->withCount('tinhthanhs');
         }])->withCount(['likes' => function ($query) {
             $query->where('userLike', '=', 1);
@@ -267,7 +267,7 @@ class BaiVietChiaSeController extends Controller
                 'idUser' => $baiViet->idUser,
                 'noiDung' => $request->input('noiDung'),
                 'thoiGian' => Carbon::now()->toDateTimeString(),
-                'trangThai' => 1
+
             ]);
             $baiViet->update();
             if ($request->hasFile('hinhAnh')) {

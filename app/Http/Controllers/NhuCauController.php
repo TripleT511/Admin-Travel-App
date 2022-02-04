@@ -45,14 +45,11 @@ class NhuCauController extends Controller
                 'tenNhuCau.required' => "Tên nhu cầu không được bỏ trống"
             ]
         );
-        $trangThai = 1;
-        if ($request->input('trangThai') != "on") {
-            $trangThai = 0;
-        }
+
         $nhuCau = new NhuCau();
         $nhuCau->fill([
             'tenNhuCau' => $request->input('tenNhuCau'),
-            'trangThai' => $trangThai
+
         ]);
         $nhuCau->save();
         return Redirect::route('nhuCau.show', ['nhuCau' => $nhuCau]);
@@ -98,13 +95,10 @@ class NhuCauController extends Controller
                 'tenNhuCau.required' => "Tên nhu cầu không được bỏ trống"
             ]
         );
-        $trangThai = 1;
-        if ($request->input('trangThai') != "on") {
-            $trangThai = 0;
-        }
+
         $nhuCau->fill([
             'tenNhuCau' => $request->input('tenNhuCau'),
-            'trangThai' => $trangThai
+
         ]);
         $nhuCau->save();
         return Redirect::route('nhuCau.show', ['nhuCau' => $nhuCau]);

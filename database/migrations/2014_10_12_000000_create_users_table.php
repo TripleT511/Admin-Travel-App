@@ -25,7 +25,6 @@ class CreateUsersTable extends Migration
             $table->integer('trangThaiHoTen');
             $table->integer('trangThaiEmail');
             $table->integer('trangThaiSDT');
-            $table->integer('trangThai');
             $table->rememberToken();
             $table->timestamps();
         });

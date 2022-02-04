@@ -17,7 +17,6 @@ class DiaDanhNhuCau extends Model
     protected $fillable = [
         'idDiaDanh',
         'idNhuCau',
-        'trangThai',
     ];
 
     public function diadanh()

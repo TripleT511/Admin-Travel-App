@@ -23,7 +23,6 @@ class DiaDanh extends Model
         'kinhDo',
         'viDo',
         'tinh_thanh_id',
-        'trangThai',
     ];
 
     public function tinhthanh()

@@ -21,7 +21,6 @@ class CreateBaiVietChiaSesTable extends Migration
             $table->foreign('idUser')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->text('noiDung');
             $table->dateTime('thoiGian');
-            $table->integer('trangThai');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -19,7 +19,6 @@ class CreateMonAnsTable extends Migration
             $table->foreign('quan_an_id')->references('id')->on('quan_ans')->onUpdate('cascade')->onDelete('cascade');
             $table->String('tenMon');
             $table->text('hinhAnh');
-            $table->integer('trangThai');
             $table->timestamps();
             $table->softDeletes();
         });

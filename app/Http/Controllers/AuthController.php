@@ -104,7 +104,7 @@ class AuthController extends Controller
                 'trangThaiHoTen' => 'required',
                 'trangThaiEmail' => 'required',
                 'trangThaiSDT' => 'required',
-                'trangThai' => 'required',
+
             ], [
                 'hoTen.required' => 'Họ Tên không được bỏ trống',
                 'email.required' => 'Email không được bỏ trống',

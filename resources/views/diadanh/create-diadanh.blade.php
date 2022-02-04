@@ -25,12 +25,12 @@
                     <input type="text" class="form-control text-light"  name="moTa" placeholder="Mô tả">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword4">Kinh độ</label>
-                     <input type="text" class="form-control text-light" name="kinhDo" placeholder="Kinh độ">
-                </div>
-                <div class="form-group">
                     <label for="exampleInputPassword4">Vĩ độ</label>
                      <input type="text" class="form-control text-light" name="viDo" placeholder="Vĩ độ">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword4">Kinh độ</label>
+                     <input type="text" class="form-control text-light" name="kinhDo" placeholder="Kinh độ">
                 </div>
                 <div class="form-group">
                     <label>Hình ảnh</label>
@@ -59,10 +59,6 @@
                             <option value="{{$nc->id}}">{{$nc->tenNhuCau}}</option>
                          @endforeach
                      </select>
-                </div>
-               <div class="form-check form-check-primary">
-                    <label class="form-check-label">
-                    <input type="checkbox" name="trangThai" class="form-check-input" checked> Trạng thái </label>
                 </div>
                 <input type="submit" class="btn btn-primary mr-2" value="Submit">
                 <button class="btn btn-dark">Cancel</button>

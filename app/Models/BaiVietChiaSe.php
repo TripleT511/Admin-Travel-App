@@ -22,7 +22,6 @@ class BaiVietChiaSe extends Model
         'idUser',
         'noiDung',
         'thoiGian',
-        'trangThai',
     ];
 
     public function diadanh()

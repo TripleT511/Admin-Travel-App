@@ -29,7 +29,6 @@ class User extends Authenticatable
         'trangThaiHoTen',
         'trangThaiEmail',
         'trangThaiSDT',
-        'trangThai',
     ];
 
     public function baiviets()

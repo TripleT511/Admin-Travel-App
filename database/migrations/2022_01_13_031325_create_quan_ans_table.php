@@ -23,7 +23,6 @@ class CreateQuanAnsTable extends Migration
             $table->text('sdt')->nullable();
             $table->string('thoiGianHoatDong')->nullable();
             $table->text('hinhAnh');
-            $table->integer('trangThai');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -26,12 +26,12 @@
                         <input type="text" class="form-control text-light" name="moTa" value="{{ $diaDanh->moTa }}" placeholder="Mô tả">
                       </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword4">Kinh độ</label>
-                     <input type="text" class="form-control text-light" name="kinhDo" value="{{ $diaDanh->kinhDo }}" placeholder="Kinh độ">
+                    <label for="exampleInputPassword4">Vĩ độ</label>
+                    <input type="text" class="form-control text-light" name="viDo" value="{{ $diaDanh->viDo }}" placeholder="Vĩ độ">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword4">Vĩ độ</label>
-                     <input type="text" class="form-control text-light" name="viDo" value="{{ $diaDanh->viDo }}" placeholder="Vĩ độ">
+                    <label for="exampleInputPassword4">Kinh độ</label>
+                    <input type="text" class="form-control text-light" name="kinhDo" value="{{ $diaDanh->kinhDo }}" placeholder="Kinh độ">
                 </div>
                 <div class="form-group">
                     @foreach ($hinhAnh as $item)
@@ -57,10 +57,6 @@
                             </option>
                         @endforeach
                     </select>
-                </div>
-               <div class="form-check form-check-primary">
-                    <label class="form-check-label">
-                    <input type="checkbox" name="trangThai" class="form-check-input" @if($diaDanh->trangThai == 1) checked @endif > Trạng thái </label>
                 </div>
                 <input type="submit" class="btn btn-primary mr-2" value="Submit">
                 <button type="text" class="btn btn-dark">Cancel</button>

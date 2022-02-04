@@ -16,7 +16,6 @@ class NhuCau extends Model
 
     protected $fillable = [
         'tenNhuCau',
-        'trangThai',
     ];
 
     public function diadanhs()

@@ -19,7 +19,6 @@ class LuuTru extends Model
         'sdt',
         'thoiGianHoatDong',
         'hinhAnh',
-        'trangThai'
     ];
 
     public function diadanh()

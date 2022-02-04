@@ -16,7 +16,6 @@ class CreateTinhThanhsTable extends Migration
         Schema::create('tinh_thanhs', function (Blueprint $table) {
             $table->id();
             $table->string('tenTinhThanh');
-            $table->integer('trangThai');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -44,17 +44,14 @@ class TinhThanhController extends Controller
                 'tenTinhThanh' => 'required|unique:tinh_thanhs',
             ],
             [
-                'tenTinhThanh.required' => "Tên tỉnh thành không được bỏ trống"
+                'tenTinhThanh.required' => "Tên tỉnh thành không được bỏ trống",
+                'tenTinhThanh.unique' => "Tỉnh thành đã tồn tại"
             ]
         );
-        $trangThai = 1;
-        if ($request->input('trangThai') != "on") {
-            $trangThai = 0;
-        }
+
         $tinhThanh = new TinhThanh();
         $tinhThanh->fill([
             'tenTinhThanh' => $request->input('tenTinhThanh'),
-            'trangThai' => $trangThai
         ]);
         $tinhThanh->save();
         return Redirect::route('tinhThanh.show', ['tinhThanh' => $tinhThanh]);
@@ -99,13 +96,9 @@ class TinhThanhController extends Controller
                 'tenTinhThanh.required' => "Tên tỉnh thành không được bỏ trống"
             ]
         );
-        $trangThai = 1;
-        if ($request->input('trangThai') != "on") {
-            $trangThai = 0;
-        }
+
         $tinhThanh->fill([
             'tenTinhThanh' => $request->input('tenTinhThanh'),
-            'trangThai' => $trangThai
         ]);
         $tinhThanh->save();
         return Redirect::route('tinhThanh.show', ['tinhThanh' => $tinhThanh]);

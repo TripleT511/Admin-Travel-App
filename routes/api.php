@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\BaiVietChiaSeController;
+use App\Http\Controllers\Api\DeXuatController;
 use App\Http\Controllers\Api\DiaDanhController;
 use App\Http\Controllers\Api\HinhAnhController;
 use App\Http\Controllers\Api\LuuTruController;
@@ -104,6 +105,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Chi tiết quán ăn
     Route::get('quanan/{id}', [QuanAnController::class, 'show']);
+
+    //Đề xuất địa danh
+    Route::post('dexuat', [DeXuatController::class, 'store']);
 });
 
 

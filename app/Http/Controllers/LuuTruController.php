@@ -26,7 +26,7 @@ class LuuTruController extends Controller
     }
     public function index()
     {
-        $lstLuuTru = LuuTru::with('diadanh')->where('trangThai', '=', 1)->paginate(5);
+        $lstLuuTru = LuuTru::with('diadanh')->paginate(5);
         return view('luutru.index-luutru', ['lstLuuTru' => $lstLuuTru]);
     }
 
@@ -64,10 +64,7 @@ class LuuTruController extends Controller
             'hinhAnh.required' => 'Bắt buộc chọn hình ảnh'
         ]);
 
-        // $trangThai = 1;
-        // if ($request->input('trangThai') != "on") {
-        //     $trangThai = 0;
-        // }
+
         $luuTru = new Luutru();
         $luuTru->fill([
             'dia_danh_id' => $request->input('dia_danh_id'),
@@ -77,7 +74,7 @@ class LuuTruController extends Controller
             'sdt' => $request->input('sdt'),
             'thoiGianHoatDong' => $request->input('thoiGianHoatDong'),
             'hinhAnh' => '',
-            'trangThai' => 1
+
         ]);
         $luuTru->save();
 
@@ -144,10 +141,7 @@ class LuuTruController extends Controller
             $luuTru->save();
         }
 
-        $trangThai = 1;
-        if ($request->input('trangThai') != "on") {
-            $trangThai = 0;
-        }
+
         $luuTru->fill([
             'dia_danh_id' => $request->input('dia_danh_id'),
             'tenLuuTru' => $request->input('tenLuuTru'),
@@ -155,7 +149,7 @@ class LuuTruController extends Controller
             'diaChi' => $request->input('diaChi'),
             'sdt' => $request->input('sdt'),
             'thoiGianHoatDong' => $request->input('thoiGianHoatDong'),
-            'trangThai' => $trangThai
+
         ]);
         $luuTru->save();
 

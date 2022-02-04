@@ -66,21 +66,16 @@ class QuanAnController extends Controller
             'moTa' => 'required',
             'diaChi' => 'required',
             'soDienThoai' => 'required',
-            // 'thoiGianHoatDong' => 'required',
             'hinhAnh' => 'required'
         ], [
             'tenQuan.required' => 'Tên quán không được bỏ trống',
             'moTa.required' => 'Mô tả không được bỏ trống',
             'diaChi.required' => 'Địa chỉ không được bỏ trống',
             'soDienThoai.required' => 'Số điện thoại không được bỏ trống',
-            // 'thoiGianHoatDong.required' => 'Thời gian hoạt động không được bỏ trống',
             'hinhAnh.required' => "Hình ảnh không được bỏ trống"
         ]);
 
-        // $trangThai = 1;
-        // if ($request->input('trangThai') != "on") {
-        //     $trangThai = 0;
-        // }
+
         $quanAn = new QuanAn();
         $quanAn->fill([
             'dia_danh_id' => $request->input('dia_danh_id'),
@@ -90,7 +85,7 @@ class QuanAnController extends Controller
             'sdt' => $request->input('soDienThoai'),
             'thoiGianHoatDong' => $request->input('thoiGianHoatDong'),
             'hinhAnh' => '',
-            'trangThai' => 1
+
         ]);
         $quanAn->save();
 
@@ -152,10 +147,7 @@ class QuanAnController extends Controller
         }
         $quanAn->save();
 
-        $trangThai = 1;
-        if ($request->input('trangThai') != "on") {
-            $trangThai = 0;
-        }
+
         $quanAn->fill([
             'dia_danh_id' => $request->input('dia_danh_id'),
             'tenQuan' => $request->input('tenQuan'),
@@ -163,7 +155,6 @@ class QuanAnController extends Controller
             'diaChi' => $request->input('diaChi'),
             'sdt' => $request->input('soDienThoai'),
             'thoiGianHoatDong' => $request->input('thoiGianHoatDong'),
-            'trangThai' => $trangThai
         ]);
         $quanAn->save();
         return Redirect::route('quanAn.index', ['quanAn' => $quanAn]);

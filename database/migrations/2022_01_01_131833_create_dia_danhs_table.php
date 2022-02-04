@@ -21,7 +21,6 @@ class CreateDiaDanhsTable extends Migration
             $table->double('viDo');
             $table->unsignedBigInteger('tinh_thanh_id');
             $table->foreign('tinh_thanh_id')->references('id')->on('tinh_thanhs')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('trangThai');
             $table->timestamps();
             $table->softDeletes();
         });

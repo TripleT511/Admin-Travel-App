@@ -159,7 +159,7 @@
                 <li class="nav-item menu-items">
                     <a class="nav-link" href="{{ route('deXuat.index') }}">
                         <span class="menu-icon">
-                            <i class="mdi mdi-guitar-pick-outline"></i>
+                            <i class="mdi mdi-image-filter"></i>
                         </span>
                         <span class="menu-title text-wrap" >Quản lý đề xuất địa danh</span>
                     </a>

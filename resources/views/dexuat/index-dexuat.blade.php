@@ -7,7 +7,7 @@
     <h3 class="page-title"> Đề xuất địa danh </h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('deXuatDiaDanh.create') }}">Thêm địa danh</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('deXuat.create') }}">Thêm địa danh</a></li>
             <li class="breadcrumb-item active" aria-current="page">Đề xuất địa danh</li>
         </ol>
     </nav>
@@ -31,11 +31,11 @@
                                 <th>Vĩ độ</th>
                                 <th>Hình ảnh</th>
                                 <th>Tỉnh thành</th>
-                                <th></th>
+                                <th>Trạng thái</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($lstDiaDanh as $item)
+                            @foreach ($lstDeXuat as $item)
                             <tr>
                                 <td>{{ $item->id }}</td>
                                 <td>
@@ -54,26 +54,39 @@
                                 </td>
                                 <td>{{ $item->tinhthanh->tenTinhThanh }}</td>
                                 <td>
-                                    <label class="badge badge-primary">
-                                        <a class="d-block text-light"
-                                            href="{{ route('deXuatDiaDanh.edit', ['deXuatDiaDanh'=>$item]) }}">
-                                            Duyệt</a>
-                                    </label>
-                                    <label>
-                                        <form method="post"
-                                            action="{{ route('deXuatDiaDanh.destroy', ['deXuatDiaDanh'=>$item]) }}">
-                                            @csrf
-                                            @method("DELETE")
-                                            <button style="outline: none; border: none" class="badge badge-danger"
-                                                type="submit">Xoá</button>
-                                        </form>
-                                    </label>
+                                    @if ($item->trangThai == 0 && $item->deleted_at == null) 
+                                        <label>
+                                            <form method="post"
+                                                action="{{ route('deXuat.update', ['deXuat'=>$item]) }}">
+                                                @csrf
+                                                @method("PATCH")
+                                                <button style="outline: none; border: none" class="badge badge-primary"
+                                                    type="submit">Duyệt</button>
+                                            </form>
+                                        </label>
+                                        <label>
+                                            <form method="post"
+                                                action="{{ route('deXuat.destroy', ['deXuat'=>$item]) }}">
+                                                @csrf
+                                                @method("DELETE")
+                                                <button style="outline: none; border: none" class="badge badge-danger"
+                                                    type="submit">Xoá</button>
+                                            </form>
+                                        </label>
+                                    @elseif ($item->trangThai == 1  && $item->deleted_at == null)
+                                        <label class="badge badge-success">Đã duyệt</label>
+                                    @else
+                                        <label class="badge badge-danger">Đã xoá</label>
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
+            </div>
+            <div class="pagination d-flex justify-content-center">
+                    {{ $lstDeXuat->links() }}
             </div>
         </div>
     </div>

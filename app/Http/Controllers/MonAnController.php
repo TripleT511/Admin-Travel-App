@@ -26,7 +26,7 @@ class MonAnController extends Controller
     }
     public function index()
     {
-        $lstMonAn = MonAn::with('quanan')->where('trangThai', '=', 1)->paginate(5);
+        $lstMonAn = MonAn::with('quanan')->paginate(5);
 
         return view('monan.index-monan', ['lstMonAn' => $lstMonAn]);
     }
@@ -59,16 +59,12 @@ class MonAnController extends Controller
             'hinhAnh.required' => 'Bắt buộc chọn hình ảnh'
         ]);
 
-        $trangThai = 1;
-        if ($request->input('trangThai') != "on") {
-            $trangThai = 0;
-        }
         $monAn = new MonAn();
         $monAn->fill([
             'quan_an_id' => $request->input('quan_an_id'),
             'tenMon' => $request->input('tenMon'),
             'hinhAnh' => '',
-            'trangThai' => 1
+
         ]);
         $monAn->save();
 
@@ -125,14 +121,10 @@ class MonAnController extends Controller
         }
         $monAn->save();
 
-        $trangThai = 1;
-        if ($request->input('trangThai') != "on") {
-            $trangThai = 0;
-        }
         $monAn->fill([
             'quan_an_id' => $request->input('quan_an_id'),
             'tenMon' => $request->input('tenMon'),
-            'trangThai' => $trangThai
+
         ]);
         $monAn->save();
         return Redirect::route('monAn.index', ['monAn' => $monAn]);

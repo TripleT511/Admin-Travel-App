@@ -19,7 +19,6 @@ class CreateDiaDanhNhuCausTable extends Migration
             $table->unsignedBigInteger('idNhuCau');
             $table->foreign('idDiaDanh')->references('id')->on('dia_danhs')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('idNhuCau')->references('id')->on('nhu_caus')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('trangThai');
             $table->timestamps();
             $table->softDeletes();
         });

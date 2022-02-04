@@ -16,7 +16,6 @@ class MonAn extends Model
         'quan_an_id',
         'tenMon',
         'hinhAnh',
-        'trangThai'
     ];
 
     public function quanan()

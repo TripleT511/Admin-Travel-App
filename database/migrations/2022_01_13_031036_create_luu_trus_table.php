@@ -23,7 +23,6 @@ class CreateLuuTrusTable extends Migration
             $table->text('sdt');
             $table->string('thoiGianHoatDong')->nullable();
             $table->text('hinhAnh');
-            $table->integer('trangThai');
             $table->timestamps();
             $table->softDeletes();
         });

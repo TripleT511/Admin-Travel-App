@@ -161,7 +161,7 @@ class LoginController extends Controller
         $user->trangThaiHoTen = 1;
         $user->trangThaiEmail = 1;
         $user->trangThaiSDT = 1;
-        $user->trangThai = 1;
+
         $user->save();
 
         if ($request->hasFile('hinhAnh')) {

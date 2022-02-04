@@ -26,7 +26,6 @@ class UserFactory extends Factory
             'trangThaiHoTen' => 1,
             'trangThaiEmail'  => 1,
             'trangThaiSDT'  => 1,
-            'trangThai'  => 1,
         ];
     }
 

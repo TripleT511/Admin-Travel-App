@@ -66,8 +66,8 @@ class DiaDanhController extends Controller
         $request->validate([
             'tenDiaDanh' => 'required|unique:dia_danhs',
             'moTa' => 'required',
-            'kinhDo' => 'required',
-            'viDo' => 'required',
+            'kinhDo' => 'required|numeric',
+            'viDo' => 'required|numeric',
             'hinhAnh' => 'required',
             'idNhuCau' => 'required'
         ], [
@@ -76,13 +76,12 @@ class DiaDanhController extends Controller
             'moTa.required' => 'Mô tả không được bỏ trống',
             'kinhDo.required' => 'Kinh độ không được bỏ trống',
             'viDo.required' => 'Vĩ độ không được bỏ trống',
+            'kinhDo.numeric' => 'Kinh độ phải là số thực',
+            'viDo.numeric' => 'Vĩ độ phải là số thực',
             'hinhAnh.required' => 'Bắt buộc chọn hình ảnh',
             'idNhuCau.required' => 'Cần phải chọn nhu cầu cho địa danh'
         ]);
-        $trangThai = 1;
-        if ($request->input('trangThai') != "on") {
-            $trangThai = 0;
-        }
+
 
         // Thêm địa danh
         $diadanh = new DiaDanh();
@@ -92,7 +91,6 @@ class DiaDanhController extends Controller
             'kinhDo' => $request->input('kinhDo'),
             'viDo' => $request->input('viDo'),
             'tinh_thanh_id' => $request->input('idTinhThanh'),
-            'trangThai' => $trangThai
         ]);
         $diadanh->save();
 
@@ -167,26 +165,24 @@ class DiaDanhController extends Controller
         $request->validate([
             'tenDiaDanh' => 'required',
             'moTa' => 'required',
-            'kinhDo' => 'required',
-            'viDo' => 'required',
+            'kinhDo' => 'required|numeric',
+            'viDo' => 'required|numeric',
         ], [
             'tenDiaDanh.required' => "Tên địa danh không được bỏ trống",
             'tenDiaDanh.unique' => "Tên địa danh bị trùng",
             'moTa.required' => 'Mô tả không được bỏ trống',
             'kinhDo.required' => 'Kinh độ không được bỏ trống',
+            'kinhDo.numeric' => 'Kinh độ phải là số thực',
+            'viDo.numeric' => 'Vĩ độ phải là số thực',
             'viDo.required' => 'Vĩ độ không được bỏ trống',
         ]);
-        $trangThai = 1;
-        if ($request->input('trangThai') != "on") {
-            $trangThai = 0;
-        }
+
         $diaDanh->fill([
             'tenDiaDanh' => $request->input('tenDiaDanh'),
             'moTa' => $request->input('moTa'),
             'kinhDo' => $request->input('kinhDo'),
             'viDo' => $request->input('viDo'),
             'tinh_thanh_id' => $request->input('idTinhThanh'),
-            'trangThai' => $trangThai
         ]);
         $diaDanh->save();
         if ($request->hasFile('hinhAnh')) {

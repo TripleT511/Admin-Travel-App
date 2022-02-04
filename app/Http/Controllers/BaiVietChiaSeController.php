@@ -71,17 +71,14 @@ class BaiVietChiaSeController extends Controller
             'noiDung.required' => 'Nội dung không được bỏ trống',
             'hinhAnh.required' => "Hình ảnh không được bỏ trống"
         ]);
-        $trangThai = 1;
-        if ($request->input('trangThai') != "on") {
-            $trangThai = 0;
-        }
+
         $baiViet = new BaiVietChiaSe();
         $baiViet->fill([
             'idDiaDanh' => $request->input('idDiaDanh'),
             'idUser' => $request->user()->id,
             'noiDung' => $request->input('noiDung'),
             'thoiGian' => Carbon::now()->toDateTimeString(),
-            'trangThai' => $trangThai
+
         ]);
         $baiViet->save();
 
@@ -152,17 +149,14 @@ class BaiVietChiaSeController extends Controller
         ], [
             'noiDung.required' => 'Nội dung không được bỏ trống',
         ]);
-        $trangThai = 1;
-        if ($request->input('trangThai') != "on") {
-            $trangThai = 0;
-        }
+
 
         $baiViet->fill([
             'idDiaDanh' => $baiViet->idDiaDanh,
             'idUser' => $baiViet->idUser,
             'noiDung' => $request->input('noiDung'),
             'thoiGian' => Carbon::now()->toDateTimeString(),
-            'trangThai' => $trangThai
+
         ]);
         $baiViet->save();
 
@@ -173,7 +167,7 @@ class BaiVietChiaSeController extends Controller
         }
         $hinhAnh->save();
 
-        $lstBaiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id', 'hinhanh:id,idDiaDanh,idBaiVietChiaSe,hinhAnh,idLoai', 'user:id,hoTen'])->get();
+        $lstBaiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id', 'hinhanh:id,idDiaDanh,idBaiVietChiaSe,hinhAnh,idLoai', 'user:id,hoTen'])->paginate(5);
 
         return view('baiviet.index-baiviet', ['lstBaiViet' => $lstBaiViet]);
     }

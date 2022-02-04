@@ -44,15 +44,12 @@ class DiaDanhNhuCauController extends Controller
     {
         $lstDiaDanh = DiaDanh::all();
         $lstNhuCau = NhuCau::all();
-        $trangThai = 1;
-        if ($request->input('trangThai') != "on") {
-            $trangThai = 0;
-        }
+
         $diadanhnhucau = new DiaDanhNhuCau();
         $diadanhnhucau->fill([
             'idDiaDanh' => $request->input('idDiaDanh'),
             'idNhuCau' => $request->input('idNhuCau'),
-            'trangThai' => $trangThai
+
         ]);
         $diadanhnhucau->save();
         return Redirect::route('diaDanhNhuCau.show', ['diaDanhNhuCau' => $diadanhnhucau, 'lstDiaDanh' => $lstDiaDanh, 'lstNhuCau' => $lstNhuCau]);
@@ -91,14 +88,11 @@ class DiaDanhNhuCauController extends Controller
      */
     public function update(UpdateDiaDanhNhuCauRequest $request, DiaDanhNhuCau $diaDanhNhuCau)
     {
-        $trangThai = 1;
-        if ($request->input('trangThai') != "on") {
-            $trangThai = 0;
-        }
+
         $diaDanhNhuCau->fill([
             'idDiaDanh' => $request->input('idDiaDanh'),
             'idNhuCau' => $request->input('idNhuCau'),
-            'trangThai' => $trangThai
+
         ]);
         $diaDanhNhuCau->save();
         return Redirect::route('diaDanhNhuCau.show', ['diaDanhNhuCau' => $diaDanhNhuCau]);

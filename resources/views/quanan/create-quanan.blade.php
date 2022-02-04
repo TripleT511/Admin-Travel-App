@@ -55,10 +55,6 @@
                         </span>
                     </div>
                 </div>
-                {{-- <div class="form-check form-check-primary">
-                    <label class="form-check-label">
-                        <input type="checkbox" name="trangThai" class="form-check-input"> Trạng thái </label>
-                </div> --}}
                 <input type="submit" class="btn btn-primary mr-2" value="Submit">
                 <button type="text" class="btn btn-dark">Cancel</button>
             </form>
