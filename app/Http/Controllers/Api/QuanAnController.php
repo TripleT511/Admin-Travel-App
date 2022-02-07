@@ -62,9 +62,12 @@ class QuanAnController extends Controller
     public function show($id)
     {
         $QuanAn = QuanAn::whereId($id)->with('monan')->get();
+
         foreach ($QuanAn as $item) {
             $this->fixImage($item);
-            $this->fixImageMonAn($item->monan);
+            if ($item->monan != null) {
+                $this->fixImageMonAn($item->monan);
+            }
         }
         return response($QuanAn);
     }
