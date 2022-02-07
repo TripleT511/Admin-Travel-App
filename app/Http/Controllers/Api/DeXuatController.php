@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\DeXuatDiaDanh;
+use App\Models\TinhThanh;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -53,6 +54,17 @@ class DeXuatController extends Controller
                     'error' => $validator->errors()->all()
                 ], 422);
             }
+            $tinhThanh = null;
+
+            if ($request->has('tenTinhThanh')) {
+                if (TinhThanh::where('tenTinhThanh', $request->tenTinhThanh)->count() > 0) {
+                    $tinhThanh = TinhThanh::where('tenTinhThanh', $request->tenTinhThanh)->first();
+                } else {
+                    $tinhThanh = TinhThanh::create([
+                        'tenTinhThanh' => $request->tenTinhThanh,
+                    ]);
+                }
+            }
 
             $deXuat = new DeXuatDiaDanh();
 
@@ -61,7 +73,7 @@ class DeXuatController extends Controller
                 'moTa' => $request->moTa,
                 'kinhDo' => $request->kinhDo,
                 'viDo' => $request->viDo,
-                'tinh_thanh_id' => $request->tinh_thanh_id,
+                'tinh_thanh_id' => $request->has('tenTinhThanh') ? $tinhThanh->id : $request->tinh_thanh_id,
                 'user_id' => request()->user()->id,
                 'hinhAnh' => '',
                 'trangThai' => 0,

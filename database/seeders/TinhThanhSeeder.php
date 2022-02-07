@@ -17,7 +17,7 @@ class TinhThanhSeeder extends Seeder
     {
         //
         DB::table('tinh_thanhs')->insert([
-            ['tenTinhThanh' => 'TP Hồ Chí Minh'],
+            ['tenTinhThanh' => 'Hồ Chí Minh'],
             ['tenTinhThanh' => 'Hà Nội'],
             ['tenTinhThanh' => 'Đà Nẵng'],
             ['tenTinhThanh' => 'Kiên Giang'],

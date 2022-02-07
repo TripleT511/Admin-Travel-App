@@ -7,7 +7,6 @@
     <h3 class="page-title"> Đề xuất địa danh </h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('deXuat.create') }}">Thêm địa danh</a></li>
             <li class="breadcrumb-item active" aria-current="page">Đề xuất địa danh</li>
         </ol>
     </nav>

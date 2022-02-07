@@ -31,6 +31,9 @@ class DeXuatDiaDanhController extends Controller
     public function index()
     {
         $lstDeXuat = DeXuatDiaDanh::withTrashed()->paginate(5);
+        foreach ($lstDeXuat as $item) {
+            $this->fixImage($item);
+        }
 
         return view('dexuat.index-dexuat', ['lstDeXuat' => $lstDeXuat]);
     }

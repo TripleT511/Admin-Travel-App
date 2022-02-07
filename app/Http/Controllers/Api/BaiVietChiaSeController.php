@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\BaiVietChiaSe;
 use App\Models\DanhGia;
+use App\Models\DiaDanh;
 use App\Models\HinhAnh;
+use App\Models\TinhThanh;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -141,9 +143,46 @@ class BaiVietChiaSeController extends Controller
                 ], 422);
             }
 
+            $diaDanh = null;
+            $tinhThanh = null;
+
+            if ($request->has('tenTinhThanh')) {
+                if (TinhThanh::where('tenTinhThanh', $request->tenTinhThanh)->count() > 0) {
+                    $tinhThanh = TinhThanh::where('tenTinhThanh', $request->tenTinhThanh)->first();
+                } else {
+                    $tinhThanh = TinhThanh::create([
+                        'tenTinhThanh' => $request->tenTinhThanh,
+                    ]);
+                }
+            }
+
+            if ($request->has('tenDiaDanh')) {
+                if (DiaDanh::where('tenDiaDanh', $request->tenDiaDanh)->count() > 0) {
+                    $diaDanh = DiaDanh::where('tenDiaDanh', $request->tenDiaDanh)->first();
+                } else {
+                    $diaDanh = DiaDanh::create([
+                        'tenDiaDanh' => $request->tenDiaDanh,
+                        'moTa' => "",
+                        'kinhDo' => $request->kinhDo,
+                        'viDo' => $request->viDo,
+                        'tinh_thanh_id' => $tinhThanh->id,
+                    ]);
+
+                    $hinhAnh = new HinhAnh();
+
+                    $hinhAnh->fill([
+                        'idDiaDanh' => $diaDanh->id,
+                        'idLoai' => 1,
+                        'hinhAnh' => 'images/no-image-available.jpg',
+                    ]);
+
+                    $hinhAnh->save();
+                }
+            }
+
             $baiViet = new BaiVietChiaSe();
             $baiViet->fill([
-                'idDiaDanh' => $request->input('idDiaDanh'),
+                'idDiaDanh' => $request->has('tenDiaDanh') ? $diaDanh->id : $request->input('idDiaDanh'),
                 'idUser' => $request->input('idUser'),
                 'noiDung' => $request->input('noiDung'),
                 'thoiGian' => Carbon::now()->toDateTimeString(),
@@ -164,7 +203,7 @@ class BaiVietChiaSeController extends Controller
             $hinhAnh = new HinhAnh();
 
             $hinhAnh->fill([
-                'idDiaDanh' => $request->input('idDiaDanh'),
+                'idDiaDanh' => $request->has('tenDiaDanh') ? $diaDanh->id : $request->input('idDiaDanh'),
                 'idBaiVietChiaSe' => $baiViet->id,
                 'idLoai' => 2,
                 'hinhAnh' => '',
