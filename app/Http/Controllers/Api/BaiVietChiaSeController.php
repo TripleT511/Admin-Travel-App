@@ -255,7 +255,16 @@ class BaiVietChiaSeController extends Controller
             }])->withCount(['views' => function ($query) {
                 $query->where('userXem', '=', 1);
             }])->where('id', '=', $id)->first();
+            $this->fixImage($baiViet->hinhanh);
+            $countTinhThanh = 0;
+            $userTinhThanh = User::whereId($baiViet->user->id)->with('tinhthanhs.diadanh')->first();
+            foreach ($userTinhThanh->tinhthanhs->groupBy('diadanh.tinh_thanh_id') as $items) {
+                $countTinhThanh++;
+            }
+            $baiViet->user->tinhthanhs_count = $countTinhThanh;
 
+            $this->fixImageUser($baiViet->user);
+            $baiViet->thoiGian = date('d-m-Y', strtotime($baiViet->thoiGian));
             return response()->json(
                 $baiViet,
                 200
