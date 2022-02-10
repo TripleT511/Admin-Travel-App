@@ -188,4 +188,11 @@ class LoginController extends Controller
         }
         return view('user.index-user', ['lstTaiKhoan' => $lstTaiKhoan]);
     }
+
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+        $this->fixImage($user);
+        return view('user.show-user', ['taiKhoan' => $user]);
+    }
 }

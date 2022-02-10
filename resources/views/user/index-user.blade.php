@@ -41,7 +41,9 @@
                                                       @endif" width="50" height="50" />
                                 </td>
                                 <td>
-                                    {{ $item->hoTen }}
+                                    <a href="{{ route('show', ['id'=>$item->id]) }}">
+                                        {{ $item->hoTen }}
+                                    </a>
                                 </td>
                                 <td>
                                     {{ $item->email }}

@@ -233,6 +233,43 @@ class BaiVietChiaSeController extends Controller
      * @param  \App\Models\BaiVietChiaSe  $baiVietChiaSe
      * @return \Illuminate\Http\Response
      */
+    public function getBaiVietById($id)
+    {
+        try {
+            $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->with(['user' => function ($query) {
+                $query->withCount('baiviets')->withCount('tinhthanhs');
+            }])->withCount(['likes' => function ($query) {
+                $query->where('userLike', '=', 1);
+            }])->withCount(['islike' => function ($query) {
+                $query->where([
+                    ['idUser', '=', auth()->user()->id,],
+                    ['userLike', '=', 1]
+                ]);
+            }])->withCount(['isdislike' => function ($query) {
+                $query->where([
+                    ['idUser', '=', auth()->user()->id,],
+                    ['userUnLike', '=', 1]
+                ]);
+            }])->withCount(['unlikes' => function ($query) {
+                $query->where('userUnLike', '=', 1);
+            }])->withCount(['views' => function ($query) {
+                $query->where('userXem', '=', 1);
+            }])->where('id', '=', $id)->first();
+
+            return response()->json(
+                $baiViet,
+                200
+            );
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'message' => 'Có lỗi xảy ra',
+                    'error' => $e,
+                ],
+                500
+            );
+        }
+    }
     public function show()
     {
         $baiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id', 'hinhanh:id,idDiaDanh,hinhAnh,idBaiVietChiaSe,idLoai', 'user'])->with(['user' => function ($query) {
@@ -334,7 +371,7 @@ class BaiVietChiaSeController extends Controller
                 'status_code' => 500,
                 'message' => 'Error in Update Post',
                 'error' => $error,
-            ]);
+            ], 500);
         }
     }
 

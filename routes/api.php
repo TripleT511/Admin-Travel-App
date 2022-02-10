@@ -90,6 +90,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // Bài viết của user
     Route::get('user/{id}/baiviet', [BaiVietChiaSeController::class, 'baivietuser']);
 
+    // Bài viết theo id
+    Route::get('baiviet/{id}', [BaiVietChiaSeController::class, 'getBaiVietById']);
+
     // Bài viết nổi bật
     Route::get('/baiviet/noibat', [BaiVietChiaSeController::class, 'show']);
 

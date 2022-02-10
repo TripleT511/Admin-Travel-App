@@ -51,6 +51,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/register', [LoginController::class, 'register'])->name('register');
 
     Route::get('/user', [LoginController::class, 'index'])->name("lstUser");
+
+    Route::get('/user/show/{id}', [LoginController::class, 'show'])->name("show");
 });
 
 
