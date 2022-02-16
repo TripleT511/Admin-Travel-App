@@ -3,6 +3,17 @@
 @section('title','Danh sách tài khoản')
 
 @section('content')
+<div class="row">
+        <div class="col col-lg-6 col-md-12">
+            <ul class="navbar-nav w-100">
+                <li class="nav-item w-100">
+                    <form class="nav-link d-lg-flex search">
+                        <input type="text" id="txtSearchUser" name="txtSearchUs" class="form-control" placeholder="Tìm kiếm">
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
 <div class="page-header">
     <h3 class="page-title"> Danh sách tài khoản </h3>
     <nav aria-label="breadcrumb">
@@ -31,7 +42,7 @@
                                 <th>Tỉnh thành</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="lstUser">
                             @foreach ($lstTaiKhoan as $item)
                             <tr>
                                 <td>{{ $item->id }}</td>
@@ -60,16 +71,12 @@
                                     {{ $item->tinhthanhs_count }}
                                 </td>
                                 <td>
-                                    {{-- <label class="badge badge-primary">
-                                        <a class="d-block text-light"
-                                            href="{{ route('taiKhoan.edit', ['taiKhoan'=>$item]) }}"> Sửa</a>
-                                    </label> --}}
                                     <label>
-                                        <form method="post" action="">
+                                        <form method="post" action="{{ route('deleteUser', ['user' => $item]) }}">
                                             @csrf
                                             @method("DELETE")
                                             <button style="outline: none; border: none" class="badge badge-danger"
-                                                type="submit">Xoá</button>
+                                                type="submit">Khoá</button>
                                         </form>
                                     </label>
                                 </td>

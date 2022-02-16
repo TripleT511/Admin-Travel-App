@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
 
 class LoginController extends Controller
 {
@@ -147,6 +148,7 @@ class LoginController extends Controller
         ], [
             'hoTen.required' => 'Họ Tên không được bỏ trống',
             'email.required' => 'Email không được bỏ trống',
+            'email.unique' => 'Email đã tồn tại',
             'password.required' => 'Mật khẩu không được bỏ trống',
             'soDienThoai.required' => 'Số điện thoại không được bỏ trống',
             'hinhAnh.required' => 'Bắt buộc chọn Hình ảnh',
@@ -194,5 +196,69 @@ class LoginController extends Controller
         $user = User::findOrFail($id);
         $this->fixImage($user);
         return view('user.show-user', ['taiKhoan' => $user]);
+    }
+
+    public function timKiem(Request $request)
+    {
+        $output = "";
+        $lstTaiKhoan = User::withCount('baiviets')->withCount('tinhthanhs')->paginate(5);;
+        if ($request->input('txtSearch') != "") {
+            $lstTaiKhoan = User::withCount('baiviets')->withCount('tinhthanhs')->where('hoTen', 'LIKE', '%' . $request->input('txtSearch') . '%')->orWhere('email', 'LIKE', '%' . $request->input('txtSearch') . '%')->orWhere('soDienThoai', '=', $request->input('txtSearch'))->paginate(5);
+        }
+        foreach ($lstTaiKhoan as $item) {
+            $countTinhThanh = 0;
+            $userTinhThanh = User::whereId($item->id)->with('tinhthanhs.diadanh')->first();
+            foreach ($userTinhThanh->tinhthanhs->groupBy('diadanh.tinh_thanh_id') as $items) {
+                if (count($userTinhThanh->tinhthanhs->groupBy('diadanh.tinh_thanh_id')) != 0) {
+                    $countTinhThanh++;
+                }
+            }
+            $item->tinhthanhs_count = $countTinhThanh;
+            $this->fixImage($item);
+
+            $output .= '<tr>
+                                <td>' . $item->id . '</td>
+                                <td>
+                                    <img class="rounded-circle" src="' . ($item->hinhAnh != null ? asset($item->hinhAnh) : asset("/images/no-image-available.jpg"))
+                . '" width="50" height="50" />
+                                </td>
+                                <td>
+                                    <a href="' . route("show", ["id" => $item->id]) . '">
+                                       ' . $item->hoTen . '
+                                    </a>
+                                </td>
+                                <td>
+                                ' . $item->email . '
+                                </td>
+                                <td>' . ($item->idPhanQuyen == 0 ? 'Admin' : 'Người dùng')
+                . '</td>
+                                <td>
+                                ' . $item->baiviets_count . '
+                                </td>
+                                <td>
+                                ' . $item->tinhthanhs_count . '
+                                </td>
+                                <td>
+                                    <label>
+                                        <form method="post" action="' . route('deleteUser', ['user' => $item]) . '">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                            <button style="outline: none; border: none" class="badge badge-danger"
+                                                type="submit">Khoá</button>
+                                        </form>
+                                    </label>
+                                </td>
+
+                            </tr>';
+        }
+        return response()->json($output);
+    }
+
+    public function delete(User $user)
+    {
+
+        $user->delete();
+
+        return Redirect::route('lstUser');
     }
 }

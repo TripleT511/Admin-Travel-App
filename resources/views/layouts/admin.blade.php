@@ -177,13 +177,7 @@
                     <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
                         <span class="mdi mdi-menu"></span>
                     </button>
-                    <ul class="navbar-nav w-100">
-                        <li class="nav-item w-100">
-                            <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
-                                <input type="text" class="form-control" placeholder="Search products">
-                            </form>
-                        </li>
-                    </ul>
+                    
                     <ul class="navbar-nav navbar-nav-right">
                         <li class="nav-item dropdown d-none d-lg-block">
                            
@@ -364,6 +358,64 @@
     <script src="{{ asset('js/file-upload.js') }}"></script>
     <script src="{{ asset('js/settings.js') }}"></script>
     <script src="{{ asset('js/todolist.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+
+            //Search User
+            $(document).on('keyup', '#txtSearchUser', function() {
+                var val = $(this).val();
+                $.ajax({
+                    type: "get",
+                    url: "/user/search",
+                    data: {
+                        txtSearch: val
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        $("#lstUser").html(response);
+                    }
+                })
+            })
+        })
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    <script>
+const ctx = document.getElementById('myChart').getContext('2d');
+const myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
     <!-- endinject -->
     <!-- Custom js for this page -->
     <!-- End custom js for this page -->

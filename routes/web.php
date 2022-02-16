@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TinhThanhController;
 use App\Http\Controllers\DiaDanhController;
 use App\Http\Controllers\DiaDanhNhuCauController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LuuTruController;
 use App\Http\Controllers\MonAnController;
 use App\Http\Controllers\NhuCauController;
@@ -24,9 +25,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/', [HomeController::class, 'index'])->name('dashboard');
 
     Route::resource('tinhThanh', TinhThanhController::class);
 
@@ -51,6 +50,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/register', [LoginController::class, 'register'])->name('register');
 
     Route::get('/user', [LoginController::class, 'index'])->name("lstUser");
+
+    Route::delete('/user/delete/{user}', [LoginController::class, 'delete'])->name("deleteUser");
+
+    Route::get('/user/search', [LoginController::class, 'timKiem'])->name("timKiemUser");
 
     Route::get('/user/show/{id}', [LoginController::class, 'show'])->name("show");
 });

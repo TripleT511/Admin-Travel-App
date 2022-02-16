@@ -27,6 +27,7 @@ class CreateUsersTable extends Migration
             $table->integer('trangThaiSDT');
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

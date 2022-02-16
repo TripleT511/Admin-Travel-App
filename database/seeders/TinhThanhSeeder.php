@@ -26,27 +26,7 @@ class TinhThanhSeeder extends Seeder
             ['tenTinhThanh' => 'Cao Bằng'],
             ['tenTinhThanh' => 'Hải Phòng'],
             ['tenTinhThanh' => 'Quảng Bình'],
-            ['tenTinhThanh' => 'Ohara'],
-            ['tenTinhThanh' => 'Water Seven'],
-            ['tenTinhThanh' => 'Wano'],
-            ['tenTinhThanh' => 'Goat'],
-            ['tenTinhThanh' => 'Shimotsuki'],
-            ['tenTinhThanh' => 'Thriller Bark'],
-            ['tenTinhThanh' => 'Germa'],
-            ['tenTinhThanh' => 'Yoshuba'],
-            ['tenTinhThanh' => 'Red Line'],
-            ['tenTinhThanh' => 'Onigashima'],
-            ['tenTinhThanh' => 'Alabasta'],
-            ['tenTinhThanh' => 'Udon'],
-            ['tenTinhThanh' => 'Ringo'],
-            ['tenTinhThanh' => 'Elbaf'],
-            ['tenTinhThanh' => 'Laugh Tale'],
-            ['tenTinhThanh' => 'Impel Down'],
-            ['tenTinhThanh' => 'Skypiea'],
-            ['tenTinhThanh' => 'Wheatheria'],
-            ['tenTinhThanh' => 'All Blue'],
-            ['tenTinhThanh' => 'God Valley'],
-
+            ['tenTinhThanh' => 'Cao Bằng'],
         ]);
     }
 }
