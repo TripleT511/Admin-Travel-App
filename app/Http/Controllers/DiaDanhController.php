@@ -38,7 +38,12 @@ class DiaDanhController extends Controller
         }])->withCount('shares')->orderBy('id')->paginate(5);
         foreach ($lstDiaDanh as $item) {
             $this->fixImage($item->hinhanh);
+            foreach ($item->hinhanhs as $item2) {
+                $this->fixImage($item2);
+            }
+            return $lstDiaDanh;
         }
+
         return view('diadanh.index-diadanh', ['lstDiaDanh' => $lstDiaDanh]);
     }
 
