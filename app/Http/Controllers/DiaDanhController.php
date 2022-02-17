@@ -41,7 +41,6 @@ class DiaDanhController extends Controller
             foreach ($item->hinhanhs as $item2) {
                 $this->fixImage($item2);
             }
-            return $lstDiaDanh;
         }
 
         return view('diadanh.index-diadanh', ['lstDiaDanh' => $lstDiaDanh]);
