@@ -15,6 +15,8 @@ class HomeController extends Controller
 {
     public function index()
     {
+
+
         $lstTaiKhoan = User::count();
         $lstDiaDanh = DiaDanh::count();
         $lstTinhThanh = TinhThanh::count();
@@ -27,18 +29,9 @@ class HomeController extends Controller
     {
         $output = "";
 
-        $countLike = DanhGia::where([
-            ['created_at', Carbon::now()->month()],
-            ['userLike', '=', 1]
-        ])->count();
-        $countUnLike = DanhGia::where([
-            ['created_at', Carbon::now()->month()],
-            ['userUnLike', '=', 1]
-        ])->count();
-        $countView = DanhGia::where([
-            ['created_at', Carbon::now()->month()],
-            ['userXem', '=', 1]
-        ])->count();
+        $countLike = DanhGia::whereMonth('created_at', Carbon::now()->month)->where('userLike', '=', 1)->count();
+        $countUnLike = DanhGia::whereMonth('created_at', Carbon::now()->month)->where('userUnLike', '=', 1)->count();
+        $countView = DanhGia::whereMonth('created_at', Carbon::now()->month)->where('userXem', '=', 1)->count();
 
         $output .= "<input type='hidden' id='like' value='" . $countLike . "' />" .
             "<input type='hidden' id='unlike' value='" . $countUnLike . "' />" .

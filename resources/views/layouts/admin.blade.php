@@ -369,24 +369,7 @@
                 dataType: "json",
                 success: function (response) {
                     $("#data").html(response);
-
-                }
-            });
-
-
-            //Search User
-            $(document).on('keyup', '#txtSearchUser', function() {
-                var val = $(this).val();
-                $.ajax({
-                    type: "get",
-                    url: "/user/search",
-                    data: {
-                        txtSearch: val
-                    },
-                    dataType: "json",
-                    success: function (response) {
-                        $("#lstUser").html(response);
-                        const ctx = document.getElementById('myChart').getContext('2d');
+                    const ctx = document.getElementById('myChart').getContext('2d');
                         const myChart = new Chart(ctx, {
                             type: 'doughnut',
                             data: {
@@ -414,6 +397,23 @@
                                 }
                             }
                         });
+                }
+            });
+
+
+            //Search User
+            $(document).on('keyup', '#txtSearchUser', function() {
+                var val = $(this).val();
+                $.ajax({
+                    type: "get",
+                    url: "/user/search",
+                    data: {
+                        txtSearch: val
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        $("#lstUser").html(response);
+                        
                     }
                 });
             });
