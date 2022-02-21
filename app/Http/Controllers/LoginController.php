@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DiaDanh;
+use App\Models\HinhAnh;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -23,6 +25,16 @@ class LoginController extends Controller
             $hinhAnh->hinhAnh = 'images/user-default.jpg';
         }
     }
+
+    protected function fixImage2(HinhAnh $hinhAnh)
+    {
+        if (Storage::disk('public')->exists($hinhAnh->hinhAnh)) {
+            $hinhAnh->hinhAnh = $hinhAnh->hinhAnh;
+        } else {
+            $hinhAnh->hinhAnh = 'images/no-image-available.jpg';
+        }
+    }
+
     public function showFormlogin()
     {
         return view('login');
@@ -201,7 +213,7 @@ class LoginController extends Controller
     public function timKiem(Request $request)
     {
         $output = "";
-        $lstTaiKhoan = User::withCount('baiviets')->withCount('tinhthanhs')->paginate(5);;
+        $lstTaiKhoan = User::withCount('baiviets')->withCount('tinhthanhs')->paginate(5);
         if ($request->input('txtSearch') != "") {
             $lstTaiKhoan = User::withCount('baiviets')->withCount('tinhthanhs')->where('hoTen', 'LIKE', '%' . $request->input('txtSearch') . '%')->orWhere('email', 'LIKE', '%' . $request->input('txtSearch') . '%')->orWhere('soDienThoai', '=', $request->input('txtSearch'))->paginate(5);
         }
@@ -245,6 +257,76 @@ class LoginController extends Controller
                                         <input type="hidden" name="_token" value="' . csrf_token() . '">
                                             <button style="outline: none; border: none" class="badge badge-danger"
                                                 type="submit">Khoá</button>
+                                        </form>
+                                    </label>
+                                </td>
+
+                            </tr>';
+        }
+        return response()->json($output);
+    }
+
+    public function timKiemDiaDanh(Request $request)
+    {
+        $output = "";
+        $lstDiaDanh = DiaDanh::with('tinhthanh')->with(['hinhanhs' => function ($query) {
+            $query->where('idLoai', '=', 1)->orderBy('created_at');
+        }])->with(['hinhanh' => function ($query) {
+            $query->where('idLoai', '=', 1)->orderBy('created_at');
+        }])->withCount('shares')->orderBy('id')->paginate(5);
+
+        if ($request->input('txtSearch') != "") {
+            $lstDiaDanh = DiaDanh::with('tinhthanh')->with(['hinhanhs' => function ($query) {
+                $query->where('idLoai', '=', 1)->orderBy('created_at');
+            }])->with(['hinhanh' => function ($query) {
+                $query->where('idLoai', '=', 1)->orderBy('created_at');
+            }])->withCount('shares')->where('tenDiaDanh', 'LIKE', '%' . $request->input('txtSearch') . '%')->orWhere('moTa', 'LIKE', '%' . $request->input('txtSearch') . '%')->orderBy('id')->paginate(5);
+        }
+
+        foreach ($lstDiaDanh as $item) {
+            $this->fixImage2($item->hinhanh);
+            foreach ($item->hinhanhs as $item2) {
+                $this->fixImage2($item2);
+            }
+
+            $tinh = $item->tinhthanh->tenTinhThanh;
+
+            $output .= '<tr>
+                                <td>' . $item->id . '</td>
+                                <td>
+                                    <a href="' . route("show", ["id" => $item->id]) . '">
+                                       ' . $item->tenDiaDanh . '
+                                    </a>
+                                </td>
+                                <td class="text-wrap cell-5">
+                                ' . $item->moTa . '
+                                </td>
+                                <td>
+                                ' . $item->kinhDo . '
+                                </td>
+                                <td>
+                                ' . $item->viDo . '
+                                </td>
+                                <td>
+                                    <img width="150" src="' . ($item->hinhanh != null ? asset($item->hinhanh->hinhAnh) : asset("/images/no-image-available.jpg"))
+                . '"  />
+                                </td>
+                                <td>
+                                ' . $tinh . '
+                                </td>
+                                <td>
+                                ' . $item->shares_count . '
+                                </td>
+                                <td>
+                                    <label class="badge badge-primary">
+                                            <a class="d-block text-light" href="' . route('diaDanh.edit', ['diaDanh' => $item]) . '"> Sửa</a>
+                                    </label>
+                                    <label>
+                                        <form method="post" action="' . route('diaDanh.destroy', ['diaDanh' => $item]) . '">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                            <button style="outline: none; border: none" class="badge badge-danger"
+                                                type="submit">Xoá</button>
                                         </form>
                                     </label>
                                 </td>

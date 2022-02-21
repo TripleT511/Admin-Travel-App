@@ -4,16 +4,16 @@
 
 @section('content')
 <div class="row">
-        <div class="col col-lg-6 col-md-12">
-            <ul class="navbar-nav w-100">
-                <li class="nav-item w-100">
-                    <form class="nav-link d-lg-flex search">
-                        <input type="text" id="txtSearchUser" name="txtSearchUs" class="form-control" placeholder="Tìm kiếm">
-                    </form>
-                </li>
-            </ul>
-        </div>
+    <div class="col col-lg-6 col-md-12">
+        <ul class="navbar-nav w-100">
+            <li class="nav-item w-100">
+                <form class="nav-link d-lg-flex search">
+                    <input type="text" id="txtSearchUser" name="txtSearch" class="form-control" placeholder="Tìm kiếm">
+                </form>
+            </li>
+        </ul>
     </div>
+</div>
 <div class="page-header">
     <h3 class="page-title"> Danh sách tài khoản </h3>
     <nav aria-label="breadcrumb">

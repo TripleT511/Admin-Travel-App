@@ -53,9 +53,16 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/user/delete/{user}', [LoginController::class, 'delete'])->name("deleteUser");
 
+    Route::get('/user/show/{id}', [LoginController::class, 'show'])->name("show");
+
+
+    // Tìm kiếm
     Route::get('/user/search', [LoginController::class, 'timKiem'])->name("timKiemUser");
 
-    Route::get('/user/show/{id}', [LoginController::class, 'show'])->name("show");
+    Route::get('/diadanh/search', [LoginController::class, 'timKiemDiaDanh'])->name("timKiemDiaDanh");
+
+    //Thống kê chart
+    Route::get('/dashboard/thongke', [HomeController::class, 'ThongKeChart']);
 });
 
 

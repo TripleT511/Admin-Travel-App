@@ -101,6 +101,14 @@
         </div>
     </div>
 </div>
-<canvas id="myChart" width="400" height="150"></canvas>
+<div class="row">
+    <div id="data">
+
+    </div>
+    <div class="col col-lg-6">
+        <canvas id="myChart" width="200" height="150"></canvas>
+    </div>
+</div>
+
 
 @endsection

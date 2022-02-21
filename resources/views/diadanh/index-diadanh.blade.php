@@ -3,13 +3,24 @@
 @section('title','Danh sách địa danh')
 
 @section('content')
+<div class="row">
+    <div class="col col-lg-6 col-md-12">
+        <ul class="navbar-nav w-100">
+            <li class="nav-item w-100">
+                <form class="nav-link d-lg-flex search">
+                    <input type="text" id="txtSearchDiaDanh" name="txtSearchDiaDanh" class="form-control" placeholder="Tìm kiếm">
+                </form>
+            </li>
+        </ul>
+    </div>
+</div>
 <div class="page-header">
     <h3 class="page-title"> Danh sách địa danh </h3>
     <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('diaDanh.create') }}">Thêm địa danh</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Danh sách địa danh</li>
-    </ol>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('diaDanh.create') }}">Thêm địa danh</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Danh sách địa danh</li>
+        </ol>
     </nav>
 </div>
 <div class="row">
@@ -34,7 +45,7 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody  id="lstDiaDanh">
                            @foreach ($lstDiaDanh as $item)
                                 <tr>
                                      <td>{{ $item->id }}</td>
@@ -43,7 +54,7 @@
                                              {{ $item->tenDiaDanh }}
                                          </a>
                                      </td>
-                                     <td class="text-wrap">{{ $item->moTa }}</td>
+                                     <td class="text-wrap cell-5">{{ $item->moTa }}</td>
                                      <td>{{ $item->kinhDo }}</td>
                                      <td>{{ $item->viDo }}</td>
                                      <td>
