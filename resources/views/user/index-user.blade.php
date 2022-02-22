@@ -7,9 +7,10 @@
     <div class="col col-lg-6 col-md-12">
         <ul class="navbar-nav w-100">
             <li class="nav-item w-100">
-                <form class="nav-link d-lg-flex search">
-                    <input type="text" id="txtSearchUser" name="txtSearch" class="form-control" placeholder="Tìm kiếm">
-                </form>
+                <div class="nav-link d-lg-flex search">
+                    <input type="text" id="txtSearchUser"  class="form-control m-1 text-light" placeholder="Tìm kiếm">
+                    <button class="btn btn-primary" id="txtSearch">Tìm kiếm</button>
+                </div>
             </li>
         </ul>
     </div>
@@ -93,4 +94,45 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('js')
+<script>
+        $(document).ready(function() {
+
+            //Search User
+            $('#txtSearch').on('click', function() {
+                var val = $('#txtSearchUser').val();
+                $.ajax({
+                    type: "get",
+                    url: "/user/search",
+                    data: {
+                        txtSearch: val
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        $("#lstUser").html(response);
+                        
+                    }
+                });
+            });
+
+            // //Search DiaDanh
+            // $(document).on('keyup', '#txtSearchDiaDanh', function() {
+            //     var val = $(this).val();
+            //     $.ajax({
+            //         type: "get",
+            //         url: "/diadanh/search",
+            //         data: {
+            //             txtSearch: val
+            //         },
+            //         dataType: "json",
+            //         success: function (response) {
+            //             $("#lstDiaDanh").html(response);
+            //         }
+            //     });
+            // });
+        });
+    </script>
+
 @endsection

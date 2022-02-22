@@ -347,6 +347,7 @@
     </div>
     <!-- container-scroller -->
     <!-- plugins:js -->
+    
     <script src="{{ asset('vendors/js/vendor.bundle.base.js') }}"></script>
     <!-- endinject -->
     <!-- Plugin js for this page -->
@@ -358,83 +359,7 @@
     <script src="{{ asset('js/file-upload.js') }}"></script>
     <script src="{{ asset('js/settings.js') }}"></script>
     <script src="{{ asset('js/todolist.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-
-            //Data thống kê chart
-           
-            $.ajax({
-                type: "get",
-                url: "/dashboard/thongke",
-                dataType: "json",
-                success: function (response) {
-                    $("#data").html(response);
-                    const ctx = document.getElementById('myChart').getContext('2d');
-                        const myChart = new Chart(ctx, {
-                            type: 'doughnut',
-                            data: {
-                                labels: ['Tổng số lượt like tháng này', 'Tổng số lượt unlike tháng này', 'Tổng số lượt xem tháng này'],
-                                datasets: [{
-                                    label: [
-                                        'Lượt like',
-                                        'Lượt unlike',
-                                        'Lượt xem'
-                                    ],
-                                    data: [$('#like').val(), $('#unlike').val(), $('#view').val()],
-                                    backgroundColor: [
-                                        'rgb(0, 102, 255)',
-                                        'rgb(255, 45, 85)',
-                                        'rgb(0, 214, 61)'
-                                    ],
-                                    hoverOffset: 4,
-                                }]
-                            },
-                            options: {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true
-                                    }
-                                }
-                            }
-                        });
-                }
-            });
-
-
-            //Search User
-            $(document).on('keyup', '#txtSearchUser', function() {
-                var val = $(this).val();
-                $.ajax({
-                    type: "get",
-                    url: "/user/search",
-                    data: {
-                        txtSearch: val
-                    },
-                    dataType: "json",
-                    success: function (response) {
-                        $("#lstUser").html(response);
-                        
-                    }
-                });
-            });
-
-            //Search DiaDanh
-            $(document).on('keyup', '#txtSearchDiaDanh', function() {
-                var val = $(this).val();
-                $.ajax({
-                    type: "get",
-                    url: "/diadanh/search",
-                    data: {
-                        txtSearch: val
-                    },
-                    dataType: "json",
-                    success: function (response) {
-                        $("#lstDiaDanh").html(response);
-                    }
-                });
-            });
-        });
-    </script>
+    @yield('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
     
     <!-- endinject -->

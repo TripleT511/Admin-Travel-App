@@ -214,6 +214,7 @@ class LoginController extends Controller
     {
         $output = "";
         $lstTaiKhoan = User::withCount('baiviets')->withCount('tinhthanhs')->paginate(5);
+
         if ($request->input('txtSearch') != "") {
             $lstTaiKhoan = User::withCount('baiviets')->withCount('tinhthanhs')->where('hoTen', 'LIKE', '%' . $request->input('txtSearch') . '%')->orWhere('email', 'LIKE', '%' . $request->input('txtSearch') . '%')->orWhere('soDienThoai', '=', $request->input('txtSearch'))->paginate(5);
         }

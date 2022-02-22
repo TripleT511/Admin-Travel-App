@@ -112,3 +112,48 @@
 
 
 @endsection
+@section('js')
+<script>
+        $(document).ready(function() {
+
+            //Data thống kê chart
+            $.ajax({
+                type: "get",
+                url: "/dashboard/thongke",
+                dataType: "json",
+                success: function (response) {
+                    $("#data").html(response);
+                    const ctx = document.getElementById('myChart').getContext('2d');
+                        const myChart = new Chart(ctx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: ['Tổng số lượt like tháng này', 'Tổng số lượt unlike tháng này', 'Tổng số lượt xem tháng này'],
+                                datasets: [{
+                                    label: [
+                                        'Lượt like',
+                                        'Lượt unlike',
+                                        'Lượt xem'
+                                    ],
+                                    data: [$('#like').val(), $('#unlike').val(), $('#view').val()],
+                                    backgroundColor: [
+                                        'rgb(0, 102, 255)',
+                                        'rgb(255, 45, 85)',
+                                        'rgb(0, 214, 61)'
+                                    ],
+                                    hoverOffset: 4,
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                }
+            });
+        });
+    </script>
+
+@endsection
