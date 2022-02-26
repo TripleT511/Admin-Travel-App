@@ -353,6 +353,7 @@
     <!-- Plugin js for this page -->
     <!-- End plugin js for this page -->
     <!-- inject:js -->
+    <script src="{{ asset('ckeditor5/build/ckeditor.js') }}"></script>
     <script src="{{ asset('js/off-canvas.js') }}"></script>
     <script src="{{ asset('js/hoverable-collapse.js') }}"></script>
     <script src="{{ asset('js/misc.js') }}"></script>

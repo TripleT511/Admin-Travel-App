@@ -59,7 +59,21 @@ Route::middleware('auth')->group(function () {
     // Tìm kiếm
     Route::get('/user/search', [LoginController::class, 'timKiem'])->name("timKiemUser");
 
-    Route::get('/diadanh/search', [LoginController::class, 'timKiemDiaDanh'])->name("timKiemDiaDanh");
+    Route::get('/user/locUser', [LoginController::class, 'locUser'])->name("locUser");
+
+    Route::get('/diadanh/search', [DiaDanhController::class, 'timKiemDiaDanh'])->name("timKiemDiaDanh");
+
+    Route::get('/tinhthanh/search', [TinhThanhController::class, 'timKiemTinhThanh'])->name("timKiemTinhThanh");
+
+    Route::get('/baiviet/search', [BaiVietChiaSeController::class, 'timKiemBV'])->name("timKiemBaiViet");
+
+    Route::get('/quanan/search', [QuanAnController::class, 'timKiemQuanAn'])->name("timKiemQuanAn");
+
+    Route::get('/monan/search', [MonAnController::class, 'timKiemMonAn'])->name("timKiemMonAn");
+
+    Route::get('/luutru/search', [LuuTruController::class, 'timKiemLuuTru'])->name("timKiemLuuTru");
+
+    Route::get('/nhucau/search', [NhuCauController::class, 'timKiemNhuCau'])->name("timKiemNhuCau");
 
     //Thống kê chart
     Route::get('/dashboard/thongke', [HomeController::class, 'ThongKeChart']);

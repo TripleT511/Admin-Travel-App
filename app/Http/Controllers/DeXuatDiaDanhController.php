@@ -35,6 +35,7 @@ class DeXuatDiaDanhController extends Controller
             $this->fixImage($item);
         }
 
+
         return view('dexuat.index-dexuat', ['lstDeXuat' => $lstDeXuat]);
     }
 

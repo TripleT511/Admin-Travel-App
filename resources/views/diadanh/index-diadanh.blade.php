@@ -5,14 +5,10 @@
 @section('content')
 <div class="row">
     <div class="col col-lg-6 col-md-12">
-        <ul class="navbar-nav w-100">
-            <li class="nav-item w-100">
-                <div class="nav-link d-lg-flex search">
-                    <input type="text" id="txtSearch" name="txtSearch" class="form-control m-1 text-light" placeholder="Tìm kiếm">
-                    <button class="btn btn-primary" id="search">Tìm kiếm</button>
-                </div>
-            </li>
-        </ul>
+        <div class="nav-link d-lg-flex search">
+            <input type="text" id="txtSearch" name="txtSearch" class="form-control m-1 text-light" placeholder="Tìm kiếm">
+            <button class="btn btn-primary" id="search">Tìm kiếm</button>
+        </div>
     </div>
 </div>
 <div class="page-header">

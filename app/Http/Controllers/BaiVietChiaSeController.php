@@ -9,6 +9,7 @@ use App\Models\DanhGia;
 use App\Models\DiaDanh;
 use App\Models\HinhAnh;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
@@ -184,5 +185,58 @@ class BaiVietChiaSeController extends Controller
         $hinhAnh->delete();
         $baiViet->delete();
         return Redirect::route('baiViet.index');
+    }
+
+    public function timKiemBV(Request $request)
+    {
+        $output = "";
+        $lstBaiViet = BaiVietChiaSe::with('user')->with('diadanh')->with(['hinhAnh' => function ($query) {
+            $query->where('idLoai', '=', 2)->orderBy('created_at');
+        }])->paginate(5);
+
+        if ($request->input('txtSearch') != "") {
+            $lstBaiViet = BaiVietChiaSe::with('user')->with('diadanh')->with(['hinhAnh' => function ($query) {
+                $query->where('idLoai', '=', 2)->orderBy('created_at');
+            }])->where('noiDung', 'LIKE', '%' . $request->input('txtSearch') . '%')->paginate(5);
+        }
+        $countLike = 0;
+        $countUnlike = 0;
+        foreach ($lstBaiViet as $item) {
+            $this->fixImage($item->hinhanh);
+            $bv = DanhGia::where('idBaiViet', '=', $item->id)->first();
+            $countLike = $bv->userLike;
+            $countUnlike = $bv->userUnLike;
+            $countView = $bv->userXem;
+
+
+            $output .= ' <tr>
+            <td>' . $item->id . '</td>
+            <td> ' . $item->diadanh->tenDiaDanh . ' </td>
+            <td>' . $item->user->hoTen . '</td>
+            <td class="text-wrap">' . $item->noiDung . '</td>
+            <td>
+                <img class="img-fluid" src="' . asset($item->hinhanh->hinhAnh) . '" width="200" alt="">
+            </td>
+            <td>' . $countLike . '</td>
+            <td>' . $countUnlike . '</td>
+            <td>' . $countView . '</td>
+            <td>' . date('d-m-Y', strtotime($item->thoiGian)) . '</td>
+            <td>
+               <label class="badge badge-primary">
+                   <a class="d-block text-light" href="' . route('baiViet.edit', ['baiViet' => $item]) . '"> Sửa</a>
+               </label>
+               <label >
+                   <form method="post" action="' . route('baiViet.destroy', ['baiViet' => $item]) . '">
+                   <input type="hidden" name="_method" value="DELETE">
+                   <input type="hidden" name="_token" value="' . csrf_token() . '">
+                  
+                   <button style="outline: none; border: none" class="badge badge-danger" type="submit">Xoá</button>
+                   </form>
+               </label>
+            </td>
+       </tr>';
+        }
+
+        return response()->json($output);
     }
 }

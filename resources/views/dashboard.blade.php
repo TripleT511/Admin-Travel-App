@@ -105,8 +105,11 @@
     <div id="data">
 
     </div>
-    <div class="col col-lg-6">
-        <canvas id="myChart" width="200" height="150"></canvas>
+    <div class="col col-lg-4">
+        <canvas id="myChart" width="200" height="100"></canvas>
+    </div>
+    <div class="col col-lg-8">
+        <canvas id="myChart2" width="200" height="100"></canvas>
     </div>
 </div>
 
@@ -115,6 +118,7 @@
 @section('js')
 <script>
         $(document).ready(function() {
+            const data = [];
 
             //Data thống kê chart
             $.ajax({
@@ -151,8 +155,65 @@
                                 }
                             }
                         });
+                    const listThang = document.querySelectorAll('#thang');
+                    listThang.forEach(item => {
+                        data.push(item.value);
+                    });
+                    const ctx2 = document.getElementById('myChart2').getContext('2d');
+                    const myChart2 = new Chart(ctx2, {
+                        type: 'bar',
+                        data: {
+                            labels: [
+                                'Tháng 1',
+                                'Tháng 2',
+                                'Tháng 3',
+                                'Tháng 4',
+                                'Tháng 5',
+                                'Tháng 6',
+                                'Tháng 7',
+                                'Tháng 8',
+                                'Tháng 9',
+                                'Tháng 10',
+                                'Tháng 11',
+                                'Tháng 12',
+
+                            ],
+                            datasets: [{
+                                label: 'Thống kê lượt tương tác các tháng trong năm',
+                                data: data,
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 205, 86, 0.2)',
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(153, 102, 255, 0.2)',
+                                    'rgba(201, 203, 207, 0.2)'
+                                ],
+                                borderColor: [
+                                    'rgb(255, 99, 132)',
+                                    'rgb(255, 159, 64)',
+                                    'rgb(255, 205, 86)',
+                                    'rgb(75, 192, 192)',
+                                    'rgb(54, 162, 235)',
+                                    'rgb(153, 102, 255)',
+                                    'rgb(201, 203, 207)'
+                                ],
+                                borderWidth: 1,
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
                 }
             });
+
+            
         });
     </script>
 

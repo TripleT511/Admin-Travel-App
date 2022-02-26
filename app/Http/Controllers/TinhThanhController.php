@@ -6,6 +6,8 @@ use App\Models\TinhThanh;
 use App\Http\Requests\StoreTinhThanhRequest;
 use App\Http\Requests\UpdateTinhThanhRequest;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Request;
+
 
 class TinhThanhController extends Controller
 {
@@ -114,5 +116,39 @@ class TinhThanhController extends Controller
     {
         $tinhThanh->delete();
         return Redirect::route('tinhThanh.index');
+    }
+
+    public function timKiemTinhThanh(Request $request)
+    {
+        $output = "";
+        $lstTinhThanh = TinhThanh::paginate(5);
+        if ($request->input('txtSearch') != "") {
+            $lstTinhThanh = TinhThanh::where('tenTinhThanh', 'LIKE', '%' . $request->input('txtSearch') . '%')->paginate(5);
+        }
+        foreach ($lstTinhThanh as $item) {
+            $output .= '<tr>
+                            <td>' . $item->id . '</td>                                
+                            
+                            <td>
+                                    ' . $item->tenTinhThanh . '
+                            </td>             
+                                            
+                            <td>
+                                <label class="badge badge-primary">
+                                        <a class="d-block text-light" href="' . route('tinhThanh.edit', ['tinhThanh' => $item]) . '"> Sửa</a>
+                                </label>
+                                <label>
+                                    <form method="post" action="' . route('tinhThanh.destroy', ['tinhThanh' => $item]) . '">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                        <button style="outline: none; border: none" class="badge badge-danger"
+                                            type="submit">Xoá</button>
+                                    </form>
+                                </label>
+                            </td>
+
+                            </tr>';
+        }
+        return response()->json($output);
     }
 }

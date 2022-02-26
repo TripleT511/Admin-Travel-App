@@ -3,6 +3,14 @@
 @section('title','Danh sách quán ăn')
 
 @section('content')
+<div class="row">
+    <div class="col col-lg-6 col-md-12">
+        <div class="nav-link d-lg-flex search">
+            <input type="text" id="txtSearch" name="txtSearch" class="form-control m-1 text-light" placeholder="Tìm kiếm">
+            <button class="btn btn-primary" id="search">Tìm kiếm</button>
+        </div>
+    </div>
+</div>
 <div class="page-header">
     <h3 class="page-title"> Danh sách quán ăn </h3>
     <nav aria-label="breadcrumb">
@@ -33,7 +41,7 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="lstQuanAn">
                             @foreach ($lstQuanAn as $item)
                             <tr>
                                 <td>{{ $item->id }}</td>
@@ -79,4 +87,28 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('js')
+<script>
+        $(document).ready(function() {
+
+            // //Search DiaDanh
+            $('#search').on('click', function() {
+                var val = $('#txtSearch').val();
+                $.ajax({
+                    type: "get",
+                    url: "/quanan/search",
+                    data: {
+                        txtSearch: val
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        $("#lstQuanAn").html(response);
+                    }
+                });
+            });
+        });
+    </script>
+
 @endsection

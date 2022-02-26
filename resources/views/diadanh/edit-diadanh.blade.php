@@ -23,8 +23,8 @@
                 </div>
                 <div class="form-group">
                         <label for="exampleTextarea1">Mô tả</label>
-                        <input type="text" class="form-control text-light" name="moTa" value="{{ $diaDanh->moTa }}" placeholder="Mô tả">
-                      </div>
+                        <textarea name="moTa" class="form-control text-light editor" placeholder="Mô tả" >{{ $diaDanh->moTa }}</textarea>
+                </div>
                 <div class="form-group">
                     <label for="exampleInputPassword4">Vĩ độ</label>
                     <input type="text" class="form-control text-light" name="viDo" value="{{ $diaDanh->viDo }}" placeholder="Vĩ độ">
@@ -64,4 +64,60 @@
         </div>
     </div>
 </div>
+@endsection
+@section('js')
+<script>
+        $(document).ready(function() {
+
+            ClassicEditor.create(document.querySelector('.editor'), {
+
+                toolbar: {
+                    items: [
+                        'heading',
+                        '|',
+                        'bold',
+                        'italic',
+                        'link',
+                        'bulletedList',
+                        'numberedList',
+                        '|',
+                        'outdent',
+                        'indent',
+                        '|',
+                        'undo',
+                        'redo',
+                        'alignment',
+                        'fontBackgroundColor',
+                        'fontColor',
+                        'fontFamily',
+                        'fontSize',
+                        'imageInsert',
+                        'imageUpload'
+                    ]
+                },
+                language: 'vi',
+                image: {
+                    toolbar: [
+                        'imageTextAlternative',
+                        'imageStyle:inline',
+                        'imageStyle:block',
+                        'imageStyle:side',
+                        'linkImage'
+                    ]
+                },
+                licenseKey: '',
+
+
+            }).then(editor => {
+                window.editor = editor;
+
+            }).catch(error => {
+                console.error('Oops, something went wrong!');
+                console.error('Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:');
+                console.warn('Build id: vfyda13refdk-szi4hnq4duwz');
+                console.error(error);
+            });
+        });
+    </script>
+
 @endsection

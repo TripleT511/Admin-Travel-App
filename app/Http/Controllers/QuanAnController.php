@@ -9,6 +9,7 @@ use App\Models\DiaDanh;
 use App\Models\MonAn;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 class QuanAnController extends Controller
 {
@@ -171,5 +172,56 @@ class QuanAnController extends Controller
         Storage::disk('public')->delete($quanAn->hinhAnh);
         $quanAn->delete();
         return Redirect::route('quanAn.index');
+    }
+
+    public function timKiemQuanAn(Request $request)
+    {
+        $output = "";
+        $lstQuanAn = QuanAn::with('diadanh')->paginate(5);
+        if ($request->input('txtSearch') != "") {
+            $lstQuanAn = QuanAn::where('tenQuan', 'LIKE', '%' . $request->input('txtSearch') . '%')->orWhere('moTa', 'LIKE', '%' . $request->input('txtSearch') . '%')->orWhere('diaChi', 'LIKE', '%' . $request->input('txtSearch') . '%')->with('diadanh')->paginate(5);
+        }
+        foreach ($lstQuanAn as $item) {
+            $this->fixImage($item);
+            $output .= '<tr>
+                                <td>' . $item->id . '</td>                                
+                               <td>' . $item->diadanh->tenDiaDanh . '</td>
+                                <td>
+                                       ' . $item->tenQuan . '
+                                </td>             
+                                               
+                                 <td>
+                                        ' . $item->moTa . '
+                                </td>  
+                                <td>
+                                        ' . $item->diaChi . '
+                                </td>  
+                                <td>
+                                        ' . $item->sdt . '
+                                </td>  
+                                <td>
+                                        ' . $item->thoiGianHoatDong . '
+                                </td>         
+                                <td>
+                                <img width="150" src="' . ($item->hinhAnh != null ? asset($item->hinhAnh) : asset("/images/no-image-available.jpg"))
+                . '"  />
+                                </td>        
+                                <td>
+                                    <label class="badge badge-primary">
+                                            <a class="d-block text-light" href="' . route('quanAn.edit', ['quanAn' => $item]) . '"> Sửa</a>
+                                    </label>
+                                    <label>
+                                        <form method="post" action="' . route('quanAn.destroy', ['quanAn' => $item]) . '">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                            <button style="outline: none; border: none" class="badge badge-danger"
+                                                type="submit">Xoá</button>
+                                        </form>
+                                    </label>
+                                </td>
+
+                            </tr>';
+        }
+        return response()->json($output);
     }
 }

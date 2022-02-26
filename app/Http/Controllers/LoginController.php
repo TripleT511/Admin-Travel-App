@@ -267,67 +267,58 @@ class LoginController extends Controller
         return response()->json($output);
     }
 
-    public function timKiemDiaDanh(Request $request)
+    public function locUser(Request $request)
     {
         $output = "";
-        $lstDiaDanh = DiaDanh::with('tinhthanh')->with(['hinhanhs' => function ($query) {
-            $query->where('idLoai', '=', 1)->orderBy('created_at');
-        }])->with(['hinhanh' => function ($query) {
-            $query->where('idLoai', '=', 1)->orderBy('created_at');
-        }])->withCount('shares')->orderBy('id')->paginate(5);
+        $lstTaiKhoan = User::withCount('baiviets')->withCount('tinhthanhs')->whereNull('deleted_at')->paginate(5);
 
-        if ($request->input('txtSearch') != "") {
-            $lstDiaDanh = DiaDanh::with('tinhthanh')->with(['hinhanhs' => function ($query) {
-                $query->where('idLoai', '=', 1)->orderBy('created_at');
-            }])->with(['hinhanh' => function ($query) {
-                $query->where('idLoai', '=', 1)->orderBy('created_at');
-            }])->withCount('shares')->where('tenDiaDanh', 'LIKE', '%' . $request->input('txtSearch') . '%')->orWhere('moTa', 'LIKE', '%' . $request->input('txtSearch') . '%')->orderBy('id')->paginate(5);
+        if ($request->input('loai') == 2) {
+            $lstTaiKhoan = User::onlyTrashed()->paginate(5);
         }
 
-        foreach ($lstDiaDanh as $item) {
-            $this->fixImage2($item->hinhanh);
-            foreach ($item->hinhanhs as $item2) {
-                $this->fixImage2($item2);
+        foreach ($lstTaiKhoan as $item) {
+            $countTinhThanh = 0;
+            if ($item->tinhthanhs_count != null) {
+                $userTinhThanh = User::whereId($item->id)->with('tinhthanhs.diadanh')->first();
+                foreach ($userTinhThanh->tinhthanhs->groupBy('diadanh.tinh_thanh_id') as $items) {
+                    if (count($userTinhThanh->tinhthanhs->groupBy('diadanh.tinh_thanh_id')) != 0) {
+                        $countTinhThanh++;
+                    }
+                }
+                $item->tinhthanhs_count = $countTinhThanh;
             }
 
-            $tinh = $item->tinhthanh->tenTinhThanh;
+            $this->fixImage($item);
 
             $output .= '<tr>
                                 <td>' . $item->id . '</td>
                                 <td>
+                                    <img class="rounded-circle" src="' . ($item->hinhAnh != null ? asset($item->hinhAnh) : asset("/images/no-image-available.jpg"))
+                . '" width="50" height="50" />
+                                </td>
+                                <td>
                                     <a href="' . route("show", ["id" => $item->id]) . '">
-                                       ' . $item->tenDiaDanh . '
+                                       ' . $item->hoTen . '
                                     </a>
                                 </td>
-                                <td class="text-wrap cell-5">
-                                ' . $item->moTa . '
+                                <td>
+                                ' . $item->email . '
+                                </td>
+                                <td>' . ($item->idPhanQuyen == 0 ? 'Admin' : 'Người dùng')
+                . '</td>
+                                <td>
+                                ' . ($item->baiviets_count == null ? 0 : $item->baiviets_count) . '
                                 </td>
                                 <td>
-                                ' . $item->kinhDo . '
+                                ' . ($item->tinhthanhs_count == null ? 0 : $item->tinhthanhs_count) . '
                                 </td>
                                 <td>
-                                ' . $item->viDo . '
-                                </td>
-                                <td>
-                                    <img width="150" src="' . ($item->hinhanh != null ? asset($item->hinhanh->hinhAnh) : asset("/images/no-image-available.jpg"))
-                . '"  />
-                                </td>
-                                <td>
-                                ' . $tinh . '
-                                </td>
-                                <td>
-                                ' . $item->shares_count . '
-                                </td>
-                                <td>
-                                    <label class="badge badge-primary">
-                                            <a class="d-block text-light" href="' . route('diaDanh.edit', ['diaDanh' => $item]) . '"> Sửa</a>
-                                    </label>
                                     <label>
-                                        <form method="post" action="' . route('diaDanh.destroy', ['diaDanh' => $item]) . '">
+                                        <form method="post" action="' . route('deleteUser', ['user' => $item]) . '">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="' . csrf_token() . '">
                                             <button style="outline: none; border: none" class="badge badge-danger"
-                                                type="submit">Xoá</button>
+                                                type="submit">Khoá</button>
                                         </form>
                                     </label>
                                 </td>
@@ -336,6 +327,8 @@ class LoginController extends Controller
         }
         return response()->json($output);
     }
+
+
 
     public function delete(User $user)
     {

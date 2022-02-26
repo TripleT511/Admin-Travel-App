@@ -6,6 +6,7 @@ use App\Models\MonAn;
 use App\Http\Requests\StoreMonAnRequest;
 use App\Http\Requests\UpdateMonAnRequest;
 use App\Models\QuanAn;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
@@ -27,7 +28,9 @@ class MonAnController extends Controller
     public function index()
     {
         $lstMonAn = MonAn::with('quanan')->paginate(5);
-
+        foreach ($lstMonAn as $item) {
+            $this->fixImage($item);
+        }
         return view('monan.index-monan', ['lstMonAn' => $lstMonAn]);
     }
 
@@ -141,5 +144,43 @@ class MonAnController extends Controller
         Storage::disk('public')->delete($monAn->hinhAnh);
         $monAn->delete();
         return Redirect::route('monAn.index');
+    }
+
+    public function timKiemMonAn(Request $request)
+    {
+        $output = "";
+        $lstMonAn = MonAn::paginate(5);
+        if ($request->input('txtSearch') != "") {
+            $lstMonAn = MonAn::where('tenMon', 'LIKE', '%' . $request->input('txtSearch') . '%')->paginate(5);
+        }
+        foreach ($lstMonAn as $item) {
+            $this->fixImage($item);
+            $output .= '<tr>
+                                <td>' . $item->id . '</td>                                
+                               <td>' . $item->quanan->tenQuan . '</td>
+                                <td>
+                                       ' . $item->tenMon . '
+                                </td>             
+                                <td>
+                                <img width="150" src="' . ($item->hinhAnh != null ? asset($item->hinhAnh) : asset("/images/no-image-available.jpg"))
+                . '"  />
+                                </td>
+                                <td>
+                                    <label class="badge badge-primary">
+                                            <a class="d-block text-light" href="' . route('monAn.edit', ['monAn' => $item]) . '"> Sửa</a>
+                                    </label>
+                                    <label>
+                                        <form method="post" action="' . route('monAn.destroy', ['monAn' => $item]) . '">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                            <button style="outline: none; border: none" class="badge badge-danger"
+                                                type="submit">Xoá</button>
+                                        </form>
+                                    </label>
+                                </td>
+
+                            </tr>';
+        }
+        return response()->json($output);
     }
 }

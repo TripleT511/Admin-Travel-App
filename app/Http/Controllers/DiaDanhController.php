@@ -10,10 +10,11 @@ use App\Models\DiaDanhNhuCau;
 use App\Models\HinhAnh;
 use App\Models\NhuCau;
 use App\Models\TinhThanh;
-use GuzzleHttp\Psr7\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Mockery\Undefined;
+use PHPUnit\Framework\Constraint\Count;
 
 class DiaDanhController extends Controller
 {
@@ -45,6 +46,76 @@ class DiaDanhController extends Controller
         }
 
         return view('diadanh.index-diadanh', ['lstDiaDanh' => $lstDiaDanh]);
+    }
+
+    public function timKiemDiaDanh(Request $request)
+    {
+        $output = "";
+        $lstDiaDanh = DiaDanh::with('tinhthanh')->with(['hinhanhs' => function ($query) {
+            $query->where('idLoai', '=', 1)->orderBy('created_at');
+        }])->with(['hinhanh' => function ($query) {
+            $query->where('idLoai', '=', 1)->orderBy('created_at');
+        }])->withCount('shares')->orderBy('id')->paginate(5);
+
+        if ($request->input('txtSearch') != "") {
+            $lstDiaDanh = DiaDanh::with('tinhthanh')->with(['hinhanhs' => function ($query) {
+                $query->where('idLoai', '=', 1)->orderBy('created_at');
+            }])->with(['hinhanh' => function ($query) {
+                $query->where('idLoai', '=', 1)->orderBy('created_at');
+            }])->withCount('shares')->where('tenDiaDanh', 'LIKE', '%' . $request->input('txtSearch') . '%')->orWhere('moTa', 'LIKE', '%' . $request->input('txtSearch') . '%')->orderBy('id')->paginate(5);
+        }
+
+        foreach ($lstDiaDanh as $item) {
+            $this->fixImage($item->hinhanh);
+            foreach ($item->hinhanhs as $item2) {
+                $this->fixImage($item2);
+            }
+
+            $tinh = $item->tinhthanh->tenTinhThanh;
+
+            $output .= '<tr>
+                                <td>' . $item->id . '</td>
+                                <td>
+                                    <a href="' . route("show", ["id" => $item->id]) . '">
+                                       ' . $item->tenDiaDanh . '
+                                    </a>
+                                </td>
+                                <td class="text-wrap cell-5">
+                                ' . $item->moTa . '
+                                </td>
+                                <td>
+                                ' . $item->kinhDo . '
+                                </td>
+                                <td>
+                                ' . $item->viDo . '
+                                </td>
+                                <td>
+                                    <img width="150" src="' . ($item->hinhanh != null ? asset($item->hinhanh->hinhAnh) : asset("/images/no-image-available.jpg"))
+                . '"  />
+                                </td>
+                                <td>
+                                ' . $tinh . '
+                                </td>
+                                <td>
+                                ' . $item->shares_count . '
+                                </td>
+                                <td>
+                                    <label class="badge badge-primary">
+                                            <a class="d-block text-light" href="' . route('diaDanh.edit', ['diaDanh' => $item]) . '"> Sửa</a>
+                                    </label>
+                                    <label>
+                                        <form method="post" action="' . route('diaDanh.destroy', ['diaDanh' => $item]) . '">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                            <button style="outline: none; border: none" class="badge badge-danger"
+                                                type="submit">Xoá</button>
+                                        </form>
+                                    </label>
+                                </td>
+
+                            </tr>';
+        }
+        return response()->json($output);
     }
 
     /**
@@ -228,6 +299,12 @@ class DiaDanhController extends Controller
     public function destroy(DiaDanh $diaDanh)
     {
         $hinhAnh = HinhAnh::where('idDiaDanh', '=', $diaDanh->id);
+        $nhucaudiadanh = DiaDanhNhuCau::where('idDiaDanh', '=', $diaDanh->id)->get();
+
+        foreach ($nhucaudiadanh as $item) {
+            $item->delete();
+        }
+
         $deleteHinh = $hinhAnh->first();
         $baiViet = BaiVietChiaSe::where('idDiaDanh', '=', $diaDanh->id);
         Storage::disk('public')->delete($deleteHinh->hinhAnh);

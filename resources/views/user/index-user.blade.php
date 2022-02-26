@@ -5,14 +5,16 @@
 @section('content')
 <div class="row">
     <div class="col col-lg-6 col-md-12">
-        <ul class="navbar-nav w-100">
-            <li class="nav-item w-100">
-                <div class="nav-link d-lg-flex search">
-                    <input type="text" id="txtSearchUser"  class="form-control m-1 text-light" placeholder="Tìm kiếm">
-                    <button class="btn btn-primary" id="txtSearch">Tìm kiếm</button>
-                </div>
-            </li>
-        </ul>
+        <div class="nav-link d-lg-flex search align-items-center">
+            <input type="text" id="txtSearchUser"  class="form-control m-1 text-light" placeholder="Tìm kiếm">
+            <button class="btn btn-primary" id="txtSearch">Tìm kiếm</button>
+            <select id="txtloc" class="form-control text-light m-1">
+                <option value="0">--Chọn--</option>
+                <option value="1">Tài khoản còn hoạt động</option>
+                <option value="2">Tài khoản đã bị khoá</option>
+            </select>
+            <button class="btn btn-primary" id="loc">Lọc</button>
+        </div>
     </div>
 </div>
 <div class="page-header">
@@ -116,6 +118,26 @@
                     }
                 });
             });
+
+            $('#loc').on('click', function() {
+                var value = $('#txtloc').val();
+                if(value == 0) {
+                    alert("Vui lòng chọn tiêu chí");
+                } else {
+                    $.ajax({
+                    type: "get",
+                    url: "/user/locUser",
+                    data: {
+                        loai: value
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        $("#lstUser").html(response);
+                        
+                    }
+                });
+                }
+            })
 
             // //Search DiaDanh
             // $(document).on('keyup', '#txtSearchDiaDanh', function() {

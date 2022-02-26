@@ -39,9 +39,6 @@
                                         <label class="badge badge-primary">
                                             <a class="d-block text-light" href="{{ route('diaDanhNhuCau.edit', ['diaDanhNhuCau'=>$item]) }}"> Sửa</a>
                                         </label>
-                                        <label class="badge badge-success">
-                                            <a class="d-block text-light" href="{{ route('diaDanhNhuCau.show', ['diaDanhNhuCau'=>$item]) }}"> Show</a>
-                                        </label>
                                         <label >
                                             <form method="post" action="{{ route('diaDanhNhuCau.destroy', ['diaDanhNhuCau'=>$item]) }}">
                                             @csrf

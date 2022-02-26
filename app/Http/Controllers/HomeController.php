@@ -32,9 +32,19 @@ class HomeController extends Controller
         $countLike = DanhGia::whereMonth('created_at', Carbon::now()->month)->where('userLike', '=', 1)->count();
         $countUnLike = DanhGia::whereMonth('created_at', Carbon::now()->month)->where('userUnLike', '=', 1)->count();
         $countView = DanhGia::whereMonth('created_at', Carbon::now()->month)->where('userXem', '=', 1)->count();
+        $count12Thang = [];
+        b:
+        for ($i = 1; $i <= 12; $i++) {
+            $Like = DanhGia::whereMonth('created_at', $i)->where('userLike', '=', 1)->count();
+            $UnLike = DanhGia::whereMonth('created_at', $i)->where('userUnLike', '=', 1)->count();
+            $View = DanhGia::whereMonth('created_at', $i)->where('userXem', '=', 1)->count();
+            $count12Thang[$i - 1] = $Like + $UnLike + $View;
 
+            $output .= "<input type='hidden' id='thang' value='" . $count12Thang[$i - 1] . "' />";
+        }
         $output .= "<input type='hidden' id='like' value='" . $countLike . "' />" .
             "<input type='hidden' id='unlike' value='" . $countUnLike . "' />" .
+
             "<input type='hidden' id='view' value='" . $countView . "' />";
 
         return response()->json($output);

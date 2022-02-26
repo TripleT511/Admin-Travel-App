@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DiaDanhNhuCau;
 use App\Models\NhuCau;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -112,7 +113,47 @@ class NhuCauController extends Controller
      */
     public function destroy(NhuCau $nhuCau)
     {
+        $diadanhnhucau = DiaDanhNhuCau::where('idNhuCau', '=', $nhuCau->id)->get();
+
+        foreach ($diadanhnhucau as $item) {
+            $item->delete();
+        }
+
         $nhuCau->delete();
         return Redirect::route('nhuCau.index');
+    }
+
+    public function timKiemNhuCau(Request $request)
+    {
+        $output = "";
+        $lstNhuCau = NhuCau::paginate(5);
+        if ($request->input('txtSearch') != "") {
+            $lstNhuCau = NhuCau::where('tenNhuCau', 'LIKE', '%' . $request->input('txtSearch') . '%')->paginate(5);
+        }
+        foreach ($lstNhuCau as $item) {
+            $output .= '<tr>
+                                <td>' . $item->id . '</td>                                
+                               
+                                <td>
+                                       ' . $item->tenNhuCau . '
+                                </td>             
+                                               
+                                <td>
+                                    <label class="badge badge-primary">
+                                            <a class="d-block text-light" href="' . route('nhuCau.edit', ['nhuCau' => $item]) . '"> Sửa</a>
+                                    </label>
+                                    <label>
+                                        <form method="post" action="' . route('nhuCau.destroy', ['nhuCau' => $item]) . '">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                            <button style="outline: none; border: none" class="badge badge-danger"
+                                                type="submit">Xoá</button>
+                                        </form>
+                                    </label>
+                                </td>
+
+                            </tr>';
+        }
+        return response()->json($output);
     }
 }

@@ -170,4 +170,53 @@ class LuuTruController extends Controller
         $luuTru->delete();
         return Redirect::route('luuTru.index');
     }
+
+    public function timKiemLuuTru(Request $request)
+    {
+        $output = "";
+        $lstLuuTru = LuuTru::with('diadanh')->paginate(5);
+        if ($request->input('txtSearch') != "") {
+            $lstLuuTru = LuuTru::where('tenLuuTru', 'LIKE', '%' . $request->input('txtSearch') . '%')->with('diadanh')->paginate(5);
+        }
+        foreach ($lstLuuTru as $item) {
+            $output .= '<tr>
+                    <td>' . $item->id . '</td>                                
+                    <td>' . $item->diadanh->tenDiaDanh . '</td>
+                    <td>
+                            ' . $item->tenLuuTru . '
+                    </td>      
+                     <td>
+                            ' . $item->moTa . '
+                    </td>  
+                     <td>
+                            ' . $item->diaChi . '
+                    </td>  
+                     <td>
+                            ' . $item->sdt . '
+                    </td>  
+                     <td>
+                            ' . $item->thoiGianHoatDong . '
+                    </td>         
+                    <td>
+                    <img width="150" src="' . ($item->hinhAnh != null ? asset($item->hinhAnh) : asset("/images/no-image-available.jpg"))
+                . '"  />
+                    </td>        
+                    <td>
+                        <label class="badge badge-primary">
+                                <a class="d-block text-light" href="' . route('luuTru.edit', ['luuTru' => $item]) . '"> Sửa</a>
+                        </label>
+                        <label>
+                            <form method="post" action="' . route('luuTru.destroy', ['luuTru' => $item]) . '">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                <button style="outline: none; border: none" class="badge badge-danger"
+                                    type="submit">Xoá</button>
+                            </form>
+                        </label>
+                    </td>
+
+                </tr>';
+        }
+        return response()->json($output);
+    }
 }
