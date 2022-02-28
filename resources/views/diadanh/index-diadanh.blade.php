@@ -5,8 +5,16 @@
 @section('content')
 <div class="row">
     <div class="col col-lg-6 col-md-12">
-        <div class="nav-link d-lg-flex search">
+        <div class="nav-link d-lg-flex search align-items-center">
             <input type="text" id="txtSearch" name="txtSearch" class="form-control m-1 text-light" placeholder="Tìm kiếm">
+            <select class="form-control text-light m-1" id="idTinhThanh">
+                <option value="0">--Chọn tên tỉnh thành--</option>
+                @foreach ($lstTinhThanh as $item)
+                    <option value="{{ $item->id }}">
+                        {{ $item->tenTinhThanh}}
+                    </option>
+                @endforeach
+            </select>
             <button class="btn btn-primary" id="search">Tìm kiếm</button>
         </div>
     </div>
@@ -33,7 +41,6 @@
                             <tr>
                                 <th>id</th>
                                 <th>Tên địa danh</th>
-                                <th>Mô tả</th>
                                 <th>Kinh độ</th>
                                 <th>Vĩ độ</th>
                                 <th>Hình ảnh</th>
@@ -51,7 +58,6 @@
                                              {{ $item->tenDiaDanh }}
                                          </a>
                                      </td>
-                                     <td class="text-wrap cell-5">{{ $item->moTa }}</td>
                                      <td>{{ $item->kinhDo }}</td>
                                      <td>{{ $item->viDo }}</td>
                                      <td>
@@ -98,7 +104,8 @@
                     type: "get",
                     url: "/diadanh/search",
                     data: {
-                        txtSearch: val
+                        txtSearch: val,
+                        idTinhThanh: $("#idTinhThanh").val()
                     },
                     dataType: "json",
                     success: function (response) {

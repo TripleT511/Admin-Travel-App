@@ -183,7 +183,7 @@ class LoginController extends Controller
         }
         $user->save();
 
-        return redirect()->route('show-register');
+        return view('user.show-user', ['user' => $user]);
     }
 
     public function index()
@@ -205,9 +205,9 @@ class LoginController extends Controller
 
     public function show($id)
     {
-        $user = User::findOrFail($id);
+        $user = User::withCount('baiviets')->withCount('tinhthanhs')->findOrFail($id);
         $this->fixImage($user);
-        return view('user.show-user', ['taiKhoan' => $user]);
+        return view('user.show-user', ['user' => $user]);
     }
 
     public function timKiem(Request $request)
@@ -312,7 +312,7 @@ class LoginController extends Controller
                                 <td>
                                 ' . ($item->tinhthanhs_count == null ? 0 : $item->tinhthanhs_count) . '
                                 </td>
-                                <td>
+                                <td>' . ($item->deleted_at == null ? '
                                     <label>
                                         <form method="post" action="' . route('deleteUser', ['user' => $item]) . '">
                                         <input type="hidden" name="_method" value="DELETE">
@@ -320,7 +320,14 @@ class LoginController extends Controller
                                             <button style="outline: none; border: none" class="badge badge-danger"
                                                 type="submit">Khoá</button>
                                         </form>
-                                    </label>
+                                    </label> ' : '<label>
+                                        <form method="post" action="' . route('moKhoaUser', ['user' => $item]) . '">
+                                        <input type="hidden" name="_method" value="PATCH">
+                                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                            <button style="outline: none; border: none" class="badge badge-primary"
+                                                type="submit">Mở Khoá</button>
+                                        </form>
+                                    </label>') . '
                                 </td>
 
                             </tr>';
@@ -328,13 +335,20 @@ class LoginController extends Controller
         return response()->json($output);
     }
 
-
-
     public function delete(User $user)
     {
 
+        $countAdmin = User::where([['idPhanQuyen', '0'], ['id', $user->id]])->count();
+        if ($countAdmin == 1) return redirect()->route('lstUser')->withError('Bạn không thể xoá tài khoản này');
+
         $user->delete();
 
+        return Redirect::route('lstUser');
+    }
+
+    public function moKhoa($user)
+    {
+        $user = User::withTrashed()->find($user)->restore();;
         return Redirect::route('lstUser');
     }
 }

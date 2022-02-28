@@ -108,9 +108,9 @@ class BaiVietChiaSeController extends Controller
         }
         $hinhAnh->save();
 
-        $lstBaiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id', 'hinhanh:id,idDiaDanh,idBaiVietChiaSe,hinhAnh,idLoai', 'user:id,hoTen'])->paginate(5);
 
-        return view('baiviet.index-baiviet', ['lstBaiViet' => $lstBaiViet]);
+
+        return Redirect::route('baiViet.index');
     }
 
     /**
@@ -168,9 +168,7 @@ class BaiVietChiaSeController extends Controller
         }
         $hinhAnh->save();
 
-        $lstBaiViet = BaiVietChiaSe::with(['diadanh:id,tenDiaDanh,moTa,kinhDo,viDo,tinh_thanh_id', 'hinhanh:id,idDiaDanh,idBaiVietChiaSe,hinhAnh,idLoai', 'user:id,hoTen'])->paginate(5);
-
-        return view('baiviet.index-baiviet', ['lstBaiViet' => $lstBaiViet]);
+        return Redirect::route('baiViet.index');
     }
 
     /**
@@ -181,7 +179,9 @@ class BaiVietChiaSeController extends Controller
      */
     public function destroy(BaiVietChiaSe $baiViet)
     {
-        $hinhAnh = HinhAnh::where('idBaiVietChiaSe', '=', $baiViet->id);
+        $hinhAnh = HinhAnh::where('idBaiVietChiaSe', '=', $baiViet->id)->first();
+
+        Storage::disk('public')->delete($hinhAnh->hinhAnh);
         $hinhAnh->delete();
         $baiViet->delete();
         return Redirect::route('baiViet.index');

@@ -8,11 +8,9 @@
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">Thêm địa danh nhu cầu</h4>
-             @if($errors->any()) 
-                    @foreach ($errors->all() as $err)
-                        <li class="card-description" style="color: #fc424a;">{{ $err }}</li>
-                    @endforeach
-                @endif
+             @if(session('error')) 
+                <li class="text-danger" >{{ session('error') }}</li>
+            @endif
             <hr>
             <form class="forms-sample" action="{{ route('diaDanhNhuCau.store') }}" method="post">
                 @csrf

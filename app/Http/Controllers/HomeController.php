@@ -16,13 +16,15 @@ class HomeController extends Controller
     public function index()
     {
 
-
         $lstTaiKhoan = User::count();
         $lstDiaDanh = DiaDanh::count();
         $lstTinhThanh = TinhThanh::count();
         $lstBaiViet = BaiVietChiaSe::count();
         $lstDeXuat = DeXuatDiaDanh::count();
-        return view('dashboard', ['lstTaiKhoan' => $lstTaiKhoan, 'lstDiaDanh' => $lstDiaDanh, 'lstTinhThanh' => $lstTinhThanh, 'lstBaiViet' => $lstBaiViet, 'lstDeXuat' => $lstDeXuat]);
+        $diaDanh = DiaDanh::withCount(['shares' => function ($query) {
+            $query->whereMonth('created_at', Carbon::now()->month);
+        }])->orderBy('shares_count', 'desc')->first();
+        return view('dashboard', ['lstTaiKhoan' => $lstTaiKhoan, 'lstDiaDanh' => $lstDiaDanh, 'lstTinhThanh' => $lstTinhThanh, 'lstBaiViet' => $lstBaiViet, 'lstDeXuat' => $lstDeXuat, 'diaDanh' => $diaDanh]);
     }
 
     public function ThongKeChart()
@@ -32,6 +34,7 @@ class HomeController extends Controller
         $countLike = DanhGia::whereMonth('created_at', Carbon::now()->month)->where('userLike', '=', 1)->count();
         $countUnLike = DanhGia::whereMonth('created_at', Carbon::now()->month)->where('userUnLike', '=', 1)->count();
         $countView = DanhGia::whereMonth('created_at', Carbon::now()->month)->where('userXem', '=', 1)->count();
+
         $count12Thang = [];
         b:
         for ($i = 1; $i <= 12; $i++) {

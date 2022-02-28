@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateDeXuatDiaDanhRequest;
 use App\Models\DiaDanh;
 use App\Models\HinhAnh;
 use App\Models\TinhThanh;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
@@ -99,6 +100,10 @@ class DeXuatDiaDanhController extends Controller
 
         $lstDeXuat = DeXuatDiaDanh::paginate(5);
 
+        foreach ($lstDeXuat as $item) {
+            $this->fixImage($item);
+        }
+
         return view('dexuat.index-dexuat', ['lstDeXuat' => $lstDeXuat]);
     }
 
@@ -158,6 +163,10 @@ class DeXuatDiaDanhController extends Controller
 
         $lstDeXuat = DeXuatDiaDanh::paginate(5);
 
+        foreach ($lstDeXuat as $item) {
+            $this->fixImage($item);
+        }
+
         return view('dexuat.index-dexuat', ['lstDeXuat' => $lstDeXuat]);
     }
 
@@ -173,5 +182,89 @@ class DeXuatDiaDanhController extends Controller
         $deXuat->delete();
 
         return Redirect::route('deXuat.index');
+    }
+
+    public function fillbv(Request $request)
+    {
+        $output = "";
+        $lstDiaDanh = DeXuatDiaDanh::with('user')->with('tinhthanh')->orderBy('id')->paginate(5);
+
+        if ($request->input('fill') != "" && $request->input('fill') == 1) {
+            $lstDiaDanh = DeXuatDiaDanh::with('tinhthanh')->with('user')->where('trangThai', '=', 0)->orderBy('id')->paginate(5);
+        }
+        if ($request->input('fill') != "" && $request->input('fill') == 2) {
+            $lstDiaDanh = DeXuatDiaDanh::with('tinhthanh')->with('user')->where('trangThai', '=', 1)->orderBy('id')->paginate(5);
+        }
+        if ($request->input('fill') != "" && $request->input('fill') == 3) {
+            $lstDiaDanh = DeXuatDiaDanh::with('tinhthanh')->with('user')->onlyTrashed()->orderBy('id')->paginate(5);
+        }
+        foreach ($lstDiaDanh as $item) {
+            $this->fixImage($item);
+
+            $handle = '';
+            if ($item->trangThai == 0 && $item->deleted_at == null) {
+                $handle .= '  <label>
+                <form method="post" action="' . route('deXuat.update', ['deXuat' => $item]) . '">
+                <input type="hidden" name="_method" value="PATCH">
+                <input type="hidden" name="_token" value="' . csrf_token() . '">
+                    <button style="outline: none; border: none" class="badge badge-primary"
+                        type="submit">Duyệt</button>
+                </form>
+            </label>
+                    <label>
+                    <label>
+                    <form method="post" action="' . route('deXuat.destroy', ['deXuat' => $item]) . '">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <button style="outline: none; border: none" class="badge badge-danger"
+                            type="submit">Xoá</button>
+                    </form>
+                </label>
+                        
+                    </label>';
+            } elseif (
+                $item->trangThai == 1  && $item->deleted_at == null
+            ) {
+                $handle .= ' <label class="badge badge-success">Đã duyệt</label>';
+            } else {
+                $handle .= '<label class="badge badge-danger">Đã xoá</label>';
+            }
+            $output .= '<tr>
+                                <td>' . $item->id . '</td>
+                                <td>
+                                    <a href="' . route("show", ["id" => $item->id]) . '">
+                                       ' . $item->tenDiaDanh . '
+                                    </a>
+                                </td>
+                                <td>
+                                ' . $item->user->hoTen . '
+                                </td>
+                                <td class="text-wrap cell-5">
+                                ' . $item->moTa . '
+                                </td>
+                                <td>
+                                ' . $item->kinhDo . '
+                                </td>
+                                <td>
+                                ' . $item->viDo . '
+                                </td>
+                                <td>
+                                    <img width="150" src="' . asset($item->hinhAnh)
+                . '"  />
+                                </td>
+                                <td>
+                                ' .  $item->tinhthanh->tenTinhThanh . '
+                                </td>
+                                <td>
+                                ' . $item->shares_count . '
+                                </td>
+                                <td>
+                                ' . $handle . '
+                                <input type="hidden" name="_token" value="' . csrf_token() . '">
+                            </td>
+
+                            </tr>';
+        }
+        return response()->json($output);
     }
 }

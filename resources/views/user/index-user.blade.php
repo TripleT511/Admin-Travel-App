@@ -17,6 +17,11 @@
         </div>
     </div>
 </div>
+@if(session('error')) 
+    <div class="alert alert-danger w-25">
+        {{ session('error') }}
+    </div>
+@endif
 <div class="page-header">
     <h3 class="page-title"> Danh sách tài khoản </h3>
     <nav aria-label="breadcrumb">
@@ -83,7 +88,6 @@
                                         </form>
                                     </label>
                                 </td>
-
                             </tr>
                             @endforeach
                         </tbody>
@@ -139,21 +143,7 @@
                 }
             })
 
-            // //Search DiaDanh
-            // $(document).on('keyup', '#txtSearchDiaDanh', function() {
-            //     var val = $(this).val();
-            //     $.ajax({
-            //         type: "get",
-            //         url: "/diadanh/search",
-            //         data: {
-            //             txtSearch: val
-            //         },
-            //         dataType: "json",
-            //         success: function (response) {
-            //             $("#lstDiaDanh").html(response);
-            //         }
-            //     });
-            // });
+           
         });
     </script>
 

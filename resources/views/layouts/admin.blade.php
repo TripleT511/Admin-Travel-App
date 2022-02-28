@@ -76,7 +76,7 @@
                 <li class="nav-item nav-category">
                     <span class="nav-link">Navigation</span>
                 </li>
-                <li class="nav-item menu-items">
+                <li class="nav-item menu-items {{ request()->is('/*') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route("dashboard") }}">
                         <span class="menu-icon">
                             <i class="mdi mdi-speedometer"></i>
@@ -84,7 +84,7 @@
                         <span class="menu-title">Dashboard</span>
                     </a>
                 </li>
-                <li class="nav-item menu-items">
+                <li class="nav-item menu-items {{ request()->is('user*') || request()->is('register') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route("lstUser") }}">
                         <span class="menu-icon">
                             <i class="mdi mdi-account-multiple"></i>
@@ -92,7 +92,7 @@
                         <span class="menu-title">Quản lý tài khoản</span>
                     </a>
                 </li>
-                <li class="nav-item menu-items">
+                <li class="nav-item menu-items {{ request()->is('diaDanh*') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('diaDanh.index') }}">
                         <span class="menu-icon">
                             <i class="mdi mdi mdi-map"></i>
@@ -100,7 +100,7 @@
                         <span class="menu-title">Quản lý địa danh</span>
                     </a>
                 </li>
-                <li class="nav-item menu-items">
+                <li class="nav-item menu-items {{ request()->is('tinhThanh*') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('tinhThanh.index') }}">
                         <span class="menu-icon">
                             <i class="mdi mdi-map-marker-multiple"></i>
@@ -108,7 +108,7 @@
                         <span class="menu-title">Quản lý tỉnh thành</span>
                     </a>
                 </li>
-                <li class="nav-item menu-items">
+                <li class="nav-item menu-items {{ request()->is('baiViet*') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('baiViet.index') }}">
                         <span class="menu-icon">
                             <i class="mdi mdi-newspaper"></i>
@@ -116,7 +116,7 @@
                         <span class="menu-title">Quản lý bài viết</span>
                     </a>
                 </li>
-                <li class="nav-item menu-items">
+                <li class="nav-item menu-items {{ request()->is('quanAn*') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('quanAn.index') }}">
                         <span class="menu-icon">
                             <i class="mdi mdi-food-fork-drink"></i>
@@ -124,7 +124,7 @@
                         <span class="menu-title">Quản lý quán ăn</span>
                     </a>
                 </li>
-                <li class="nav-item menu-items">
+                <li class="nav-item menu-items {{ request()->is('monAn*') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('monAn.index') }}">
                         <span class="menu-icon">
                             <i class="mdi mdi-food-fork-drink"></i>
@@ -132,7 +132,7 @@
                         <span class="menu-title">Quản lý món ăn</span>
                     </a>
                 </li>
-               <li class="nav-item menu-items">
+               <li class="nav-item menu-items {{ request()->is('luuTru*') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('luuTru.index') }}">
                         <span class="menu-icon">
                             <i class="mdi mdi-home-map-marker"></i>
@@ -140,7 +140,7 @@
                         <span class="menu-title">Quản lý lưu trú</span>
                     </a>
                 </li>
-                <li class="nav-item menu-items">
+                <li class="nav-item menu-items {{ request()->is('nhuCau*') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('nhuCau.index') }}">
                         <span class="menu-icon">
                             <i class="mdi mdi-home-map-marker"></i>
@@ -148,7 +148,7 @@
                         <span class="menu-title">Quản lý nhu cầu</span>
                     </a>
                 </li>
-                <li class="nav-item menu-items">
+                <li class="nav-item menu-items {{ request()->is('diaDanhNhuCau*') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('diaDanhNhuCau.index') }}">
                         <span class="menu-icon">
                             <i class="mdi mdi-guitar-pick-outline"></i>
@@ -156,7 +156,7 @@
                         <span class="menu-title text-wrap" >Quản lý địa danh nhu cầu</span>
                     </a>
                 </li>
-                <li class="nav-item menu-items">
+                <li class="nav-item menu-items {{ request()->is('deXuat*') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('deXuat.index') }}">
                         <span class="menu-icon">
                             <i class="mdi mdi-image-filter"></i>

@@ -3,6 +3,19 @@
 @section('title','Đề xuất địa danh')
 
 @section('content')
+<div class="row">
+    <div class="col col-lg-6 col-md-12">
+        <div class="nav-link d-lg-flex search align-items-center">
+            <select id="fill" class="form-control text-light m-1">
+                <option value="0">--Chọn--</option>
+                <option value="1">Chờ duyệt</option>
+                <option value="2">Đã duyệt</option>
+                <option value="3">Đã xoá</option>
+            </select>
+            <button class="btn btn-primary" id="loc">Lọc</button>
+        </div>
+    </div>
+</div>
 <div class="page-header">
     <h3 class="page-title"> Đề xuất địa danh </h3>
     <nav aria-label="breadcrumb">
@@ -33,7 +46,7 @@
                                 <th>Trạng thái</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="lstDeXuat">
                             @foreach ($lstDeXuat as $item)
                             <tr>
                                 <td>{{ $item->id }}</td>
@@ -47,9 +60,7 @@
                                 <td>{{ $item->kinhDo }}</td>
                                 <td>{{ $item->viDo }}</td>
                                 <td>
-                                    <img src="@if($item->hinhAnh != null) {{ asset($item->hinhAnh) }}
-                                                      @else '/images/no-image-available.jpg'
-                                                      @endif" width="150" />
+                                    <img src="{{ asset($item->hinhAnh) }}" width="150" />
                                 </td>
                                 <td>{{ $item->tinhthanh->tenTinhThanh }}</td>
                                 <td>
@@ -91,3 +102,32 @@
     </div>
 </div>
 @endsection
+
+@section('js')
+<script>
+        $(document).ready(function() {
+
+            // Lọc
+            $('#loc').on('click', function() {
+                var val = $('#fill').val();
+                if(val == 0) {
+                    alert("Vui lòng chọn tiêu chí");
+                    return;
+                }
+                $.ajax({
+                    type: "get",
+                    url: "/dexuat/fill",
+                    data: {
+                        fill: val
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        $("#lstDeXuat").html(response);
+                      
+                    }
+                });
+            });
+        });
+    </script>
+
+@endsection 

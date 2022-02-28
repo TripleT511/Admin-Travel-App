@@ -3,6 +3,18 @@
 @section('title','Thêm địa danh nhu cầu')
 
 @section('content')
+<div class="row">
+    <div class="col col-lg-6 col-md-12">
+        <div class="nav-link d-lg-flex search align-items-center">
+            <input type="text" id="txtSearch"  class="form-control m-1 text-light" placeholder="Tìm kiếm...">
+            <select id="txtloc" class="form-control text-light m-1">
+                <option value="1">Tên địa danh</option>
+                <option value="2">Tên nhu cầu</option>
+            </select>
+            <button class="btn btn-primary" id="loc">Lọc</button>
+        </div>
+    </div>
+</div>
 <div class="page-header">
     <h3 class="page-title"> Danh sách địa danh nhu cầu </h3>
     <nav aria-label="breadcrumb">
@@ -28,11 +40,13 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="lstDiaDanh">
                            @foreach ($lstDiaDanhNhuCau as $item)
                                 <tr>
                                      <td>{{ $item->id }}</td>
-                                     <td>{{ $item->diadanh->tenDiaDanh }}</td>
+                                     <td>
+                                         <a href="{{ route('diaDanhNhuCau.show', ['diaDanhNhuCau'=>$item]) }} }}">{{ $item->diadanh->tenDiaDanh }}</a>
+                                        </td>
                                      <td>{{ $item->nhucau->tenNhuCau }}</td>
 
                                      <td>
@@ -59,4 +73,35 @@
         </div>
     </div>
 </div>
-@endsection*/
+@endsection
+
+@section('js')
+<script>
+        $(document).ready(function() {
+
+            $('#loc').on('click', function() {
+                var value = $('#txtSearch').val();
+                if(value == "") {
+                    alert("Vui lòng nhập thông tin");
+                    return;
+                }
+                $.ajax({
+                type: "get",
+                url: "/diadanhnhucau/search",
+                data: {
+                    loai: $("#txtloc").val(),
+                    noiDung: value
+                },
+                dataType: "json",
+                success: function (response) {
+                    $("#lstDiaDanh").html(response);
+                    
+                }
+                });
+            })
+
+           
+        });
+    </script>
+
+@endsection

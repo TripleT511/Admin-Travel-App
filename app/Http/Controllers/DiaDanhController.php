@@ -45,12 +45,16 @@ class DiaDanhController extends Controller
             }
         }
 
-        return view('diadanh.index-diadanh', ['lstDiaDanh' => $lstDiaDanh]);
+        $lstTinhThanh = TinhThanh::all();
+
+        return view('diadanh.index-diadanh', ['lstDiaDanh' => $lstDiaDanh, 'lstTinhThanh' => $lstTinhThanh]);
     }
 
     public function timKiemDiaDanh(Request $request)
     {
         $output = "";
+        $idTinhThanh = $request->idTinhThanh;
+
         $lstDiaDanh = DiaDanh::with('tinhthanh')->with(['hinhanhs' => function ($query) {
             $query->where('idLoai', '=', 1)->orderBy('created_at');
         }])->with(['hinhanh' => function ($query) {
@@ -58,11 +62,34 @@ class DiaDanhController extends Controller
         }])->withCount('shares')->orderBy('id')->paginate(5);
 
         if ($request->input('txtSearch') != "") {
-            $lstDiaDanh = DiaDanh::with('tinhthanh')->with(['hinhanhs' => function ($query) {
+
+            if ($idTinhThanh == 0) {
+
+                $lstDiaDanh = DiaDanh::with('tinhthanh')->with(['hinhanhs' => function ($query) {
+                    $query->where('idLoai', '=', 1)->orderBy('created_at');
+                }])->with(['hinhanh' => function ($query) {
+                    $query->where('idLoai', '=', 1)->orderBy('created_at');
+                }])->withCount('shares')->where('tenDiaDanh', 'LIKE', '%' . $request->input('txtSearch') . '%')->orWhere('moTa', 'LIKE', '%' . $request->input('txtSearch') . '%')->orderBy('id')->paginate(5);
+            }
+
+            if ($idTinhThanh != 0) {
+
+                $lstDiaDanh = DiaDanh::with('tinhthanh')->with(['hinhanhs' => function ($query) {
+                    $query->where('idLoai', '=', 1)->orderBy('created_at');
+                }])->with(['hinhanh' => function ($query) {
+                    $query->where('idLoai', '=', 1)->orderBy('created_at');
+                }])->withCount('shares')->where('tinh_thanh_id', $idTinhThanh)->where('tenDiaDanh', 'LIKE', '%' . $request->input('txtSearch') . '%')->orWhere([['moTa', 'LIKE', '%' . $request->input('txtSearch') . '%'], ['tinh_thanh_id', $idTinhThanh]])->orderBy('id')->paginate(5);
+            }
+        }
+
+        if ($request->input('txtSearch') == "" && $idTinhThanh != 0) {
+            $lstDiaDanh = DiaDanh::with('tinhthanh')->whereHas('tinhthanh', function ($query) use ($idTinhThanh) {
+                return $query->where('id', '=', $idTinhThanh);
+            })->with(['hinhanhs' => function ($query) {
                 $query->where('idLoai', '=', 1)->orderBy('created_at');
             }])->with(['hinhanh' => function ($query) {
                 $query->where('idLoai', '=', 1)->orderBy('created_at');
-            }])->withCount('shares')->where('tenDiaDanh', 'LIKE', '%' . $request->input('txtSearch') . '%')->orWhere('moTa', 'LIKE', '%' . $request->input('txtSearch') . '%')->orderBy('id')->paginate(5);
+            }])->withCount('shares')->where('tinh_thanh_id', $idTinhThanh)->orderBy('id')->paginate(5);
         }
 
         foreach ($lstDiaDanh as $item) {
@@ -74,14 +101,11 @@ class DiaDanhController extends Controller
             $tinh = $item->tinhthanh->tenTinhThanh;
 
             $output .= '<tr>
-                                <td>' . $item->id . '</td>
+                                <td>' . $item->id  . '</td>
                                 <td>
-                                    <a href="' . route("show", ["id" => $item->id]) . '">
+                                    <a href="' . route("diaDanh.show", ["diaDanh" => $item]) . '">
                                        ' . $item->tenDiaDanh . '
                                     </a>
-                                </td>
-                                <td class="text-wrap cell-5">
-                                ' . $item->moTa . '
                                 </td>
                                 <td>
                                 ' . $item->kinhDo . '
@@ -213,7 +237,18 @@ class DiaDanhController extends Controller
      */
     public function show(DiaDanh $diaDanh)
     {
-        return view('diadanh.show-diadanh', ['diaDanh' => $diaDanh]);
+        $diaDanh = DiaDanh::where('id', $diaDanh->id)->with('tinhthanh')->with(['hinhanhs' => function ($query) {
+            $query->where('idLoai', '=', 1)->orderBy('created_at');
+        }])->with(['hinhanh' => function ($query) {
+            $query->where('idLoai', '=', 1)->orderBy('created_at');
+        }])->withCount('shares')->first();
+        $ddNhuCau = DiaDanhNhuCau::with('nhucau')->where('idDiaDanh', '=', $diaDanh->id)->get();
+        $this->fixImage($diaDanh->hinhanh);
+        foreach ($diaDanh->hinhanhs as $item2) {
+            $this->fixImage($item2);
+        }
+
+        return view('diadanh.show-diadanh', ['diaDanh' => $diaDanh, 'nhucau' => $ddNhuCau]);
     }
 
     /**

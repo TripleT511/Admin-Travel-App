@@ -8,24 +8,25 @@
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">Chỉnh sửa địa danh nhu cầu</h4>
-            <form class="forms-sample" action="{{ route('diaDanhNhuCau.update', ['diaDanhNhuCau'=>$diaDanh]) }}" method="post">
+             @if(session('error')) 
+                <li class="text-danger" >{{ session('error') }}</li>
+            @endif
+            <form class="forms-sample" action="{{ route('diaDanhNhuCau.update', ['diaDanhNhuCau'=>$diaDanhNhuCau->id]) }}" method="post">
                 @csrf
                 @method("PATCH")
                 <div class="form-group">
                     <label for="exampleInputName1">Tên địa danh</label>
                      <select class="form-control text-light" name="idDiaDanh" id="">
-                         <option value="{{$diaDanhNhuCau->idDiaDanh}}">{{$lstDiaDanh[$diaDanhNhuCau->idDiaDanh-1]->tenDiaDanh}}</option>
                          @foreach($lstDiaDanh as $dd)
-                            <option value="{{$dd->id}}">{{$dd->tenDiaDanh}}</option>
+                            <option value="{{$dd->id}}" @if($dd->id == $diaDanhNhuCau->diadanh->id) selected @endif>{{$dd->tenDiaDanh}}</option>
                          @endforeach
                      </select>
                 </div>
                 <div class="form-group">
                         <label for="exampleTextarea1">Nhu cầu</label>
                         <select class="form-control text-light" name="idNhuCau" id="">
-                        <option value="{{$diaDanhNhuCau->idNhuCau}}">{{$lstNhuCau[$diaDanhNhuCau->idNhuCau-1]->tenNhuCau}}</option>
                          @foreach($lstNhuCau as $nc)
-                            <option value="{{$nc->id}}">{{$nc->tenNhuCau}}</option>
+                            <option value="{{$nc->id}}" @if($nc->id == $diaDanhNhuCau->nhucau->id) selected @endif>{{$nc->tenNhuCau}}</option>
                          @endforeach
                      </select>
                       </div>

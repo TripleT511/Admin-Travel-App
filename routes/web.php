@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\DeXuatController;
 use App\Http\Controllers\BaiVietChiaSeController;
 use App\Http\Controllers\DeXuatDiaDanhController;
 use App\Http\Controllers\LoginController;
@@ -53,6 +54,8 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/user/delete/{user}', [LoginController::class, 'delete'])->name("deleteUser");
 
+    Route::patch('/user/update/{user}', [LoginController::class, 'moKhoa'])->name("moKhoaUser");
+
     Route::get('/user/show/{id}', [LoginController::class, 'show'])->name("show");
 
 
@@ -74,6 +77,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/luutru/search', [LuuTruController::class, 'timKiemLuuTru'])->name("timKiemLuuTru");
 
     Route::get('/nhucau/search', [NhuCauController::class, 'timKiemNhuCau'])->name("timKiemNhuCau");
+
+    Route::get('/diadanhnhucau/search', [DiaDanhNhuCauController::class, 'timKiem']);
+
+
+    Route::get('/dexuat/fill', [DeXuatDiaDanhController::class, 'fillbv'])->name("locDeXuat");
 
     //Thống kê chart
     Route::get('/dashboard/thongke', [HomeController::class, 'ThongKeChart']);
