@@ -110,15 +110,34 @@
     </div>
     
 </div>
-<div class="row">
+<div class="row justify-content-center">
     <div id="data">
 
     </div>
-    <div class="col col-lg-4">
-        <canvas id="myChart" width="200" height="100"></canvas>
+    <div class="col-lg-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+            <h4 class="card-title">Thống kê lượt tương tác tháng này</h4>
+            <canvas id="myChart" width="100" height="100" class="chartjs-render-monitor"></canvas>
+            </div>
+        </div>
     </div>
-    <div class="col col-lg-8">
-        <canvas id="myChart2" width="200" height="100"></canvas>
+    <div class="col-lg-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+            <h4 class="card-title">Thống kê lượt tương tác tháng trước</h4>
+                <canvas id="myChart3" width="100" height="100" class="chartjs-render-monitor"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-12 grid-margin stretch-card" style="margin-top: 10px">
+        <div class="card">
+            <div class="card-body">
+            <h4 class="card-title">Thống kê lượt tương tác các tháng trong năm</h4>
+            <canvas id="myChart2" width="100" height="30" class="chartjs-render-monitor"></canvas>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -140,7 +159,7 @@
                         const myChart = new Chart(ctx, {
                             type: 'doughnut',
                             data: {
-                                labels: ['Tổng số lượt like tháng này', 'Tổng số lượt unlike tháng này', 'Tổng số lượt xem tháng này'],
+                                labels: ['Lượt like', 'Lượt unlike', 'Lượt xem'],
                                 datasets: [{
                                     label: [
                                         'Lượt like',
@@ -164,6 +183,34 @@
                                 }
                             }
                         });
+                    const ctx3 = document.getElementById('myChart3').getContext('2d');
+                    const myChart3 = new Chart(ctx3, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Lượt like', 'Lượt unlike', 'Lượt xem'],
+                            datasets: [{
+                                label: [
+                                    'Lượt like',
+                                    'Lượt unlike',
+                                    'Lượt xem'
+                                ],
+                                data: [$('#likePrev').val(), $('#unlikePrev').val(), $('#viewPrev').val()],
+                                backgroundColor: [
+                                    'rgb(0, 102, 255)',
+                                    'rgb(255, 45, 85)',
+                                    'rgb(0, 214, 61)'
+                                ],
+                                hoverOffset: 4,
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
                     const listThang = document.querySelectorAll('#thang');
                     listThang.forEach(item => {
                         data.push(item.value);
@@ -188,7 +235,7 @@
 
                             ],
                             datasets: [{
-                                label: 'Thống kê lượt tương tác các tháng trong năm',
+                                label: 'Thống kê lượt tương tác',
                                 data: data,
                                 backgroundColor: [
                                     'rgba(255, 99, 132, 0.2)',
